@@ -63,7 +63,7 @@ const columns: GridColDef[] = [
     field: "WithBalcony",
     headerName: "Наличие балкона/лоджии",
     align: "right",
-    type: "checkbox",
+    type: "bool",
     editable: true,
     width: 150,
   },
