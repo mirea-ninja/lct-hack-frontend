@@ -22,6 +22,10 @@ const theme = createTheme({
     secondary: {
       main: "#A6A8B5",
     },
+    accent: {
+      main: "#E5F3FA",
+      light: "#E5F3FA",
+    },
   },
   typography: {
     allVariants: {
@@ -42,5 +46,19 @@ declare module "@mui/material/styles" {
     status?: {
       danger?: string
     }
+  }
+
+  interface Palette {
+    accent: Palette["primary"]
+  }
+  interface PaletteOptions {
+    accent: PaletteOptions["primary"]
+  }
+
+  interface PaletteColor {
+    darker?: string
+  }
+  interface SimplePaletteColorOptions {
+    darker?: string
   }
 }
