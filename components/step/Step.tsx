@@ -18,7 +18,14 @@ export default function Step({ number }: Props) {
       height="30px"
       bgcolor={theme.palette.accent.light}
     >
-      <Typography color={theme.palette.primary.main}>{number}</Typography>
+      <Typography
+        sx={{
+          fontWeight: "bold",
+        }}
+        color={theme.palette.primary.main}
+      >
+        {number}
+      </Typography>
     </Box>
   )
 }
