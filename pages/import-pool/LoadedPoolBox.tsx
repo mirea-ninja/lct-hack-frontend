@@ -1,14 +1,22 @@
 import React from "react"
-import { Box, Button, Stack, TextField, Typography } from "@mui/material"
+import {
+  Box,
+  Button,
+  Stack,
+  TextField,
+  Typography,
+  useTheme,
+} from "@mui/material"
 
 type Props = {}
 
 export default function LoadedPoolBox({}: Props) {
+  let isActive = false // Поменять на логику с query в бэк
+
   return (
     <Stack
       sx={{
         flex: 1,
-        backgroundColor: "#d7d7d7",
       }}
       display="flex"
       padding={3}
@@ -22,12 +30,12 @@ export default function LoadedPoolBox({}: Props) {
       </Stack>
       <Box display="flex" justifyContent="center" marginTop="auto">
         <Button
-          variant="contained"
+          variant="mainDisabled"
           sx={{
             width: "50%",
           }}
         >
-          Добавить пул
+          Рассчитать
         </Button>
       </Box>
     </Stack>
@@ -35,10 +43,12 @@ export default function LoadedPoolBox({}: Props) {
 }
 
 function PoolPreview() {
+  let theme = useTheme()
+
   return (
     <Stack
       sx={{
-        backgroundColor: "#b4b4b4",
+        backgroundColor: theme.palette.accent.light,
       }}
       borderRadius={3}
       padding={2}

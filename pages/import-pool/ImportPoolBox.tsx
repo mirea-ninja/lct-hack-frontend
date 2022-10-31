@@ -4,11 +4,12 @@ import React from "react"
 type Props = {}
 
 export default function ImportPoolBox({}: Props) {
+  let isActive = false // Поменять на логику с query в бэк
+
   return (
     <Stack
       sx={{
         flex: 1,
-        backgroundColor: "#d7d7d7",
       }}
       padding={3}
       borderRadius={5}
@@ -29,7 +30,7 @@ export default function ImportPoolBox({}: Props) {
       </Stack>
       <Box display="flex" justifyContent="center" marginTop="auto">
         <Button
-          variant="contained"
+          variant="mainActive"
           sx={{
             width: "40%",
           }}
