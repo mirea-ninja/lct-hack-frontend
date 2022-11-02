@@ -1,3 +1,11 @@
+export interface Column {
+  id: keyof RequiredData | keyof CorrectableData
+  label: string
+  minWidth?: number
+  align?: "right"
+  format?: (value: number) => string
+}
+
 export enum SegmentType {
   New,
   Modern,
@@ -37,3 +45,5 @@ export type CorrectableData = {
   TimeToMetroInMinutes: number
   FurnishQuality: FurnishQuality
 }
+
+export * from "./types"
