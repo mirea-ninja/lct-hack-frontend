@@ -158,9 +158,9 @@ export const SliderCollapseInfo = () => {
         </Box>
         <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
           {isCollapsed ? (
-            <ArrowLeft sx={{ transform: "rotate(90deg)" }} />
-          ) : (
             <ArrowLeft sx={{ transform: "rotate(-90deg)" }} />
+          ) : (
+            <ArrowLeft sx={{ transform: "rotate(90deg)" }} />
           )}
         </IconButton>
       </Box>
@@ -221,15 +221,7 @@ export const SliderCollapseInfo = () => {
         >
           Современное жилье, 22 этажа, панель
         </Typography>
-        {/* <InfoCard title={"торг"} description={"-4,5%"} isPositive={false} />
-        <InfoCard title={"этаж 4"} description={"0"} isPositive={null} />
-        <InfoCard title={"S 45 м²"} description={"+1,5%"} isPositive={true} />
-        <InfoCard title={"S кухня 45 м²"} description={"+1,5%"} isPositive={true} />
-        <InfoCard title={"нет балкона"} description={"0"} isPositive={null} />
-        <InfoCard title={"до метро 10 мин."} description={"0"} isPositive={null} />
-        <InfoCard title={"без отделки"} description={"-10 300 ₽"} isPositive={false} /> */}
 
-        {/* Grid для InfoCard. Помещать в строке 2 или 3 карточки в зависимости от ширины карточки */}
         <Grid container spacing={"10px"}>
           <Grid item xs={4}>
             <InfoCard title={"торг"} description={"-4,5%"} isPositive={false} />
