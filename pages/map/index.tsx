@@ -17,6 +17,7 @@ import IconButton from "@mui/material/IconButton";
 import styles from "../../styles/Map.module.scss";
 import {MapSlider} from "./MapSlider";
 import {ReferenceCard} from "./ReferenceCard";
+import placemark from "../../public/placemark.png";
 
 type Props = {};
 
@@ -29,46 +30,20 @@ class TemplateProvider extends React.Component {
     }
 
     componentDidMount() {
-        console.log("TemplateProvider componentDidMount", this.props.ymaps);
-        // @ts-ignore
-        this.setState({
-            template: this.props.ymaps.templateLayoutFactory.createClass(
-                '<div class="popover top">' +
-                '<a class="close" href="#">&times;</a>' +
-                '<div class="arrow"></div>' +
-                '<div class="popover-inner">' +
-                '$[[properties.content observeSize minWidth=235 maxWidth=235 maxHeight=350]]' +
-                '</div>' +
-                '</div>',
-                {
-                    build: function () {
-                        this.constructor.superclass.build.call(this);
-                    }
+        // Ждём загрузки модуля
+        const interval = setInterval(() => {
+            if (!this.state.ready) {
+                // Когда загрузился модуль
+                if (this.props.ymaps.hasOwnProperty('Map')) {
+                    const MyBalloonContentLayout = this.props.ymaps.templateLayoutFactory.createClass(
+                        '<h3 class="popover-title">$[properties.balloonHeader]</h3>' +
+                        '<div class="popover-content">$[properties.balloonContent]</div>'
+                    )
+                    this.setState({template: MyBalloonContentLayout, ready: true})
+                    clearInterval(interval)
                 }
-            ),
-        });
-
-
-        // @ts-ignore
-        const MyBalloonContentLayout = this.props.ymaps.templateLayoutFactory.createClass(
-            '<h3 class="popover-title">$[properties.balloonHeader]</h3>' +
-            '<div class="popover-content">$[properties.balloonContent]</div>'
-        )
-
-
-        // // Создание метки с пользовательским макетом балуна.
-        // // @ts-ignore
-        // const myPlacemark = this.props.ymaps.Placemark([55.8, 37.6], {
-        //     balloonContent: 'Содержимое балуна',
-        //     balloonHeader: 'Заголовок',
-        //     balloonFooter: 'Подвал'
-        // }, {
-        //     balloonContentLayout: MyBalloonContentLayout,
-        //     balloonPanelMaxMapArea: 0
-        // });
-        //
-        // // @ts-ignore
-        // this.props.ymaps.geoObjects.add(myPlacemark);
+            }
+        }, 300);
     }
 
 
@@ -121,23 +96,26 @@ export default function Maps(props: Props) {
                                 }}
                             >
                                 <Placemark
-                                    geometry={[55.75, 37.57]}
+                                    geometry={[55.8, 37.6]}
                                     properties={{
                                         balloonContent: 'Содержимое балуна',
                                         balloonHeader: 'Заголовок',
-                                        balloonFooter: 'Подвал',
-                                        content: '<h3 class="popover-title">$[properties.balloonHeader]</h3>' +
-                                            '<div class="popover-content">$[properties.balloonContent]</div>'
+                                        balloonFooter: 'Подвал'
                                     }}
+
 
                                     options={{
+                                        // Применяем шаблон
                                         balloonContentLayout: template,
-                                        iconLayout: template,
+                                        balloonPanelMaxMapArea: 0,
 
+                                        iconLayout: 'default#image',
+                                        iconImageHref: '/placemark.svg',
+                                        iconImageSize: [18, 22],
 
                                     }}
-                                    // Load balloon addon for all geo objects
-                                    modules={['geoObject.addon.balloon']}
+                                    modules={["geoObject.addon.balloon"]}
+
                                 />
                             </Map>
                         )}
