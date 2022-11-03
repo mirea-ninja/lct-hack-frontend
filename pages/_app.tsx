@@ -1,8 +1,8 @@
-import "../styles/globals.scss"
-import type { AppProps } from "next/app"
-import { createTheme, ThemeProvider } from "@mui/material"
-import { blue, orange } from "@mui/material/colors"
-import { Box } from "@mui/system"
+import "../styles/globals.scss";
+import type { AppProps } from "next/app";
+import { createTheme, ThemeProvider } from "@mui/material";
+import { blue, orange } from "@mui/material/colors";
+import { Box } from "@mui/system";
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -16,7 +16,7 @@ export default function App({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
       </Box>
     </ThemeProvider>
-  )
+  );
 }
 
 const commonTheme = createTheme({
@@ -62,7 +62,7 @@ const commonTheme = createTheme({
       },
     },
   },
-})
+});
 
 const theme = createTheme(
   {
@@ -119,62 +119,62 @@ const theme = createTheme(
     },
   },
   commonTheme
-)
+);
 
 declare module "@mui/material/Button" {
   interface ButtonPropsVariantOverrides {
-    mainActive: true
-    mainDisabled: true
-    accentActive: true
+    mainActive: true;
+    mainDisabled: true;
+    accentActive: true;
   }
 }
 
 declare module "@mui/material/styles" {
   interface Theme {
     status: {
-      danger: string
-    }
+      danger: string;
+    };
     text: {
-      primary: string
-      secondary: string
-      light: string
-    }
+      primary: string;
+      secondary: string;
+      light: string;
+    };
     background: {
-      primary: string
-    }
+      primary: string;
+    };
   }
   // allow configuration using `createTheme`
   interface ThemeOptions {
     status?: {
-      danger?: string
-    }
+      danger?: string;
+    };
     text?: {
-      primary?: string
-      secondary?: string
-      light?: string
-    }
+      primary?: string;
+      secondary?: string;
+      light?: string;
+    };
     background?: {
-      primary?: string
-    }
+      primary?: string;
+    };
   }
 
   interface Palette {
-    accent: Palette["primary"]
+    accent: Palette["primary"];
   }
   interface PaletteOptions {
-    accent: PaletteOptions["primary"] & AdditionalPanelOptions
+    accent: PaletteOptions["primary"] & AdditionalPanelOptions;
   }
 
   interface PaletteColor {
-    darker?: string
-    color?: string
+    darker?: string;
+    color?: string;
   }
 
   interface AdditionalPanelOptions {
-    color?: string
+    color?: string;
   }
 
   interface SimplePaletteColorOptions {
-    darker?: string
+    darker?: string;
   }
 }
