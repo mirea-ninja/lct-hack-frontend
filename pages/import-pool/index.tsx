@@ -13,7 +13,6 @@ export default function ImportPoolPage({}: Props) {
       gap={1}
       sx={{
         height: "100%",
-        flexWrap: "wrap",
       }}
     >
       <Header />
@@ -34,6 +33,7 @@ export default function ImportPoolPage({}: Props) {
         gap={7}
         sx={{
           flexBasis: "100%",
+          bottom: 0,
         }}
       >
         <ImportPoolBox />

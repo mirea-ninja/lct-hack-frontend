@@ -78,7 +78,13 @@ export default function ImportPoolBox({}: Props) {
               : ""
 
             return (
-              <div
+              <Box
+                display="flex"
+                justifyContent="center"
+                alignItems="center"
+                sx={{
+                  minHeight: "150px",
+                }}
                 {...getRootProps({
                   className: `dropzone ${styles.dropzone} ${additionalClass}`,
                 })}
@@ -107,12 +113,12 @@ export default function ImportPoolBox({}: Props) {
                     </Stack>
                   </Stack>
                 )}
-              </div>
+              </Box>
             )
           }}
         </Dropzone>
       </Box>
-      <Box display="flex" justifyContent="center" marginTop="auto">
+      <Box display="flex" justifyContent="center" marginTop="50px">
         <Button
           variant="mainActive"
           sx={{
