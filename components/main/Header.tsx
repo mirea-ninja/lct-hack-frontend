@@ -20,14 +20,19 @@ type Props = {}
 
 export default function Header({}: Props) {
   return (
-    <Box sx={{ flexGrow: 1 }}>
+    <Box
+      sx={{
+        flexGrow: 1,
+        borderShadow: "20px rgba(0, 0, 0, 0.25)",
+      }}
+    >
       <AppBar
         sx={{
           backgroundColor: "white",
           paddingLeft: "20px",
           paddingRight: "20px",
         }}
-        elevation={0.1}
+        elevation={0}
         position="static"
       >
         <Toolbar>

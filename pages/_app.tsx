@@ -33,7 +33,7 @@ const commonTheme = createTheme({
   },
   palette: {
     primary: {
-      main: "#1976d2",
+      main: "#038CD2",
       darker: "#145a9f",
     },
     secondary: {
@@ -42,9 +42,9 @@ const commonTheme = createTheme({
       dark: "#A6A8B5",
     },
     accent: {
-      main: "#E5F3FA",
+      main: "#c5ecff",
       color: "#038CD2",
-      light: "#E5F3FA",
+      light: "#c5ecff",
     },
   },
   typography: {

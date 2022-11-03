@@ -30,20 +30,20 @@ export type DataRow = {
   CorrectableData
 
 export type RequiredData = {
-  Location: string
-  Rooms: number
-  Segment: SegmentType
-  FloorsCount: number
-  WallMaterials: WallMaterials
+  Location?: string
+  Rooms?: number
+  Segment?: SegmentType
+  FloorsCount?: number
+  WallMaterials?: WallMaterials
 }
 
 export type CorrectableData = {
-  Floor: number
-  TotalSpace: number
-  KitchenSpace: number
-  WithBalcony: boolean
-  TimeToMetroInMinutes: number
-  FurnishQuality: FurnishQuality
+  Floor?: number
+  TotalSpace?: number
+  KitchenSpace?: number
+  WithBalcony?: boolean
+  TimeToMetroInMinutes?: number
+  FurnishQuality?: FurnishQuality
 }
 
 export * from "./types"
