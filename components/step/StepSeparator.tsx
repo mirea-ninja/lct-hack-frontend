@@ -1,23 +1,23 @@
 import React from "react"
 import { Box, useTheme } from "@mui/material"
 
-type Props = {}
+type Props = {
+  isActive?: boolean
+}
 
-export default function StepSeparator({}: Props) {
+export default function StepSeparator({ isActive }: Props) {
   let theme = useTheme()
 
   return (
     <Box
       sx={{
-        position: "absolute",
-        left: 0,
-        right: 0,
-        top: "50%",
-        marginLeft: "auto",
-        marginRight: "auto",
-        zIndex: -1,
         height: "2px",
-        backgroundColor: theme.palette.primary.main,
+        top: "45%",
+        zIndex: "0",
+        flexGrow: "1",
+        backgroundColor: isActive
+          ? theme.palette.primary.main
+          : theme.palette.secondary.main,
       }}
     ></Box>
   )

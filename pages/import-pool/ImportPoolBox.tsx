@@ -15,6 +15,7 @@ type Props = {}
 export default function ImportPoolBox({}: Props) {
   let isActive = false // Поменять на логику с query в бэк\
   let theme = useTheme()
+  const [poolName, setPoolName] = useState("")
 
   const [fileNames, setFileNames] = useState([])
   const isLoadedWithFile = fileNames.length != 0
@@ -47,6 +48,8 @@ export default function ImportPoolBox({}: Props) {
           size="small"
           id="outlined-read-only-input"
           placeholder="Название пула"
+          value={poolName}
+          onChange={(ev) => setPoolName(ev.target.value)}
         />
         <Typography variant="body2">
           Можете оставить это поле пустым, тогда в названии автоматически будет

@@ -19,11 +19,7 @@ export default function HeaderTab({ isActive, text, onClick, link }: Props) {
 
   return (
     <Link href={link}>
-      <Typography
-        color={color}
-        variant="body1"
-        sx={isActive ? { fontWeight: "bold" } : {}}
-      >
+      <Typography color={color} variant="body1">
         {text}
       </Typography>
     </Link>

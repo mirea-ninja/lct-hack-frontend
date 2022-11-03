@@ -16,16 +16,6 @@ export default function ImportPoolPage({}: Props) {
       }}
     >
       <Header />
-      <Box
-        justifyContent="center"
-        alignItems="center"
-        sx={{
-          display: "flex",
-          flexGrow: 1,
-        }}
-      >
-        <StepProgress currentStep={1} stepsCount={5} width="25%" />
-      </Box>
       <Stack
         direction="row"
         marginTop="30px"

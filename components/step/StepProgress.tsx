@@ -10,19 +10,43 @@ type Props = {
   width?: string
 } & BoxProps
 
+const stepValues = [
+  {
+    stepName: "Загрузка пула",
+  },
+  {
+    stepName: "Выбор эталонов",
+  },
+  {
+    stepName: "Расет эталонов",
+  },
+  {
+    stepName: "Расет пула",
+  },
+  {
+    stepName: "Экспорт",
+  },
+]
+
 export default function StepProgress({
   stepsCount,
   currentStep,
   width,
 }: Props) {
   return (
-    <Box position="relative" width={width}>
-      <StepSeparator />
-      <Stack direction="row" justifyContent="space-between">
-        {Array.from(Array(stepsCount).keys()).map((stepNumber, i) => {
-          return <Step key={i} number={i + 1} />
-        })}
-      </Stack>
-    </Box>
+    <Stack direction="row" alignItems="center">
+      {Array.from(Array(stepsCount).keys()).map((stepNumber, i) => {
+        return (
+          <Step
+            stepName={stepValues[i].stepName}
+            key={i}
+            number={i + 1}
+            isActive={currentStep === i + 1}
+            isProgressed={currentStep > i + 1}
+            havePath={i !== stepsCount - 1}
+          />
+        )
+      })}
+    </Stack>
   )
 }
