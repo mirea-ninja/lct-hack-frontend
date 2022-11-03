@@ -20,7 +20,7 @@ export default function StepProgress({
       <StepSeparator />
       <Stack direction="row" justifyContent="space-between">
         {Array.from(Array(stepsCount).keys()).map((stepNumber, i) => {
-          return <Step number={i + 1} />
+          return <Step key={i} number={i + 1} />
         })}
       </Stack>
     </Box>

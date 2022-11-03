@@ -7,14 +7,7 @@ import { Box } from "@mui/system"
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
-      <Box
-        padding={0}
-        sx={{
-          backgroundColor: theme.background.primary,
-        }}
-      >
-        <Component {...pageProps} />
-      </Box>
+      <Component {...pageProps} />
     </ThemeProvider>
   )
 }
@@ -33,7 +26,7 @@ const commonTheme = createTheme({
   },
   palette: {
     primary: {
-      main: "#1976d2",
+      main: "#038CD2",
       darker: "#145a9f",
     },
     secondary: {
@@ -42,9 +35,9 @@ const commonTheme = createTheme({
       dark: "#A6A8B5",
     },
     accent: {
-      main: "#E5F3FA",
+      main: "#c5ecff",
       color: "#038CD2",
-      light: "#E5F3FA",
+      light: "#c5ecff",
     },
   },
   typography: {
@@ -77,7 +70,6 @@ const theme = createTheme(
           },
           sx: {
             borderRadius: "10px",
-            borderWidth: "30px",
             borderColor: commonTheme.palette.secondary.light,
           },
         },

@@ -1,0 +1,21 @@
+.dropzone {
+  text-align: center;
+  padding: 20px;
+  border: 2px dashed #a6a8b5;
+  color: #bdbdbd;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  margin-top: 20px;
+
+  &:active {
+    border-color: #0b23c5 !important;
+  }
+}
+
+.accept {
+  border-color: #0b23c5 !important;
+}
+
+.reject {
+  border-color: #d83b01 !important;
+}
