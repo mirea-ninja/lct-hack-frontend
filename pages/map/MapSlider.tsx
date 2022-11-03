@@ -137,6 +137,23 @@ export const MapSlider = () => {
         className={styles.slider}
         sx={{
           left: open ? 30 : -330,
+
+          scrollBehavior: "smooth",
+          overflowY: "scroll",
+          overflowX: "hidden",
+          scrollbarWidth: "thin",
+          scrollbarColor: `${theme.palette.secondary.light} ${theme.palette.secondary.main}`,
+          "&::-webkit-scrollbar": {
+            width: "6px",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: theme.palette.secondary.light,
+            borderRadius: "0px 10px 10px 0px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: theme.palette.secondary.main,
+            borderRadius: "0px 10px 10px 0px",
+          },
         }}
       >
         <Box className={styles.header}>

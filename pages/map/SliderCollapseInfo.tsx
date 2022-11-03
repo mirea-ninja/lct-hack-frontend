@@ -158,9 +158,9 @@ export const SliderCollapseInfo = () => {
         </Box>
         <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
           {isCollapsed ? (
-            <ArrowLeft sx={{ transform: "rotate(-90deg)" }} />
-          ) : (
             <ArrowLeft sx={{ transform: "rotate(90deg)" }} />
+          ) : (
+            <ArrowLeft sx={{ transform: "rotate(-90deg)" }} />
           )}
         </IconButton>
       </Box>
@@ -211,7 +211,7 @@ export const SliderCollapseInfo = () => {
           итог
         </Typography>
       </Box>
-      <Collapse in={!isCollapsed}>
+      <Collapse in={isCollapsed}>
         <Typography
           fontSize={16}
           lineHeight={"18px"}
