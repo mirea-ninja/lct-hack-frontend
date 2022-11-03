@@ -106,6 +106,20 @@ const Open = () => (
   </svg>
 );
 
+const Hr = () => {
+  const theme = useTheme();
+  return (
+    <Box
+      sx={{
+        height: "1px",
+        backgroundColor: theme.palette.secondary.light,
+        marginTop: "20px",
+        marginBottom: "10px",
+      }}
+    />
+  );
+};
+
 export const MapSlider = () => {
   const [open, setOpen] = React.useState(false);
   const [subquery, setSubquery] = React.useState(0);
@@ -249,7 +263,9 @@ export const MapSlider = () => {
         {/* Контейнер с инфой раскрывающейся */}
         <Box className={styles.cards}>
           <SliderCollapseInfo />
+          <Hr />
           <SliderCollapseInfo />
+          <Hr />
           <SliderCollapseInfo />
         </Box>
       </Box>
