@@ -14,11 +14,15 @@ import { useApiClient } from "../../logic/ApiClientHook"
 import axios from "axios"
 import { useStore } from "../../logic/DataStore"
 import { QueryGet } from "../../apiConnection/gen/models/query-get"
+import HeaderTab from "../../components/main/HeaderTab"
+import StepProgress from "../../components/step/StepProgress"
+import DeleteIcon from "../../components/icons/DeleteIcon/DeleteIcon"
+import NewFileIcon from "../../components/icons/NewFileIcon/NewFileIcon"
 
 type Props = {}
 
 export default function ImportPoolBox({}: Props) {
-  let isActive = false // Поменять на логику с query в бэк
+  let isActive = true // Поменять на логику с query в бэк
   let theme = useTheme()
   const [poolName, setPoolName] = useState("")
   const client = useApiClient()
@@ -66,6 +70,8 @@ export default function ImportPoolBox({}: Props) {
       sx={{
         // flex: 1,
         width: "563px",
+        minWidth: "470px",
+        maxWidth: "470px",
         backgroundColor: isActive ? theme.palette.background.paper : null,
       }}
       height="678px"
@@ -90,7 +96,7 @@ export default function ImportPoolBox({}: Props) {
           value={poolName}
           onChange={(ev) => setPoolName(ev.target.value)}
         />
-        <Typography variant="body2">
+        <Typography variant="body2" sx={{color: theme.text.secondary}}>
           Можете оставить это поле пустым, тогда в названии автоматически будет
           название загруженного файла
         </Typography>
@@ -117,8 +123,9 @@ export default function ImportPoolBox({}: Props) {
               ? styles.accept
               : isDragReject
               ? styles.reject
+              : isLoadedWithFile
+              ? styles.file_loaded
               : ""
-
             return (
               <Box
                 display="flex"
@@ -129,28 +136,75 @@ export default function ImportPoolBox({}: Props) {
                 }}
                 {...getRootProps({
                   className: `dropzone ${styles.dropzone} ${additionalClass}`,
+                  onClick: (event) => {
+                    if (isLoadedWithFile)
+                      event.stopPropagation()
+                    }
                 })}
               >
                 {isLoadedWithFile ? (
                   <>
-                    <Typography
-                      sx={{
-                        color: theme.text.primary,
-                      }}
-                    >
-                      Загружен файл: <strong>{file.name}</strong>
+                  <Stack gap={1}>
+                    <input {...getInputProps()} />
+                    <Typography paddingBottom="20px">
+                      Перетащите файл сюда <br/> или {" "}
+                      <strong>выберите файл для загрузки</strong>
                     </Typography>
+                    <Box>
+                      <Stack
+                          direction="row"
+                          alignItems="center"
+                          sx={{
+                            padding: "10px",
+                            borderRadius: "10px",
+                            backgroundColor: theme.palette.accent.light,
+                          }}
+                        >
+                          <NewFileIcon />
+                          <Typography noWrap
+                            textOverflow="ellipsis"
+                            sx={{
+                              paddingLeft: "10px",
+                              paddingRight: "10px",
+                              color: theme.palette.accent.color,
+                              width: "330px",
+                            }}
+                          >
+                           {file.name}
+                          </Typography>
+
+                          <Button
+                            onClick={() => setFile(null)}
+                            sx={{
+                              padding: "0px",
+                              minWidth: "0px",
+                              width: "24px",
+                              height: "24px",
+                            }}
+                          >
+                            <DeleteIcon />
+                          </Button>
+                      </Stack>
+                    </Box>
+                    <Stack>
+                      <Typography paddingTop="20px">
+                        Формат XLSX, XLS, CSV
+                      </Typography>
+                      <Typography>Максимальный размер файла 60 мб</Typography>
+                    </Stack>
+                  </Stack>
+
                   </>
                 ) : (
                   <Stack gap={1}>
                     <input {...getInputProps()} />
-                    <Typography>
-                      Перетащите файл сюда <br /> или{" "}
+                    <Typography paddingBottom="42px">
+                      Перетащите файл сюда <br/> или {" "}
                       <strong>выберите файл для загрузки</strong>
                     </Typography>
                     <Box></Box>
                     <Stack>
-                      <Typography paddingTop="84px">
+                      <Typography paddingTop="42px">
                         Формат XLSX, XLS, CSV
                       </Typography>
                       <Typography>Максимальный размер файла 60 мб</Typography>
@@ -164,7 +218,7 @@ export default function ImportPoolBox({}: Props) {
       </Box>
       <Box display="flex" justifyContent="center" marginTop="50px">
         <Button
-          variant={isLoadedWithFile ? "mainActive" : "mainDisabled"}
+          variant={isLoadedWithFile ? "mainActive" :"mainDisabled"}
           sx={{
             height: "52px",
             width: "329px",
