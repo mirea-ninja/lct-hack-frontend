@@ -9,6 +9,8 @@ import {
 import React, { useState } from "react"
 import Dropzone from "react-dropzone"
 import styles from "../../styles/Dropzone.module.scss"
+import { useQuery } from "@tanstack/react-query"
+import { useApiClient } from "../../logic/ApiClientHook"
 
 type Props = {}
 
@@ -16,13 +18,26 @@ export default function ImportPoolBox({}: Props) {
   let isActive = false // Поменять на логику с query в бэк\
   let theme = useTheme()
   const [poolName, setPoolName] = useState("")
+  const client = useApiClient()
 
-  const [fileNames, setFileNames] = useState([])
+  const [fileNames, setFileNames] = useState<string[]>([])
   const isLoadedWithFile = fileNames.length != 0
-  const handleDrop = (acceptedFiles: any[]) => {
+  const handleDrop = (acceptedFiles: File[]) => {
     console.log(acceptedFiles)
     setFileNames(acceptedFiles.map((file) => file.name))
   }
+
+  const { isLoading, error, data } = useQuery({
+    queryKey: ["repoData"],
+    queryFn: () =>
+      fetch("https://api.github.com/repos/tannerlinsley/react-query").then(
+        (res) => res.json()
+      ),
+  })
+
+  if (isLoading) return "Loading..."
+
+  if (error) return "An error has occurred: " + error.message
 
   return (
     <Stack

@@ -3,11 +3,19 @@ import type { AppProps } from "next/app"
 import { createTheme, ThemeProvider } from "@mui/material"
 import { blue, orange } from "@mui/material/colors"
 import { Box } from "@mui/system"
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
+import { ApiClientContextProvider } from "../logic/ApiClientHook"
+
+const queryClient = new QueryClient()
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ThemeProvider theme={theme}>
-      <Component {...pageProps} />
+      <QueryClientProvider client={queryClient}>
+        <ApiClientContextProvider>
+          <Component {...pageProps} />
+        </ApiClientContextProvider>
+      </QueryClientProvider>
     </ThemeProvider>
   )
 }
