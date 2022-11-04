@@ -32,3 +32,5 @@ export default function ImportPoolPage({}: Props) {
     </Stack>
   )
 }
+
+ImportPoolPage.requireAuth = true

@@ -1,15 +1,54 @@
-import "../styles/globals.scss"
-import type { AppProps } from "next/app"
-import { createTheme, ThemeProvider } from "@mui/material"
-import { blue, orange } from "@mui/material/colors"
-import { Box } from "@mui/system"
+import "../styles/globals.scss";
+import type { AppProps } from "next/app";
+import { createTheme, ThemeProvider } from "@mui/material";
+import { orange } from "@mui/material/colors";
 
-export default function App({ Component, pageProps }: AppProps) {
+import { AuthProvider } from "../components/auth/AuthProvider";
+import { NextPage } from "next";
+import Head from "next/head";
+import { AuthGuard } from "../components/auth/AuthGuard";
+
+export type NextApplicationPage<P = any, IP = P> = NextPage<P, IP> & {
+  requireAuth?: boolean;
+};
+
+export default function App(props: AppProps) {
+  const {
+    Component,
+    pageProps,
+  }: { Component: NextApplicationPage; pageProps: any } = props;
+
   return (
-    <ThemeProvider theme={theme}>
-      <Component {...pageProps} />
-    </ThemeProvider>
-  )
+    <>
+      <Head>
+        <meta
+          name="viewport"
+          content="minimum-scale=1, initial-scale=1, width=device-width"
+          key="viewport"
+        />
+        <meta charSet="utf-8" />
+        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
+        <meta
+          name="description"
+          content="Ninja LCT Hack"
+          key="description"
+        />
+      </Head>
+      <AuthProvider>
+        {Component.requireAuth ? (
+          <AuthGuard>
+            <ThemeProvider theme={theme}>
+              <Component {...pageProps} />
+            </ThemeProvider>
+          </AuthGuard>
+        ) : (
+          <ThemeProvider theme={theme}>
+            <Component {...pageProps} />
+          </ThemeProvider>
+        )}
+      </AuthProvider>
+    </>
+  );
 }
 
 const commonTheme = createTheme({
@@ -55,7 +94,7 @@ const commonTheme = createTheme({
       },
     },
   },
-})
+});
 
 const theme = createTheme(
   {
@@ -111,62 +150,62 @@ const theme = createTheme(
     },
   },
   commonTheme
-)
+);
 
 declare module "@mui/material/Button" {
   interface ButtonPropsVariantOverrides {
-    mainActive: true
-    mainDisabled: true
-    accentActive: true
+    mainActive: true;
+    mainDisabled: true;
+    accentActive: true;
   }
 }
 
 declare module "@mui/material/styles" {
   interface Theme {
     status: {
-      danger: string
-    }
+      danger: string;
+    };
     text: {
-      primary: string
-      secondary: string
-      light: string
-    }
+      primary: string;
+      secondary: string;
+      light: string;
+    };
     background: {
-      primary: string
-    }
+      primary: string;
+    };
   }
   // allow configuration using `createTheme`
   interface ThemeOptions {
     status?: {
-      danger?: string
-    }
+      danger?: string;
+    };
     text?: {
-      primary?: string
-      secondary?: string
-      light?: string
-    }
+      primary?: string;
+      secondary?: string;
+      light?: string;
+    };
     background?: {
-      primary?: string
-    }
+      primary?: string;
+    };
   }
 
   interface Palette {
-    accent: Palette["primary"]
+    accent: Palette["primary"];
   }
   interface PaletteOptions {
-    accent: PaletteOptions["primary"] & AdditionalPanelOptions
+    accent: PaletteOptions["primary"] & AdditionalPanelOptions;
   }
 
   interface PaletteColor {
-    darker?: string
-    color?: string
+    darker?: string;
+    color?: string;
   }
 
   interface AdditionalPanelOptions {
-    color?: string
+    color?: string;
   }
 
   interface SimplePaletteColorOptions {
-    darker?: string
+    darker?: string;
   }
 }
