@@ -9,8 +9,10 @@ import {
 import React, { useState } from "react"
 import Dropzone from "react-dropzone"
 import styles from "../../styles/Dropzone.module.scss"
-import { useQuery } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { useApiClient } from "../../logic/ApiClientHook"
+import { QueryGet } from "../../apiConnection/gen"
+import axios from "axios"
 
 type Props = {}
 
@@ -20,24 +22,36 @@ export default function ImportPoolBox({}: Props) {
   const [poolName, setPoolName] = useState("")
   const client = useApiClient()
 
-  const [fileNames, setFileNames] = useState<string[]>([])
-  const isLoadedWithFile = fileNames.length != 0
+  const [file, setFile] = useState<File | null>(null)
+  const [newName, setNewName] = useState<string | null>(null)
+  const isLoadedWithFile = file != null
+
   const handleDrop = (acceptedFiles: File[]) => {
     console.log(acceptedFiles)
-    setFileNames(acceptedFiles.map((file) => file.name))
+    setFile(acceptedFiles[0])
   }
 
-  const { isLoading, error, data } = useQuery({
-    queryKey: ["repoData"],
-    queryFn: () =>
-      fetch("https://api.github.com/repos/tannerlinsley/react-query").then(
-        (res) => res.json()
-      ),
+  const onButtonClick = () => {
+    if (file == null) {
+      return
+    }
+
+    mutate({ name: newName ?? "123", file: file as Blob })
+  }
+
+  const { mutate, isLoading, isError, isSuccess } = useMutation({
+    mutationFn: (params: { name: string; file: Blob }) => {
+      return client.poolApi.createPoolPostForm(params.file, params.name)
+    },
+    onSettled(data, error, variables, context) {
+      console.log(data)
+      console.log(error)
+      console.log(variables)
+      console.log(context)
+    },
   })
 
   if (isLoading) return "Loading..."
-
-  if (error) return "An error has occurred: " + error.message
 
   return (
     <Stack
@@ -116,7 +130,7 @@ export default function ImportPoolBox({}: Props) {
                         color: theme.text.primary,
                       }}
                     >
-                      Загружен файл: <strong>{fileNames[0]}</strong>
+                      Загружен файл: <strong>{file.name}</strong>
                     </Typography>
                   </>
                 ) : (
@@ -148,6 +162,9 @@ export default function ImportPoolBox({}: Props) {
           sx={{
             height: "52px",
             width: "329px",
+          }}
+          onClick={() => {
+            onButtonClick()
           }}
         >
           Загрузить пул

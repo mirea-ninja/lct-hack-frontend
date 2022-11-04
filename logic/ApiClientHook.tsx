@@ -24,7 +24,14 @@ class ApiClient {
   constructor() {
     let config = new Configuration({
       basePath: process.env.NEXT_APP_API_URL,
-      accessToken: "Bearer " + window.sessionStorage.getItem("user")
+      //accessToken: "Bearer " + window.sessionStorage.getItem("user"),
+      baseOptions: {
+        headers: {
+          Authorization:
+            "Bearer " +
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2Njg4MDY0OTksImlhdCI6MTY2NzU5Njg5OSwianRpIjoiOWRhMGEyNTItYmFlYy00YmQzLTg4MDEtNTI3MzE3ZjdkZWU1Iiwic3ViIjoiOTdmNmJmYzAtY2I2MC00NTI0LTlmN2ItYjhmOTZmZmIxNzQxIiwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIiwiZmlyc3RfbmFtZSI6InN0cmluZyIsImxhc3RfbmFtZSI6InN0cmluZyIsIm1pZGRsZV9uYW1lIjoic3RyaW5nIn0.XLGRwGZ1KbhBQMQ3_lpv6yD4vtJiEVkpr11R0sBLWP8",
+        },
+      },
     })
 
     this.apartmentApi = new ApartmentApi(config)
