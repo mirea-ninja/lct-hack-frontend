@@ -1,23 +1,17 @@
 import React from "react";
 import {
     YMaps,
-    YMapsApi,
     Map,
-    Circle,
-    Polygon,
     withYMaps,
     Placemark,
-    Rectangle,
 } from "react-yandex-maps";
 import {useTheme} from "@mui/material";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
-import IconButton from "@mui/material/IconButton";
-import styles from "../../styles/Map.module.scss";
+
 import {MapSlider} from "./MapSlider";
 import {ReferenceCard} from "./ReferenceCard";
-import placemark from "../../public/placemark.png";
+import {EditorModal} from "./EditorModal";
+
 
 type Props = {};
 
@@ -61,12 +55,13 @@ const ConnectedTemplateProvider = withYMaps(TemplateProvider, true, [
 export default function Maps(props: Props) {
     const [open, setOpen] = React.useState(false);
     const [ymaps, setYmaps] = React.useState<any>();
-
+    const [editorOpen, setEditorOpen] = React.useState(false);
 
     const theme = useTheme();
 
     // @ts-ignore
     return (
+
         <Box>
             <MapSlider/>
             <ReferenceCard/>
@@ -112,11 +107,8 @@ export default function Maps(props: Props) {
                                         iconLayout: 'default#image',
                                         iconImageHref: '/placemark.svg',
                                         iconImageSize: [18, 22],
-
                                     }}
-                                    modules={["geoObject.addon.balloon"]}
-
-                                />
+                                    modules={["geoObject.addon.balloon"]}/>
                             </Map>
                         )}
                     </ConnectedTemplateProvider>
