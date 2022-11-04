@@ -8,6 +8,9 @@ import { BoxProps } from '@mui/system';
 import { Stack } from '@mui/system';
 import React from 'react';
 import AppButton from '../../components/buttons/AppButton';
+import GosuslugiIcon from '../../components/icons/GosuslugiIcon';
+import ACMLogoIcon from '../../components/icons/ACMLogoIcon';
+import NinjaIcon from '../../components/icons/NinjaIcon';
 import styles from '../../styles/Login.module.scss';
 
 type Props = {};
@@ -32,13 +35,27 @@ function LeftSide(props: BoxProps) {
     <Box
       {...props}
       sx={{
+        display: 'grid',
+        gridTemplateRows: 'auto 1fr auto',
+        alignItems: 'center',
         flex: 1,
         backgroundColor: theme.palette.primary.main,
-        padding: '5rem',
+        padding: '50px',
       }}>
-      <Typography variant='h3' sx={{ color: 'white' }}>
+      <ACMLogoIcon />
+      <Typography
+        variant='h3'
+        component='h1'
+        sx={{
+          maxWidth: '500px',
+          color: 'var(--bg-clr-pure-white)',
+          fontWeight: 700,
+          fontSize: '55px',
+          lineHeight: '60px',
+        }}>
         Расчет рыночной стоимости жилых объектов в Москве
       </Typography>
+      <NinjaIcon />
     </Box>
   );
 }
@@ -68,7 +85,10 @@ function RightSide(props: StackProps) {
           <Typography align='center'>ИЛИ</Typography>
           <AppButton variant='secondary'>Войти через SSO</AppButton>
           <Stack direction='row' justifyContent='space-between' spacing={2}>
-            <AppButton sx={{ flex: 1 }} variant='secondary'>
+            <AppButton
+              sx={{ flex: 1 }}
+              variant='secondary'
+              startIcon={<GosuslugiIcon />}>
               Госуслуги
             </AppButton>
             <AppButton sx={{ flex: 1 }} variant='secondary'>
