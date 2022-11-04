@@ -8,7 +8,7 @@ import {
   ToggleButton,
 } from "@mui/material";
 
-import { SliderCollapseInfo } from "./SliderCollapseInfo";
+import SliderCollapseInfo from "./SliderCollapseInfo";
 
 import styles from "../../styles/MapSlider.module.scss";
 
@@ -120,7 +120,7 @@ const Hr = () => {
   );
 };
 
-export const MapSlider = () => {
+export default function MapSlider(){
   const [open, setOpen] = React.useState(false);
   const [subquery, setSubquery] = React.useState(0);
 
