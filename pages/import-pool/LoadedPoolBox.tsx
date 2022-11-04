@@ -58,6 +58,22 @@ export default function LoadedPoolBox({}: Props) {
           height: "500px",
           width: "750px",
           overflow: "auto",
+          scrollBehavior: "smooth",
+          overflowY: "scroll",
+          overflowX: "hidden",
+          scrollbarWidth: "thin",
+          scrollbarColor: `${theme.palette.secondary.light} ${theme.palette.secondary.main}`,
+          "&::-webkit-scrollbar": {
+            width: "6px",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: theme.palette.secondary.light,
+            borderRadius: "10px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: theme.palette.secondary.main,
+            borderRadius: "10px",
+          },
         }}
       >
         <Grid container item rowSpacing={2} columnSpacing={1}> {/* Поменять на логику c бэка */}
