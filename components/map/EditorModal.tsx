@@ -11,7 +11,7 @@ import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
-
+import styles from "./EditorModal.module.scss";
 
 const CloseIcon = () => (
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -26,7 +26,7 @@ type Props = {
     setOpen: (open: boolean) => void,
 }
 
-export default function EditorModal({open, setOpen}: Props){
+export default function EditorModal({open, setOpen}: Props) {
     const theme = useTheme();
 
     return (
@@ -37,30 +37,13 @@ export default function EditorModal({open, setOpen}: Props){
             aria-describedby="modal-modal-description"
         >
             <Box
+                className={styles.modal}
                 sx={{
-                    padding: "30px",
-                    display: "flex",
-                    flexDirection: "column",
-                    alignItems: "flex-start",
                     background: theme.palette.background.paper,
-                    borderRadius: "10px",
-                    boxShadow: 24,
-
-                    position: "absolute",
-                    top: "50%",
-                    left: "50%",
-                    transform: "translate(-50%, -50%)",
-
-                }}
-            >
-                {/* header */}
-                <Box sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                    width: "100%",
                 }}>
 
+                {/* header */}
+                <Box className={styles.header}>
                     <Box sx={{display: "flex", alignItems: "center", gap: "20px"}}>
                         <Typography
                             fontSize={24}
@@ -86,26 +69,34 @@ export default function EditorModal({open, setOpen}: Props){
 
                 {/* body */}
                 <Box sx={{width: "100%", marginTop: "30px"}}>
-                    {/* 3 текстовых поля и 1 выпадающий список в 1 строке */}
-                    <Box sx={{display: "flex", gap: "20px", width: "100%"}}>
+                    <Box className={styles.input_row}>
                         <TextField
                             variant="outlined"
                             placeholder="Адрес"
                             value={"Шарикоподшипниковская, 123"}
-                            fullWidth
-
+                            sx={{
+                                minWidth: "350px",
+                                paddingRight: "20px",
+                            }}
                         />
                         <TextField
                             variant="outlined"
                             placeholder="Этаж"
                             value={"3"}
-                            fullWidth
+                            sx={{
+                                minWidth: "108px",
+                                paddingRight: "5px"
+                            }}
                         />
+                        <Typography fontSize={18} lineHeight={"20px"} color={theme.palette.secondary.dark}
+                                    fontWeight={500} sx={{paddingRight: "5px"}}>
+                            из
+                        </Typography>
                         <TextField
                             variant="outlined"
                             placeholder="Этаж"
                             value={"24"}
-                            fullWidth
+                            sx={{minWidth: "64px", paddingRight: "20px"}}
                         />
                         <FormControl variant="outlined" fullWidth>
                             <InputLabel>Ремонт</InputLabel>
@@ -119,6 +110,65 @@ export default function EditorModal({open, setOpen}: Props){
                                 <MenuItem value={30}>Три</MenuItem>
                             </Select>
                         </FormControl>
+                    </Box>
+                    <Box className={styles.input_row}>
+                        <TextField
+                            variant="outlined"
+                            placeholder="S общая"
+                            value={"45"}
+                            sx={{
+                                minWidth: "183px",
+                                paddingRight: "5px"
+                            }}
+                        />
+                        <Typography fontSize={18} lineHeight={"20px"} color={theme.palette.secondary.dark}
+                                    fontWeight={500} sx={{paddingRight: "20px"}}>
+                            м²
+                        </Typography>
+                        <TextField
+                            variant="outlined"
+                            placeholder="S кухни"
+                            value={"163"}
+                            sx={{minWidth: "163px", paddingRight: "5px"}}
+                        />
+                        <Typography fontSize={18} lineHeight={"20px"} color={theme.palette.secondary.dark}
+                                    fontWeight={500} sx={{paddingRight: "20px"}}>
+                            м²
+                        </Typography>
+                        <FormControl variant="outlined" sx={{minWidth: "190px", paddingRight: "20px"}}>
+                            <InputLabel>Балкон</InputLabel>
+                            <Select>
+                                <MenuItem value={true}>Да</MenuItem>
+                                <MenuItem value={false}>Нет</MenuItem>
+                            </Select>
+                        </FormControl>
+                        <TextField
+                            variant="outlined"
+                            placeholder="до метро пешком"
+                            value={"163"}
+                            sx={{minWidth: "205px", paddingRight: "5px"}}
+                        />
+                        <Typography fontSize={18} lineHeight={"20px"} color={theme.palette.secondary.dark}
+                                    fontWeight={500}>
+                            мин
+                        </Typography>
+                    </Box>
+                    <Box className={styles.input_row} sx={{justifyContent: "space-between"}}>
+                        <Box sx={{display: "flex", alignItems: "center", gap: "20px"}}>
+                            <Typography fontSize={18} lineHeight={"20px"} fontWeight={700}
+                                        color={theme.palette.secondary.dark}>
+                                Цена общая
+                            </Typography>
+                            <TextField
+                                variant="outlined"
+                                placeholder="Цена"
+                                value={"163"}
+                                sx={{minWidth: "165px"}}
+                            />
+                        </Box>
+                        <Button variant={"mainActive"} sx={{width: "300px", height: "60px"}}>
+                            Сохранить изменения
+                        </Button>
                     </Box>
                 </Box>
             </Box>
