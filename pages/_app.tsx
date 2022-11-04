@@ -4,58 +4,21 @@ import { createTheme, ThemeProvider } from "@mui/material";
 import { orange } from "@mui/material/colors";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ApiClientContextProvider } from "../logic/ApiClientHook";
-import { AuthProvider } from "../components/auth/AuthProvider";
 import { NextPage } from "next";
 import Head from "next/head";
-import { AuthGuard } from "../components/auth/AuthGuard";
 
-export type NextApplicationPage<P = any, IP = P> = NextPage<P, IP> & {
-  requireAuth?: boolean;
-};
 
-export default function App(props: AppProps) {
-  const {
-    Component,
-    pageProps,
-  }: { Component: NextApplicationPage; pageProps: any } = props;
-
+export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
 
   return (
-    <>
-      <Head>
-        <meta
-          name="viewport"
-          content="minimum-scale=1, initial-scale=1, width=device-width"
-          key="viewport"
-        />
-        <meta charSet="utf-8" />
-        <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta name="description" content="Ninja LCT Hack" key="description" />
-      </Head>
-
-      <AuthProvider>
-        {Component.requireAuth ? (
-          <AuthGuard>
-            <ThemeProvider theme={theme}>
-              <QueryClientProvider client={queryClient}>
-                <ApiClientContextProvider>
-                  <Component {...pageProps} />
-                </ApiClientContextProvider>
-              </QueryClientProvider>
-            </ThemeProvider>
-          </AuthGuard>
-        ) : (
-          <ThemeProvider theme={theme}>
-            <QueryClientProvider client={queryClient}>
-              <ApiClientContextProvider>
-                <Component {...pageProps} />
-              </ApiClientContextProvider>
-            </QueryClientProvider>
-          </ThemeProvider>
-        )}
-      </AuthProvider>
-    </>
+    <ThemeProvider theme={theme}>
+      <QueryClientProvider client={queryClient}>
+        <ApiClientContextProvider>
+          <Component {...pageProps} />
+        </ApiClientContextProvider>
+      </QueryClientProvider>
+    </ThemeProvider>
   );
 }
 
