@@ -62,38 +62,73 @@ function LeftSide(props: BoxProps) {
 
 function RightSide(props: StackProps) {
   return (
-    <Box {...props} sx={{ flex: 1, padding: '5rem' }}>
-      <Stack spacing={2}>
-        <Typography variant='h4' sx={{ color: 'black' }}>
+    <Box
+      {...props}
+      sx={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        flex: 1,
+        padding: '5rem',
+        backgroundColor: 'var(--bg-clr-pure-white)',
+      }}>
+      <Stack sx={{ maxWidth: '445px', flex: 1, width: '100%' }}>
+        <Typography
+          variant='h4'
+          sx={{
+            marginBottom: '50px',
+            fontWeight: 700,
+            fontSize: '55px',
+            lineHeight: '60px',
+            color: 'var(--text-clr-main)',
+          }}>
           Вход
         </Typography>
-        <TextField id='outlined-read-only-input' placeholder='Логин' />
-        <TextField id='outlined-read-only-input' placeholder='Пароль' />
-        <Stack
-          direction='row'
-          justifyContent='space-between'
-          alignItems='center'>
-          <Stack direction='row' alignItems='center'>
-            <Checkbox sx={{ padding: 0 }}></Checkbox>
-            <Typography paddingLeft={2}>Сохранить данные</Typography>
+        <Stack sx={{ gap: '20px' }}>
+          <Stack sx={{ gap: '10px' }}>
+            <TextField id='outlined-read-only-input' placeholder='Логин' />
+            <TextField id='outlined-read-only-input' placeholder='Пароль' />
           </Stack>
-          <Link>Восстановить пароль</Link>
+          <Stack
+            direction='row'
+            justifyContent='space-between'
+            alignItems='center'>
+            <Stack direction='row' alignItems='center'>
+              <Checkbox sx={{ padding: 0 }}></Checkbox>
+              <Typography paddingLeft={2}>Сохранить данные</Typography>
+            </Stack>
+            <Link>Восстановить пароль</Link>
+          </Stack>
         </Stack>
 
-        <Stack paddingTop={5} spacing={5}>
+        <Stack sx={{ gap: '30px', marginTop: '40px' }}>
           <AppButton>Войти</AppButton>
-          <Typography align='center'>ИЛИ</Typography>
-          <AppButton variant='secondary'>Войти через SSO</AppButton>
-          <Stack direction='row' justifyContent='space-between' spacing={2}>
-            <AppButton
-              sx={{ flex: 1 }}
-              variant='secondary'
-              startIcon={<GosuslugiIcon />}>
-              Госуслуги
-            </AppButton>
-            <AppButton sx={{ flex: 1 }} variant='secondary'>
-              Mos.ru
-            </AppButton>
+          <Typography
+            align='center'
+            sx={{
+              fontWeight: 500,
+              fontSize: '16px',
+            }}>
+            ИЛИ
+          </Typography>
+          <Stack sx={{ gap: '20px' }}>
+            <AppButton variant='secondary'>Войти через SSO</AppButton>
+            <Stack
+              direction='row'
+              justifyContent='space-between'
+              sx={{
+                gap: '20px',
+              }}>
+              <AppButton
+                sx={{ flex: 1 }}
+                variant='secondary'
+                startIcon={<GosuslugiIcon />}>
+                Госуслуги
+              </AppButton>
+              <AppButton sx={{ flex: 1 }} variant='secondary'>
+                Mos.ru
+              </AppButton>
+            </Stack>
           </Stack>
         </Stack>
       </Stack>
