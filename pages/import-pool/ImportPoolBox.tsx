@@ -70,7 +70,7 @@ export default function ImportPoolBox({}: Props) {
         />
         <Typography variant="body2">
           Можете оставить это поле пустым, тогда в названии автоматически будет
-          дата и время загрузки пула
+          название загруженного файла
         </Typography>
       </Stack>
       <Box>
