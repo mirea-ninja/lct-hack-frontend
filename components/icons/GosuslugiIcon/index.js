@@ -26,7 +26,7 @@ const GosuslugiIcon = () => {
           x2='12.2006'
           y2='23.9998'
           gradientUnits='userSpaceOnUse'>
-          <stop stop-color='#0066B3' />
+          <stop stopColor='#0066B3' />
           <stop offset='0.354167' stopColor='#0066B3' />
           <stop offset='0.6875' stopColor='#EE2F53' />
           <stop offset='1' stopColor='#EE2F53' />
