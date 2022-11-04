@@ -2,7 +2,8 @@ import "../styles/globals.scss";
 import type { AppProps } from "next/app";
 import { createTheme, ThemeProvider } from "@mui/material";
 import { orange } from "@mui/material/colors";
-
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ApiClientContextProvider } from "../logic/ApiClientHook";
 import { AuthProvider } from "../components/auth/AuthProvider";
 import { NextPage } from "next";
 import Head from "next/head";
@@ -18,6 +19,8 @@ export default function App(props: AppProps) {
     pageProps,
   }: { Component: NextApplicationPage; pageProps: any } = props;
 
+  const queryClient = new QueryClient();
+
   return (
     <>
       <Head>
@@ -28,22 +31,27 @@ export default function App(props: AppProps) {
         />
         <meta charSet="utf-8" />
         <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
-        <meta
-          name="description"
-          content="Ninja LCT Hack"
-          key="description"
-        />
+        <meta name="description" content="Ninja LCT Hack" key="description" />
       </Head>
+
       <AuthProvider>
         {Component.requireAuth ? (
           <AuthGuard>
             <ThemeProvider theme={theme}>
-              <Component {...pageProps} />
+              <QueryClientProvider client={queryClient}>
+                <ApiClientContextProvider>
+                  <Component {...pageProps} />
+                </ApiClientContextProvider>
+              </QueryClientProvider>
             </ThemeProvider>
           </AuthGuard>
         ) : (
           <ThemeProvider theme={theme}>
-            <Component {...pageProps} />
+            <QueryClientProvider client={queryClient}>
+              <ApiClientContextProvider>
+                <Component {...pageProps} />
+              </ApiClientContextProvider>
+            </QueryClientProvider>
           </ThemeProvider>
         )}
       </AuthProvider>

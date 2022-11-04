@@ -1,6 +1,6 @@
 import jwt_decode from "jwt-decode";
 
-export type UserCB = (user: User, error: any) => void;
+export type UserCB = (user: User | null, error: any) => void;
 
 export type User = {
   email: string;
@@ -45,14 +45,14 @@ export class Auth {
 
   signIn(email: string, password: string) {
     return new Promise((resolve, reject) => {
-      if (email !== userEmail || password !== userPassword) {
-        const error = { message: "Неверный логин или пароль" };
-        this.error = error;
-        reject(error);
-        this.onUserChange(null, this.error);
+      // if (email !== userEmail || password !== userPassword) {
+      //   const error = { message: "Неверный логин или пароль" };
+      //   this.error = error;
+      //   reject(error);
+      //   this.onUserChange(null, this.error);
 
-        return;
-      }
+      //   return;
+      // }
       const tokenData = this.getDecodedAccessToken("token");
       this.user = {
         email: tokenData.email,
