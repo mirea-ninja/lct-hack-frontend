@@ -11,8 +11,9 @@ import Dropzone from "react-dropzone"
 import styles from "../../styles/Dropzone.module.scss"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { useApiClient } from "../../logic/ApiClientHook"
-import { QueryGet } from "../../apiConnection/gen"
 import axios from "axios"
+import { useStore } from "../../logic/DataStore"
+import { QueryGet } from "../../apiConnection/gen/models/query-get"
 
 type Props = {}
 
@@ -26,17 +27,20 @@ export default function ImportPoolBox({}: Props) {
   const [newName, setNewName] = useState<string | null>(null)
   const isLoadedWithFile = file != null
 
+  const store = useStore()
+  console.log(store.queryGetData)
+
   const handleDrop = (acceptedFiles: File[]) => {
     console.log(acceptedFiles)
     setFile(acceptedFiles[0])
   }
 
   const onButtonClick = () => {
-    if (file == null) {
+    if (!isLoadedWithFile) {
       return
     }
 
-    mutate({ name: newName ?? "123", file: file as Blob })
+    mutate({ name: newName ?? "", file: file as Blob })
   }
 
   const { mutate, isLoading, isError, isSuccess } = useMutation({
@@ -49,9 +53,13 @@ export default function ImportPoolBox({}: Props) {
       console.log(variables)
       console.log(context)
     },
+    onSuccess(data) {
+      console.log("SUCCESS")
+      store.updGetQueryData(data.data)
+    },
   })
 
-  if (isLoading) return "Loading..."
+  if (isLoading) return <div>Loading...</div>
 
   return (
     <Stack
@@ -137,14 +145,12 @@ export default function ImportPoolBox({}: Props) {
                   <Stack gap={1}>
                     <input {...getInputProps()} />
                     <Typography>
-                      Перетащите файл сюда <br/> или {" "}
+                      Перетащите файл сюда <br /> или{" "}
                       <strong>выберите файл для загрузки</strong>
                     </Typography>
                     <Box></Box>
                     <Stack>
-                      <Typography
-                        paddingTop="84px"
-                      >
+                      <Typography paddingTop="84px">
                         Формат XLSX, XLS, CSV
                       </Typography>
                       <Typography>Максимальный размер файла 60 мб</Typography>
@@ -158,7 +164,7 @@ export default function ImportPoolBox({}: Props) {
       </Box>
       <Box display="flex" justifyContent="center" marginTop="50px">
         <Button
-          variant="mainDisabled"
+          variant={isLoadedWithFile ? "mainActive" : "mainDisabled"}
           sx={{
             height: "52px",
             width: "329px",
