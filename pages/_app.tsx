@@ -21,13 +21,13 @@ const commonTheme = createTheme({
   },
   text: {
     primary: "#3E3E41",
-    secondary: "#FFFFFF",
+    secondary: "#A6A8B5",
     light: "#FFFFFF",
   },
   palette: {
     primary: {
       main: "#038CD2",
-      darker: "#145a9f",
+      darker: "#00699e",
     },
     secondary: {
       main: "#A6A8B5",
@@ -37,7 +37,7 @@ const commonTheme = createTheme({
     accent: {
       main: "#c5ecff",
       color: "#038CD2",
-      light: "#c5ecff",
+      light: "#E5F3FA",
     },
   },
   typography: {
@@ -80,7 +80,7 @@ const theme = createTheme(
             props: { variant: "mainActive" },
             style: {
               backgroundColor: commonTheme.palette.primary.main,
-              color: commonTheme.text.secondary,
+              color: commonTheme.text.light,
               fontWeight: "500",
               "&:hover": {
                 backgroundColor: commonTheme.palette.primary.darker,

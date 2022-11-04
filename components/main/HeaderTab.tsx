@@ -19,7 +19,7 @@ export default function HeaderTab({ isActive, text, onClick, link }: Props) {
 
   return (
     <Link href={link}>
-      <Typography color={color} variant="body1">
+      <Typography color={color} variant="body1" sx={{whiteSpace: "nowrap"}}>
         {text}
       </Typography>
     </Link>

@@ -30,6 +30,7 @@ export default function Step({
             ? theme.palette.primary.main
             : theme.palette.secondary.main,
           marginRight: "10px",
+          whiteSpace: "nowrap",
         }}
       >
         {stepName}

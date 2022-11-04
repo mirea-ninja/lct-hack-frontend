@@ -19,6 +19,9 @@ export default function ImportPoolPage({}: Props) {
       <Stack
         direction="row"
         marginTop="30px"
+        marginLeft="100px"
+        marginRight="100px"
+        justifyContent="center"
         padding={5}
         gap={7}
         sx={{

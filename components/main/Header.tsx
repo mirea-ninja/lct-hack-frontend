@@ -48,6 +48,7 @@ export default function Header({}: Props) {
           direction="row"
           gap={5}
           marginLeft={5}
+          marginRight={2}
           alignItems="center"
           sx={{
             padding: "6px",
@@ -66,7 +67,7 @@ export default function Header({}: Props) {
               flexGrow: 5,
             }}
           >
-            <StepProgress currentStep={1} stepsCount={5} width="50%" />
+            <StepProgress currentStep={1} stepsCount={5} width="50%"/>
           </Box>
         </Stack>
         <Stack direction="row" gap={10} marginLeft="auto">

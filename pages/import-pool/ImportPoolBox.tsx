@@ -13,7 +13,7 @@ import styles from "../../styles/Dropzone.module.scss"
 type Props = {}
 
 export default function ImportPoolBox({}: Props) {
-  let isActive = false // Поменять на логику с query в бэк\
+  let isActive = false // Поменять на логику с query в бэк
   let theme = useTheme()
   const [poolName, setPoolName] = useState("")
 
@@ -27,9 +27,11 @@ export default function ImportPoolBox({}: Props) {
   return (
     <Stack
       sx={{
-        flex: 1,
+        // flex: 1,
+        width: "563px",
+        backgroundColor: isActive ? theme.palette.background.paper : null,
       }}
-      height="100%"
+      height="678px"
       padding={3}
       borderRadius={5}
     >
@@ -47,7 +49,7 @@ export default function ImportPoolBox({}: Props) {
         <TextField
           size="small"
           id="outlined-read-only-input"
-          placeholder="Название пула"
+          placeholder="Название запроса"
           value={poolName}
           onChange={(ev) => setPoolName(ev.target.value)}
         />
@@ -106,12 +108,16 @@ export default function ImportPoolBox({}: Props) {
                   <Stack gap={1}>
                     <input {...getInputProps()} />
                     <Typography>
-                      Перетащите файл сюда или{" "}
+                      Перетащите файл сюда <br/> или {" "}
                       <strong>выберите файл для загрузки</strong>
                     </Typography>
                     <Box></Box>
                     <Stack>
-                      <Typography>Формат XLSX, XLS, CSV</Typography>
+                      <Typography
+                        paddingTop="84px"
+                      >
+                        Формат XLSX, XLS, CSV
+                      </Typography>
                       <Typography>Максимальный размер файла 60 мб</Typography>
                     </Stack>
                   </Stack>
@@ -123,13 +129,13 @@ export default function ImportPoolBox({}: Props) {
       </Box>
       <Box display="flex" justifyContent="center" marginTop="50px">
         <Button
-          variant="mainActive"
+          variant="mainDisabled"
           sx={{
             height: "52px",
-            width: "40%",
+            width: "329px",
           }}
         >
-          Изменить пул
+          Загрузить пул
         </Button>
       </Box>
     </Stack>

@@ -3,12 +3,15 @@ import {
   Box,
   Button,
   Grid,
+  Link,
   Paper,
   Stack,
   TextField,
   Typography,
   useTheme,
 } from "@mui/material"
+import { truncateSync } from "fs"
+import { sizing } from "@mui/system"
 
 type Props = {}
 
@@ -20,8 +23,10 @@ export default function LoadedPoolBox({}: Props) {
     <Stack
       sx={{
         flex: 1,
+        backgroundColor: isActive ? theme.palette.background.paper : null,
       }}
       display="flex"
+      maxWidth="800px"
       padding={3}
       borderRadius={5}
     >
@@ -30,7 +35,8 @@ export default function LoadedPoolBox({}: Props) {
         fontWeight="700"
         sx={{
           fontSize: "24px",
-          color: isActive ? theme.text.primary : theme.palette.secondary.main,
+          color: theme.text.primary,
+          opacity: isActive ? 1 : 0.7,
         }}
       >
         Название запроса
@@ -40,23 +46,50 @@ export default function LoadedPoolBox({}: Props) {
         fontWeight="700"
         sx={{
           marginTop: "10px",
-          color: isActive ? theme.text.primary : theme.palette.secondary.main,
+          color: theme.text.secondary,
+          opacity: isActive ? 1 : 0.7,
         }}
       >
         Сегмент, этажность, материал стен
       </Typography>
-      <Stack marginTop={5} gap={0.5} marginBottom={5}>
-        <PoolPreview />
-      </Stack>
-      <Box display="flex" justifyContent="center" marginTop="50px">
+      <Box
+        sx={{
+          marginTop: "20px",
+          height: "500px",
+          width: "750px",
+          overflow: "auto",
+        }}
+      >
+        <Grid container item rowSpacing={2} columnSpacing={1}> {/* Поменять на логику c бэка */}
+          <Grid item xs={6}>
+            <PoolPreview />
+          </Grid>
+          <Grid item xs={6}>
+            <PoolPreview />
+          </Grid>
+          <Grid item xs={6}>
+            <PoolPreview />
+          </Grid>
+          <Grid item xs={6}>
+            <PoolPreview />
+          </Grid>
+          <Grid item xs={6}>
+            <PoolPreview />
+          </Grid>
+          <Grid item xs={6}>
+            <PoolPreview />
+          </Grid>
+        </Grid>
+      </Box>
+      <Box display="flex" justifyContent="center" paddingTop="20px">
         <Button
-          variant="mainDisabled"
           sx={{
             height: "52px",
-            width: "50%",
+            width: "330px",
           }}
+          variant = {isActive ? "mainActive" : "mainDisabled"}
         >
-          Рассчитать
+          Найти аналоги
         </Button>
       </Box>
     </Stack>
@@ -71,7 +104,7 @@ const SkeletonBox = () => {
       sx={{
         borderRadius: "10px",
         height: "25px",
-        backgroundColor: theme.palette.secondary.light,
+        backgroundColor: theme.text.light,
       }}
     ></Box>
   )
@@ -83,21 +116,23 @@ function PoolPreview() {
   return (
     <Stack
       sx={{
-        backgroundColor: "#3e3e4170",
+        backgroundColor: theme.palette.accent.light,
+        opacity: 0.7,
       }}
       borderRadius={3}
       padding={2}
       gap={1}
-      width="40%"
+      width="360px"
+      height="220px"
     >
       <Typography
         variant="h6"
         fontWeight="bold"
         sx={{
-          color: theme.palette.secondary.light,
+          color: theme.text.primary,
         }}
       >
-        Название пула
+        Количество комнат
       </Typography>
       <Typography
         variant="body2"
@@ -105,17 +140,39 @@ function PoolPreview() {
           color: theme.palette.secondary.light,
         }}
       >
-        объекты
+        количество объектов
       </Typography>
       <Box height={"15px"} />
-      <Typography
-        variant="body2"
-        sx={{
-          color: theme.palette.secondary.light,
-        }}
-      >
-        Эталон
-      </Typography>
+      <Grid container spacing={1}>
+        <Grid item xs={6}>
+          <Typography
+            variant="body2"
+            sx={{
+              color: theme.text.secondary,
+            }}
+          >
+            Эталон
+          </Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Link
+            href="/"
+            sx={{
+              textDecoration: "none",
+            }}
+          >
+            <Typography
+              variant="body2"
+              sx={{
+                textAlign: "right",
+                color: theme.palette.accent.color,
+              }}
+            >
+              сменить
+            </Typography>
+          </Link>
+        </Grid>
+      </Grid>
       <Box>
         <Grid container spacing={1}>
           <Grid container item spacing={1}>

@@ -18,10 +18,10 @@ const stepValues = [
     stepName: "Выбор эталонов",
   },
   {
-    stepName: "Расет эталонов",
+    stepName: "Расчет эталонов",
   },
   {
-    stepName: "Расет пула",
+    stepName: "Расчет пула",
   },
   {
     stepName: "Экспорт",
