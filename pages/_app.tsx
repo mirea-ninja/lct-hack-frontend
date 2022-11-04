@@ -1,15 +1,25 @@
-import "../styles/globals.scss"
-import type { AppProps } from "next/app"
-import { createTheme, ThemeProvider } from "@mui/material"
-import { blue, orange } from "@mui/material/colors"
-import { Box } from "@mui/system"
+import "../styles/globals.scss";
+import type { AppProps } from "next/app";
+import { createTheme, ThemeProvider } from "@mui/material";
+import { orange } from "@mui/material/colors";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ApiClientContextProvider } from "../logic/ApiClientHook";
+import { NextPage } from "next";
+import Head from "next/head";
+
 
 export default function App({ Component, pageProps }: AppProps) {
+  const queryClient = new QueryClient();
+
   return (
     <ThemeProvider theme={theme}>
-      <Component {...pageProps} />
+      <QueryClientProvider client={queryClient}>
+        <ApiClientContextProvider>
+          <Component {...pageProps} />
+        </ApiClientContextProvider>
+      </QueryClientProvider>
     </ThemeProvider>
-  )
+  );
 }
 
 const commonTheme = createTheme({
@@ -55,7 +65,7 @@ const commonTheme = createTheme({
       },
     },
   },
-})
+});
 
 const theme = createTheme(
   {
@@ -111,62 +121,62 @@ const theme = createTheme(
     },
   },
   commonTheme
-)
+);
 
 declare module "@mui/material/Button" {
   interface ButtonPropsVariantOverrides {
-    mainActive: true
-    mainDisabled: true
-    accentActive: true
+    mainActive: true;
+    mainDisabled: true;
+    accentActive: true;
   }
 }
 
 declare module "@mui/material/styles" {
   interface Theme {
     status: {
-      danger: string
-    }
+      danger: string;
+    };
     text: {
-      primary: string
-      secondary: string
-      light: string
-    }
+      primary: string;
+      secondary: string;
+      light: string;
+    };
     background: {
-      primary: string
-    }
+      primary: string;
+    };
   }
   // allow configuration using `createTheme`
   interface ThemeOptions {
     status?: {
-      danger?: string
-    }
+      danger?: string;
+    };
     text?: {
-      primary?: string
-      secondary?: string
-      light?: string
-    }
+      primary?: string;
+      secondary?: string;
+      light?: string;
+    };
     background?: {
-      primary?: string
-    }
+      primary?: string;
+    };
   }
 
   interface Palette {
-    accent: Palette["primary"]
+    accent: Palette["primary"];
   }
   interface PaletteOptions {
-    accent: PaletteOptions["primary"] & AdditionalPanelOptions
+    accent: PaletteOptions["primary"] & AdditionalPanelOptions;
   }
 
   interface PaletteColor {
-    darker?: string
-    color?: string
+    darker?: string;
+    color?: string;
   }
 
   interface AdditionalPanelOptions {
-    color?: string
+    color?: string;
   }
 
   interface SimplePaletteColorOptions {
-    darker?: string
+    darker?: string;
   }
 }

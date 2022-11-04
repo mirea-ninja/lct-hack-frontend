@@ -26,7 +26,7 @@ type Props = {
     setOpen: (open: boolean) => void,
 }
 
-export const EditorModal = ({open, setOpen}: Props) => {
+export default function EditorModal({open, setOpen}: Props){
     const theme = useTheme();
 
     return (

@@ -1,0 +1,2276 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "LCT Hack Backend",
+    "description": "Backend part for LCT Hack",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/signin": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Вход в сервис",
+        "description": "Войти в сервис и получить токен",
+        "operationId": "signin_signin_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserAuth" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Успешный возврат токена авторизации",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Token" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/signup": {
+      "post": {
+        "tags": ["auth"],
+        "summary": "Регистрация в сервисе",
+        "description": "Зарегистирироваться в сервисе и получить токен",
+        "operationId": "signup_signup_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserCreate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Успешный возврат токена авторизации",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Token" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/user": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Получение всех пользователей",
+        "description": "Получить список всех пользователей",
+        "operationId": "get_all_user_get",
+        "parameters": [
+          {
+            "required": false,
+            "schema": {
+              "title": "Limit",
+              "minimum": 1.0,
+              "type": "integer",
+              "default": 100
+            },
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Offset",
+              "minimum": 0.0,
+              "type": "integer",
+              "default": 0
+            },
+            "name": "offset",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный возврат списка пользователей",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Get All User Get",
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/UserGet" }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "post": {
+        "tags": ["users"],
+        "summary": "Создание пользователя",
+        "description": "Создать пользователя и вернуть его",
+        "operationId": "create_user_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserCreate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Пользователь успешно создан",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserGet" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/user/{id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Получение пользователя по id",
+        "description": "Получить пользователя по его id",
+        "operationId": "get_user__id__get",
+        "parameters": [
+          {
+            "description": "Id пользователя",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string",
+              "description": "Id пользователя",
+              "format": "uuid4"
+            },
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный возврат пользователя",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserGet" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "put": {
+        "tags": ["users"],
+        "summary": "Изменение пользователя по id",
+        "description": "Изменить пользователя по его id (полное обновление модели)",
+        "operationId": "update_user__id__put",
+        "parameters": [
+          {
+            "description": "Id пользователя",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string",
+              "description": "Id пользователя",
+              "format": "uuid4"
+            },
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserCreate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Успешное обновление пользователя",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserGet" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "delete": {
+        "tags": ["users"],
+        "summary": "Удаление пользователя по id",
+        "description": "Удалить пользователя по его id",
+        "operationId": "delete_user__id__delete",
+        "parameters": [
+          {
+            "description": "Id пользователя",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string",
+              "description": "Id пользователя",
+              "format": "uuid4"
+            },
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "204": { "description": "Успешное удаление пользователя" },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "patch": {
+        "tags": ["users"],
+        "summary": "Изменение пользователя по id (только указанные поля будут изменены)",
+        "description": "Изменить пользователя по его id (частисно обновление модели)",
+        "operationId": "patch_user__id__patch",
+        "parameters": [
+          {
+            "description": "Id пользователя",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string",
+              "description": "Id пользователя",
+              "format": "uuid4"
+            },
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UserPatch" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Успешное частичное обновление пользователя",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserGet" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/user/email/{email}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Получение пользователя по email",
+        "description": "Получить пользователя по его email",
+        "operationId": "get_user_email__email__get",
+        "parameters": [
+          {
+            "description": "Email пользователя",
+            "required": true,
+            "schema": {
+              "title": "Email",
+              "type": "string",
+              "description": "Email пользователя",
+              "format": "email"
+            },
+            "name": "email",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный возврат пользователя",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/UserGet" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/pool": {
+      "post": {
+        "tags": ["pool"],
+        "summary": "Загрузка пула",
+        "description": "Загрузить новый пул в сервис",
+        "operationId": "create_pool_post",
+        "parameters": [
+          {
+            "description": "Название запроса",
+            "required": false,
+            "schema": {
+              "title": "Name",
+              "type": "string",
+              "description": "Название запроса"
+            },
+            "name": "name",
+            "in": "query"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "multipart/form-data": {
+              "schema": { "$ref": "#/components/schemas/Body_create_pool_post" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Пул успешно загружен и обработан",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/QueryGet" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/query": {
+      "get": {
+        "tags": ["query"],
+        "summary": "Получение всех запросов",
+        "description": "Получить список всех запросов",
+        "operationId": "get_all_query_get",
+        "parameters": [
+          {
+            "required": false,
+            "schema": {
+              "title": "Limit",
+              "minimum": 1.0,
+              "type": "integer",
+              "default": 100
+            },
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Offset",
+              "minimum": 0.0,
+              "type": "integer",
+              "default": 0
+            },
+            "name": "offset",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный возврат списка запросов",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Get All Query Get",
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/QueryGet" }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/query/{id}": {
+      "get": {
+        "tags": ["query"],
+        "summary": "Получение запрос по id",
+        "description": "Получить запрос по его id",
+        "operationId": "get_query__id__get",
+        "parameters": [
+          {
+            "description": "Id запроса",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string",
+              "description": "Id запроса",
+              "format": "uuid4"
+            },
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный возврат запроса",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/QueryGet" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "put": {
+        "tags": ["query"],
+        "summary": "Изменение запрос по id",
+        "description": "Изменить запрос по его id (полное обновление модели)",
+        "operationId": "update_query__id__put",
+        "parameters": [
+          {
+            "description": "Id запроса",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string",
+              "description": "Id запроса",
+              "format": "uuid4"
+            },
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/QueryCreate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Успешное обновление запроса",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/QueryGet" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "delete": {
+        "tags": ["query"],
+        "summary": "Удаление запрос по id",
+        "description": "Удалить запрос по его id",
+        "operationId": "delete_query__id__delete",
+        "parameters": [
+          {
+            "description": "Id запроса",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string",
+              "description": "Id запроса",
+              "format": "uuid4"
+            },
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "204": { "description": "Успешное удаление запроса" },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "patch": {
+        "tags": ["query"],
+        "summary": "Изменение запрос по id (только указанные поля будут изменены)",
+        "description": "Изменить запрос по его id (частичное обновление модели)",
+        "operationId": "patch_query__id__patch",
+        "parameters": [
+          {
+            "description": "Id запроса",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string",
+              "description": "Id запроса",
+              "format": "uuid4"
+            },
+            "name": "id",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/QueryPatch" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Успешное частичное обновление запроса",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/QueryGet" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/query/{id}/subquery/{subid}/base-apartment": {
+      "post": {
+        "tags": ["subquery"],
+        "summary": "Установка эталонного объекта",
+        "description": "Установить эталонный объект для подзапроса",
+        "operationId": "set_base_query__id__subquery__subid__base_apartment_post",
+        "parameters": [
+          {
+            "description": "Id запроса",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string",
+              "description": "Id запроса",
+              "format": "uuid4"
+            },
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "description": "Id подзапроса",
+            "required": true,
+            "schema": {
+              "title": "Subid",
+              "type": "string",
+              "description": "Id подзапроса",
+              "format": "uuid4"
+            },
+            "name": "subid",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "Analog",
+                "allOf": [
+                  { "$ref": "#/components/schemas/QueryCreateBaseApartment" }
+                ],
+                "description": "Список аналогов"
+              },
+              "example": { "guid": "8400c8b8-2497-4d89-9679-4d5e3132b2df" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Эталонный объект успешно установлен",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApartmentGet" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/query/{id}/subquery/{subid}/analogs": {
+      "get": {
+        "tags": ["subquery"],
+        "summary": "Получение аналогов для подзапроса",
+        "description": "Получить список аналогов для подзапроса",
+        "operationId": "get_analogs_query__id__subquery__subid__analogs_get",
+        "parameters": [
+          {
+            "description": "Id запроса",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string",
+              "description": "Id запроса",
+              "format": "uuid4"
+            },
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "description": "Id подзапроса",
+            "required": true,
+            "schema": {
+              "title": "Subid",
+              "type": "string",
+              "description": "Id подзапроса",
+              "format": "uuid4"
+            },
+            "name": "subid",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный возврат списка аналогов",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Get Analogs Query  Id  Subquery  Subid  Analogs Get",
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ApartmentGet" }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "post": {
+        "tags": ["subquery"],
+        "summary": "Установка аналогов для подзапроса",
+        "description": "Установить аналоги для подзапроса",
+        "operationId": "create_analogs_query__id__subquery__subid__analogs_post",
+        "parameters": [
+          {
+            "description": "Id запроса",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string",
+              "description": "Id запроса",
+              "format": "uuid4"
+            },
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "description": "Id подзапроса",
+            "required": true,
+            "schema": {
+              "title": "Subid",
+              "type": "string",
+              "description": "Id подзапроса",
+              "format": "uuid4"
+            },
+            "name": "subid",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "Analogs",
+                "type": "array",
+                "items": { "$ref": "#/components/schemas/ApartmentCreate" }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "204": { "description": "Успешная установка аналогов" },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/query/{id}/subquery/{subid}/user-analogs": {
+      "post": {
+        "tags": ["subquery"],
+        "summary": "Установка аналогов для подзапроса",
+        "description": "Установить подзапросу выбранные аналоги",
+        "operationId": "set_analogs_query__id__subquery__subid__user_analogs_post",
+        "parameters": [
+          {
+            "description": "Id запроса",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string",
+              "description": "Id запроса",
+              "format": "uuid4"
+            },
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "description": "Id подзапроса",
+            "required": true,
+            "schema": {
+              "title": "Subid",
+              "type": "string",
+              "description": "Id подзапроса",
+              "format": "uuid4"
+            },
+            "name": "subid",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "title": "Analogs",
+                "allOf": [
+                  { "$ref": "#/components/schemas/QueryCreateUserApartments" }
+                ],
+                "description": "Список аналогов"
+              },
+              "example": {
+                "guids": [
+                  "b93644bd-93f7-4ecf-a59e-e2f85c68ba34",
+                  "8a23a0cb-9c4d-479b-9857-1a1559432433",
+                  "3dd9d67b-c2e0-4910-b002-0c65a213ad41",
+                  "826b9ce7-9913-4a4f-ad33-3097763bb194"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Аналоги успешно установлены",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AdjustmentGet" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/query/{id}/subquery/{subid}/apartment": {
+      "get": {
+        "tags": ["apartment"],
+        "summary": "Получение всех квартир",
+        "description": "Получить список всех квартир",
+        "operationId": "get_all_query__id__subquery__subid__apartment_get",
+        "parameters": [
+          {
+            "description": "Id запроса",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string",
+              "description": "Id запроса",
+              "format": "uuid4"
+            },
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "description": "Id подзапроса",
+            "required": true,
+            "schema": {
+              "title": "Subid",
+              "type": "string",
+              "description": "Id подзапроса",
+              "format": "uuid4"
+            },
+            "name": "subid",
+            "in": "path"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Limit",
+              "minimum": 1.0,
+              "type": "integer",
+              "default": 100
+            },
+            "name": "limit",
+            "in": "query"
+          },
+          {
+            "required": false,
+            "schema": {
+              "title": "Offset",
+              "minimum": 0.0,
+              "type": "integer",
+              "default": 0
+            },
+            "name": "offset",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный возврат списка квартир",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "title": "Response Get All Query  Id  Subquery  Subid  Apartment Get",
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ApartmentGet" }
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "post": {
+        "tags": ["apartment"],
+        "summary": "Создание квартиры",
+        "description": "Создать квартиру и вернуть её",
+        "operationId": "create_query__id__subquery__subid__apartment_post",
+        "parameters": [
+          {
+            "description": "Id запроса",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string",
+              "description": "Id запроса",
+              "format": "uuid4"
+            },
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "description": "Id подзапроса",
+            "required": true,
+            "schema": {
+              "title": "Subid",
+              "type": "string",
+              "description": "Id подзапроса",
+              "format": "uuid4"
+            },
+            "name": "subid",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ApartmentCreate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Квартира успешно создана",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApartmentGet" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    },
+    "/query/{id}/subquery/{subid}/apartment/{aid}": {
+      "get": {
+        "tags": ["apartment"],
+        "summary": "Получение квартиры по id",
+        "description": "Получить квартиры по его id",
+        "operationId": "get_query__id__subquery__subid__apartment__aid__get",
+        "parameters": [
+          {
+            "description": "Id запроса",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string",
+              "description": "Id запроса",
+              "format": "uuid4"
+            },
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "description": "Id подзапроса",
+            "required": true,
+            "schema": {
+              "title": "Subid",
+              "type": "string",
+              "description": "Id подзапроса",
+              "format": "uuid4"
+            },
+            "name": "subid",
+            "in": "path"
+          },
+          {
+            "description": "Id квартиры",
+            "required": true,
+            "schema": {
+              "title": "Aid",
+              "type": "string",
+              "description": "Id квартиры",
+              "format": "uuid4"
+            },
+            "name": "aid",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешный возврат квартиры",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApartmentGet" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "put": {
+        "tags": ["apartment"],
+        "summary": "Изменение квартиры по id",
+        "description": "Изменить квартиры по его id (полное обновление модели)",
+        "operationId": "update_query__id__subquery__subid__apartment__aid__put",
+        "parameters": [
+          {
+            "description": "Id запроса",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string",
+              "description": "Id запроса",
+              "format": "uuid4"
+            },
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "description": "Id подзапроса",
+            "required": true,
+            "schema": {
+              "title": "Subid",
+              "type": "string",
+              "description": "Id подзапроса",
+              "format": "uuid4"
+            },
+            "name": "subid",
+            "in": "path"
+          },
+          {
+            "description": "Id квартиры",
+            "required": true,
+            "schema": {
+              "title": "Aid",
+              "type": "string",
+              "description": "Id квартиры",
+              "format": "uuid4"
+            },
+            "name": "aid",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ApartmentCreate" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Успешное обновление квартиры",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApartmentGet" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "delete": {
+        "tags": ["apartment"],
+        "summary": "Удаление квартиры по id",
+        "description": "Удалить квартиры по его id",
+        "operationId": "delete_query__id__subquery__subid__apartment__aid__delete",
+        "parameters": [
+          {
+            "description": "Id запроса",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string",
+              "description": "Id запроса",
+              "format": "uuid4"
+            },
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "description": "Id подзапроса",
+            "required": true,
+            "schema": {
+              "title": "Subid",
+              "type": "string",
+              "description": "Id подзапроса",
+              "format": "uuid4"
+            },
+            "name": "subid",
+            "in": "path"
+          },
+          {
+            "description": "Id квартиры",
+            "required": true,
+            "schema": {
+              "title": "Aid",
+              "type": "string",
+              "description": "Id квартиры",
+              "format": "uuid4"
+            },
+            "name": "aid",
+            "in": "path"
+          }
+        ],
+        "responses": {
+          "204": { "description": "Успешное удаление квартиры" },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      },
+      "patch": {
+        "tags": ["apartment"],
+        "summary": "Изменение квартиры по id (только указанные поля будут изменены)",
+        "description": "Изменить квартиру по его id (частисно обновление модели)",
+        "operationId": "patch_query__id__subquery__subid__apartment__aid__patch",
+        "parameters": [
+          {
+            "description": "Id запроса",
+            "required": true,
+            "schema": {
+              "title": "Id",
+              "type": "string",
+              "description": "Id запроса",
+              "format": "uuid4"
+            },
+            "name": "id",
+            "in": "path"
+          },
+          {
+            "description": "Id подзапроса",
+            "required": true,
+            "schema": {
+              "title": "Subid",
+              "type": "string",
+              "description": "Id подзапроса",
+              "format": "uuid4"
+            },
+            "name": "subid",
+            "in": "path"
+          },
+          {
+            "description": "Id квартиры",
+            "required": true,
+            "schema": {
+              "title": "Aid",
+              "type": "string",
+              "description": "Id квартиры",
+              "format": "uuid4"
+            },
+            "name": "aid",
+            "in": "path"
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ApartmentPatch" }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Успешное частичное обновление квартиры",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ApartmentGet" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        },
+        "security": [{ "HTTPBearer": [] }]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AdjustmentGet": {
+        "title": "AdjustmentGet",
+        "required": [
+          "floor",
+          "apt_area",
+          "kitchen_area",
+          "has_balcony",
+          "distance_to_metro",
+          "quality",
+          "price_trade",
+          "price_area",
+          "price_kitchen_area",
+          "price_balcony",
+          "price_metro",
+          "price_final",
+          "guid"
+        ],
+        "type": "object",
+        "properties": {
+          "trade": {
+            "title": "Trade",
+            "type": "integer",
+            "description": "Корректировка на торг",
+            "default": -450
+          },
+          "floor": {
+            "title": "Floor",
+            "type": "integer",
+            "description": "Корректировка на этаж"
+          },
+          "apt_area": {
+            "title": "Apt Area",
+            "type": "integer",
+            "description": "Корректировка на площадь квартиры"
+          },
+          "kitchen_area": {
+            "title": "Kitchen Area",
+            "type": "integer",
+            "description": "Корректировка на площадь кухни"
+          },
+          "has_balcony": {
+            "title": "Has Balcony",
+            "type": "integer",
+            "description": "Корректировка на наличие балкона"
+          },
+          "distance_to_metro": {
+            "title": "Distance To Metro",
+            "type": "integer",
+            "description": "Корректировка на удаленность от метро"
+          },
+          "quality": {
+            "title": "Quality",
+            "type": "integer",
+            "description": "Корректировка на отделку"
+          },
+          "price_trade": {
+            "title": "Price Trade",
+            "type": "number",
+            "description": "Цена после корректировки на торг"
+          },
+          "price_area": {
+            "title": "Price Area",
+            "type": "number",
+            "description": "Цена после корректировки на площадь"
+          },
+          "price_kitchen_area": {
+            "title": "Price Kitchen Area",
+            "type": "number",
+            "description": "Цена после корректировки на площадь кухни"
+          },
+          "price_balcony": {
+            "title": "Price Balcony",
+            "type": "number",
+            "description": "Цена после корректировки на наличие балкона"
+          },
+          "price_metro": {
+            "title": "Price Metro",
+            "type": "number",
+            "description": "Цена после корректировки на удаленность от метро"
+          },
+          "price_final": {
+            "title": "Price Final",
+            "type": "number",
+            "description": "Цена после корректировки на отделку"
+          },
+          "guid": {
+            "title": "Guid",
+            "type": "string",
+            "description": "Уникальный идентификатор квартиры, для которой проводилась корректировка автоматически",
+            "format": "uuid4"
+          }
+        }
+      },
+      "ApartmentBase": {
+        "title": "ApartmentBase",
+        "required": [
+          "address",
+          "rooms",
+          "segment",
+          "floors",
+          "walls",
+          "floor",
+          "apartment_area",
+          "kitchen_area",
+          "has_balcony",
+          "distance_to_metro",
+          "quality"
+        ],
+        "type": "object",
+        "properties": {
+          "address": {
+            "title": "Address",
+            "type": "string",
+            "description": "Адрес квартиры"
+          },
+          "link": {
+            "title": "Link",
+            "maxLength": 2083,
+            "minLength": 1,
+            "type": "string",
+            "description": "Ссылка на объявление",
+            "format": "uri"
+          },
+          "lat": { "title": "Lat", "type": "number", "description": "Широта" },
+          "lon": { "title": "Lon", "type": "number", "description": "Долгота" },
+          "rooms": {
+            "title": "Rooms",
+            "type": "integer",
+            "description": "Количество комнат"
+          },
+          "segment": {
+            "title": "Segment",
+            "type": "string",
+            "description": "Тип жилья"
+          },
+          "floors": {
+            "title": "Floors",
+            "type": "integer",
+            "description": "Количество этажей"
+          },
+          "walls": {
+            "title": "Walls",
+            "type": "string",
+            "description": "Материал стен"
+          },
+          "floor": {
+            "title": "Floor",
+            "type": "integer",
+            "description": "Этаж"
+          },
+          "apartment_area": {
+            "title": "Apartment Area",
+            "type": "integer",
+            "description": "Площадь квартиры"
+          },
+          "kitchen_area": {
+            "title": "Kitchen Area",
+            "type": "integer",
+            "description": "Площадь кухни"
+          },
+          "has_balcony": {
+            "title": "Has Balcony",
+            "type": "boolean",
+            "description": "Наличие балкона"
+          },
+          "distance_to_metro": {
+            "title": "Distance To Metro",
+            "type": "integer",
+            "description": "Расстояние до метро"
+          },
+          "quality": {
+            "title": "Quality",
+            "type": "string",
+            "description": "Отделка"
+          },
+          "m2price": {
+            "title": "M2Price",
+            "type": "number",
+            "description": "Цена за квадратный метр",
+            "default": 0
+          },
+          "price": {
+            "title": "Price",
+            "type": "integer",
+            "description": "Цена квартиры",
+            "default": 0
+          }
+        }
+      },
+      "ApartmentCreate": {
+        "title": "ApartmentCreate",
+        "required": [
+          "address",
+          "rooms",
+          "segment",
+          "floors",
+          "walls",
+          "floor",
+          "apartment_area",
+          "kitchen_area",
+          "has_balcony",
+          "distance_to_metro",
+          "quality"
+        ],
+        "type": "object",
+        "properties": {
+          "address": {
+            "title": "Address",
+            "type": "string",
+            "description": "Адрес квартиры"
+          },
+          "link": {
+            "title": "Link",
+            "maxLength": 2083,
+            "minLength": 1,
+            "type": "string",
+            "description": "Ссылка на объявление",
+            "format": "uri"
+          },
+          "lat": { "title": "Lat", "type": "number", "description": "Широта" },
+          "lon": { "title": "Lon", "type": "number", "description": "Долгота" },
+          "rooms": {
+            "title": "Rooms",
+            "type": "integer",
+            "description": "Количество комнат"
+          },
+          "segment": {
+            "title": "Segment",
+            "type": "string",
+            "description": "Тип жилья"
+          },
+          "floors": {
+            "title": "Floors",
+            "type": "integer",
+            "description": "Количество этажей"
+          },
+          "walls": {
+            "title": "Walls",
+            "type": "string",
+            "description": "Материал стен"
+          },
+          "floor": {
+            "title": "Floor",
+            "type": "integer",
+            "description": "Этаж"
+          },
+          "apartment_area": {
+            "title": "Apartment Area",
+            "type": "integer",
+            "description": "Площадь квартиры"
+          },
+          "kitchen_area": {
+            "title": "Kitchen Area",
+            "type": "integer",
+            "description": "Площадь кухни"
+          },
+          "has_balcony": {
+            "title": "Has Balcony",
+            "type": "boolean",
+            "description": "Наличие балкона"
+          },
+          "distance_to_metro": {
+            "title": "Distance To Metro",
+            "type": "integer",
+            "description": "Расстояние до метро"
+          },
+          "quality": {
+            "title": "Quality",
+            "type": "string",
+            "description": "Отделка"
+          },
+          "m2price": {
+            "title": "M2Price",
+            "type": "number",
+            "description": "Цена за квадратный метр",
+            "default": 0
+          },
+          "price": {
+            "title": "Price",
+            "type": "integer",
+            "description": "Цена квартиры",
+            "default": 0
+          }
+        }
+      },
+      "ApartmentGet": {
+        "title": "ApartmentGet",
+        "required": [
+          "address",
+          "rooms",
+          "segment",
+          "floors",
+          "walls",
+          "floor",
+          "apartment_area",
+          "kitchen_area",
+          "has_balcony",
+          "distance_to_metro",
+          "quality",
+          "guid"
+        ],
+        "type": "object",
+        "properties": {
+          "address": {
+            "title": "Address",
+            "type": "string",
+            "description": "Адрес квартиры"
+          },
+          "link": {
+            "title": "Link",
+            "maxLength": 2083,
+            "minLength": 1,
+            "type": "string",
+            "description": "Ссылка на объявление",
+            "format": "uri"
+          },
+          "lat": { "title": "Lat", "type": "number", "description": "Широта" },
+          "lon": { "title": "Lon", "type": "number", "description": "Долгота" },
+          "rooms": {
+            "title": "Rooms",
+            "type": "integer",
+            "description": "Количество комнат"
+          },
+          "segment": {
+            "title": "Segment",
+            "type": "string",
+            "description": "Тип жилья"
+          },
+          "floors": {
+            "title": "Floors",
+            "type": "integer",
+            "description": "Количество этажей"
+          },
+          "walls": {
+            "title": "Walls",
+            "type": "string",
+            "description": "Материал стен"
+          },
+          "floor": {
+            "title": "Floor",
+            "type": "integer",
+            "description": "Этаж"
+          },
+          "apartment_area": {
+            "title": "Apartment Area",
+            "type": "integer",
+            "description": "Площадь квартиры"
+          },
+          "kitchen_area": {
+            "title": "Kitchen Area",
+            "type": "integer",
+            "description": "Площадь кухни"
+          },
+          "has_balcony": {
+            "title": "Has Balcony",
+            "type": "boolean",
+            "description": "Наличие балкона"
+          },
+          "distance_to_metro": {
+            "title": "Distance To Metro",
+            "type": "integer",
+            "description": "Расстояние до метро"
+          },
+          "quality": {
+            "title": "Quality",
+            "type": "string",
+            "description": "Отделка"
+          },
+          "m2price": {
+            "title": "M2Price",
+            "type": "number",
+            "description": "Цена за квадратный метр",
+            "default": 0
+          },
+          "price": {
+            "title": "Price",
+            "type": "integer",
+            "description": "Цена квартиры",
+            "default": 0
+          },
+          "guid": {
+            "title": "Guid",
+            "type": "string",
+            "description": "Уникальный идентификатор квартиры",
+            "format": "uuid4"
+          }
+        }
+      },
+      "ApartmentPatch": {
+        "title": "ApartmentPatch",
+        "type": "object",
+        "properties": {
+          "address": {
+            "title": "Address",
+            "type": "string",
+            "description": "Адрес квартиры"
+          },
+          "link": {
+            "title": "Link",
+            "maxLength": 2083,
+            "minLength": 1,
+            "type": "string",
+            "description": "Ссылка на объявление",
+            "format": "uri"
+          },
+          "lat": { "title": "Lat", "type": "number", "description": "Широта" },
+          "lon": { "title": "Lon", "type": "number", "description": "Долгота" },
+          "rooms": {
+            "title": "Rooms",
+            "type": "integer",
+            "description": "Количество комнат"
+          },
+          "segment": {
+            "title": "Segment",
+            "type": "string",
+            "description": "Тип жилья"
+          },
+          "floors": {
+            "title": "Floors",
+            "type": "integer",
+            "description": "Количество этажей"
+          },
+          "walls": {
+            "title": "Walls",
+            "type": "string",
+            "description": "Материал стен"
+          },
+          "floor": {
+            "title": "Floor",
+            "type": "integer",
+            "description": "Этаж"
+          },
+          "apartment_area": {
+            "title": "Apartment Area",
+            "type": "integer",
+            "description": "Площадь квартиры"
+          },
+          "kitchen_area": {
+            "title": "Kitchen Area",
+            "type": "integer",
+            "description": "Площадь кухни"
+          },
+          "has_balcony": {
+            "title": "Has Balcony",
+            "type": "boolean",
+            "description": "Наличие балкона"
+          },
+          "distance_to_metro": {
+            "title": "Distance To Metro",
+            "type": "integer",
+            "description": "Расстояние до метро"
+          },
+          "quality": {
+            "title": "Quality",
+            "type": "string",
+            "description": "Отделка"
+          },
+          "m2price": {
+            "title": "M2Price",
+            "type": "number",
+            "description": "Цена за квадратный метр",
+            "default": 0
+          },
+          "price": {
+            "title": "Price",
+            "type": "integer",
+            "description": "Цена квартиры",
+            "default": 0
+          }
+        }
+      },
+      "Body_create_pool_post": {
+        "title": "Body_create_pool_post",
+        "required": ["file"],
+        "type": "object",
+        "properties": {
+          "file": {
+            "title": "File",
+            "type": "string",
+            "description": "Excel таблица с пулом",
+            "format": "binary"
+          }
+        }
+      },
+      "HTTPValidationError": {
+        "title": "HTTPValidationError",
+        "type": "object",
+        "properties": {
+          "detail": {
+            "title": "Detail",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ValidationError" }
+          }
+        }
+      },
+      "QueryCreate": {
+        "title": "QueryCreate",
+        "required": ["input_file", "sub_queries", "created_by", "updated_by"],
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string",
+            "description": "Название запроса"
+          },
+          "input_file": {
+            "title": "Input File",
+            "maxLength": 2083,
+            "minLength": 1,
+            "type": "string",
+            "description": "Ссылка на файл с входными данными",
+            "format": "uri"
+          },
+          "output_file": {
+            "title": "Output File",
+            "maxLength": 2083,
+            "minLength": 1,
+            "type": "string",
+            "description": "Ссылка на файл с выходными данными",
+            "format": "uri"
+          },
+          "sub_queries": {
+            "title": "Sub Queries",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/SubQueryCreate" },
+            "description": "Список подзапросов"
+          },
+          "created_by": {
+            "title": "Created By",
+            "type": "string",
+            "description": "Уникальный идентификатор пользователя, создавшего запись",
+            "format": "uuid4"
+          },
+          "updated_by": {
+            "title": "Updated By",
+            "type": "string",
+            "description": "Уникальный идентификатор пользователя, обновившего запись",
+            "format": "uuid4"
+          }
+        }
+      },
+      "QueryCreateBaseApartment": {
+        "title": "QueryCreateBaseApartment",
+        "required": ["guid"],
+        "type": "object",
+        "properties": {
+          "guid": {
+            "title": "Guid",
+            "type": "string",
+            "description": "Уникальный идентификатор эталонного объекта",
+            "format": "uuid4"
+          }
+        }
+      },
+      "QueryCreateUserApartments": {
+        "title": "QueryCreateUserApartments",
+        "required": ["guids"],
+        "type": "object",
+        "properties": {
+          "guids": {
+            "title": "Guids",
+            "type": "array",
+            "items": { "type": "string", "format": "uuid4" },
+            "description": "Уникальные идентификаторы аналогов, устанавливаемых пользователем"
+          }
+        }
+      },
+      "QueryGet": {
+        "title": "QueryGet",
+        "required": [
+          "input_file",
+          "guid",
+          "sub_queries",
+          "created_by",
+          "updated_by",
+          "created_at",
+          "updated_at"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string",
+            "description": "Название запроса"
+          },
+          "input_file": {
+            "title": "Input File",
+            "maxLength": 2083,
+            "minLength": 1,
+            "type": "string",
+            "description": "Ссылка на файл с входными данными",
+            "format": "uri"
+          },
+          "output_file": {
+            "title": "Output File",
+            "maxLength": 2083,
+            "minLength": 1,
+            "type": "string",
+            "description": "Ссылка на файл с выходными данными",
+            "format": "uri"
+          },
+          "guid": {
+            "title": "Guid",
+            "type": "string",
+            "description": "Уникальный идентификатор записи",
+            "format": "uuid4"
+          },
+          "sub_queries": {
+            "title": "Sub Queries",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/SubQueryGet" },
+            "description": "Список подзапросов"
+          },
+          "created_by": {
+            "title": "Created By",
+            "type": "string",
+            "description": "Уникальный идентификатор пользователя, создавшего запись",
+            "format": "uuid4"
+          },
+          "updated_by": {
+            "title": "Updated By",
+            "type": "string",
+            "description": "Уникальный идентификатор пользователя, обновившего запись",
+            "format": "uuid4"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "description": "Время создания записи",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "description": "Время последнего обновления записи",
+            "format": "date-time"
+          }
+        }
+      },
+      "QueryPatch": {
+        "title": "QueryPatch",
+        "type": "object",
+        "properties": {
+          "name": {
+            "title": "Name",
+            "type": "string",
+            "description": "Название запроса"
+          },
+          "input_file": {
+            "title": "Input File",
+            "maxLength": 2083,
+            "minLength": 1,
+            "type": "string",
+            "description": "Ссылка на файл с входными данными",
+            "format": "uri"
+          },
+          "output_file": {
+            "title": "Output File",
+            "maxLength": 2083,
+            "minLength": 1,
+            "type": "string",
+            "description": "Ссылка на файл с выходными данными",
+            "format": "uri"
+          },
+          "sub_queries": {
+            "title": "Sub Queries",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/SubQueryCreate" },
+            "description": "Список подзапросов"
+          },
+          "created_by": {
+            "title": "Created By",
+            "type": "string",
+            "description": "Уникальный идентификатор пользователя, создавшего запись",
+            "format": "uuid4"
+          },
+          "updated_by": {
+            "title": "Updated By",
+            "type": "string",
+            "description": "Уникальный идентификатор пользователя, обновившего запись",
+            "format": "uuid4"
+          }
+        }
+      },
+      "SubQueryCreate": {
+        "title": "SubQueryCreate",
+        "type": "object",
+        "properties": {
+          "input_apartments": {
+            "title": "Input Apartments",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ApartmentBase" },
+            "description": "Список квартир в подзапросе"
+          },
+          "standart_object": {
+            "title": "Standart Object",
+            "allOf": [{ "$ref": "#/components/schemas/ApartmentBase" }],
+            "description": "Эталонный объект"
+          },
+          "analogs": {
+            "title": "Analogs",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ApartmentBase" },
+            "description": "Список подобранных аналогов"
+          },
+          "selected_analogs": {
+            "title": "Selected Analogs",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ApartmentBase" },
+            "description": "Список выбранных аналогов"
+          },
+          "adjustments_analog_calculated": {
+            "title": "Adjustments Analog Calculated",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AdjustmentGet" },
+            "description": "Список корректировок для аналогов"
+          },
+          "adjustments_analog_user": {
+            "title": "Adjustments Analog User",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AdjustmentGet" },
+            "description": "Список корректировок для аналогов, исправленных пользователем"
+          },
+          "adjustments_pool_calculated": {
+            "title": "Adjustments Pool Calculated",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AdjustmentGet" },
+            "description": "Список корректировок для пула"
+          },
+          "adjustments_pool_user": {
+            "title": "Adjustments Pool User",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AdjustmentGet" },
+            "description": "Список корректировок для пула, исправленных пользователем"
+          },
+          "output_apartments": {
+            "title": "Output Apartments",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ApartmentBase" },
+            "description": "Список выходных квартир"
+          }
+        }
+      },
+      "SubQueryGet": {
+        "title": "SubQueryGet",
+        "required": ["guid"],
+        "type": "object",
+        "properties": {
+          "guid": {
+            "title": "Guid",
+            "type": "string",
+            "description": "Уникальный идентификатор подзапроса",
+            "format": "uuid4"
+          },
+          "input_apartments": {
+            "title": "Input Apartments",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ApartmentGet" },
+            "description": "Список квартир в подзапросе"
+          },
+          "standart_object": {
+            "title": "Standart Object",
+            "allOf": [{ "$ref": "#/components/schemas/ApartmentGet" }],
+            "description": "Эталонный объект"
+          },
+          "analogs": {
+            "title": "Analogs",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ApartmentGet" },
+            "description": "Список подобранных аналогов"
+          },
+          "selected_analogs": {
+            "title": "Selected Analogs",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ApartmentGet" },
+            "description": "Список выбранных аналогов"
+          },
+          "adjustments_analog_calculated": {
+            "title": "Adjustments Analog Calculated",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AdjustmentGet" },
+            "description": "Список корректировок для аналогов"
+          },
+          "adjustments_analog_user": {
+            "title": "Adjustments Analog User",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AdjustmentGet" },
+            "description": "Список корректировок для аналогов, исправленных пользователем"
+          },
+          "adjustments_pool_calculated": {
+            "title": "Adjustments Pool Calculated",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AdjustmentGet" },
+            "description": "Список корректировок для пула"
+          },
+          "adjustments_pool_user": {
+            "title": "Adjustments Pool User",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/AdjustmentGet" },
+            "description": "Список корректировок для пула, исправленных пользователем"
+          },
+          "output_apartments": {
+            "title": "Output Apartments",
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/ApartmentGet" },
+            "description": "Список выходных квартир"
+          }
+        }
+      },
+      "Token": {
+        "title": "Token",
+        "required": ["access_token"],
+        "type": "object",
+        "properties": {
+          "access_token": { "title": "Access Token", "type": "string" }
+        }
+      },
+      "UserAuth": {
+        "title": "UserAuth",
+        "required": ["email", "password"],
+        "type": "object",
+        "properties": {
+          "email": { "title": "Email", "type": "string", "format": "email" },
+          "password": { "title": "Password", "type": "string" }
+        }
+      },
+      "UserCreate": {
+        "title": "UserCreate",
+        "required": ["email", "first_name", "last_name", "password"],
+        "type": "object",
+        "properties": {
+          "email": {
+            "title": "Email",
+            "type": "string",
+            "description": "Email адрес пользователя",
+            "format": "email"
+          },
+          "first_name": {
+            "title": "First Name",
+            "type": "string",
+            "description": "Имя пользователя"
+          },
+          "last_name": {
+            "title": "Last Name",
+            "type": "string",
+            "description": "Фамилия пользователя"
+          },
+          "middle_name": {
+            "title": "Middle Name",
+            "type": "string",
+            "description": "Отчество пользователя(при наличии)"
+          },
+          "password": {
+            "title": "Password",
+            "type": "string",
+            "description": "Пароль пользователя"
+          }
+        }
+      },
+      "UserGet": {
+        "title": "UserGet",
+        "required": [
+          "email",
+          "first_name",
+          "last_name",
+          "guid",
+          "password",
+          "created_at",
+          "updated_at"
+        ],
+        "type": "object",
+        "properties": {
+          "email": {
+            "title": "Email",
+            "type": "string",
+            "description": "Email адрес пользователя",
+            "format": "email"
+          },
+          "first_name": {
+            "title": "First Name",
+            "type": "string",
+            "description": "Имя пользователя"
+          },
+          "last_name": {
+            "title": "Last Name",
+            "type": "string",
+            "description": "Фамилия пользователя"
+          },
+          "middle_name": {
+            "title": "Middle Name",
+            "type": "string",
+            "description": "Отчество пользователя(при наличии)"
+          },
+          "guid": {
+            "title": "Guid",
+            "type": "string",
+            "description": "Уникальный идентификатор пользователя",
+            "format": "uuid4"
+          },
+          "password": {
+            "title": "Password",
+            "type": "string",
+            "description": "Пароль пользователя"
+          },
+          "created_at": {
+            "title": "Created At",
+            "type": "string",
+            "description": "Время создания пользователя",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "title": "Updated At",
+            "type": "string",
+            "description": "Время последнего обновления пользователя",
+            "format": "date-time"
+          }
+        }
+      },
+      "UserPatch": {
+        "title": "UserPatch",
+        "type": "object",
+        "properties": {
+          "email": {
+            "title": "Email",
+            "type": "string",
+            "description": "Email адрес пользователя",
+            "format": "email"
+          },
+          "first_name": {
+            "title": "First Name",
+            "type": "string",
+            "description": "Имя пользователя"
+          },
+          "last_name": {
+            "title": "Last Name",
+            "type": "string",
+            "description": "Фамилия пользователя"
+          },
+          "middle_name": {
+            "title": "Middle Name",
+            "type": "string",
+            "description": "Отчество пользователя(при наличии)"
+          },
+          "password": {
+            "title": "Password",
+            "type": "string",
+            "description": "Пароль пользователя"
+          }
+        }
+      },
+      "ValidationError": {
+        "title": "ValidationError",
+        "required": ["loc", "msg", "type"],
+        "type": "object",
+        "properties": {
+          "loc": {
+            "title": "Location",
+            "type": "array",
+            "items": { "anyOf": [{ "type": "string" }, { "type": "integer" }] }
+          },
+          "msg": { "title": "Message", "type": "string" },
+          "type": { "title": "Error Type", "type": "string" }
+        }
+      }
+    },
+    "securitySchemes": { "HTTPBearer": { "type": "http", "scheme": "bearer" } }
+  },
+  "tags": [
+    { "name": "auth", "description": "Авторизация" },
+    { "name": "users", "description": "Работа с пользователями" },
+    { "name": "pool", "description": "Работа с пулами" },
+    { "name": "query", "description": "Работа с запросами" },
+    { "name": "subquery", "description": "Работа с подзапросами" },
+    { "name": "apartment", "description": "Работа с квартирами" }
+  ]
+}

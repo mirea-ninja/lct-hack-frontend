@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 
 import ArrowLeft from "@mui/icons-material/ChevronLeft";
-import {EditorModal} from "./EditorModal";
+import EditorModal from "./EditorModal";
 
 const PenIcon = () => (
     <svg
@@ -118,7 +118,7 @@ const InfoCard = ({title, description, isPositive}: InfoCardProps) => {
     );
 };
 
-export const SliderCollapseInfo = () => {
+export default function SliderCollapseInfo() {
     const theme = useTheme();
 
     const [isCollapsed, setIsCollapsed] = React.useState(false);

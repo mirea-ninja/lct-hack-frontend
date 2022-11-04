@@ -40,7 +40,7 @@ const Tag = (text: string) => {
 }
 
 
-export const ReferenceCard = ({}) => {
+export default function ReferenceCard({}) {
     const theme = useTheme();
 
     const [isCollapsed, setIsCollapsed] = React.useState(false);
