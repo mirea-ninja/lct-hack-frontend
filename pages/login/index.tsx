@@ -73,12 +73,6 @@ function RightSide(props: StackProps) {
 
   const client = useApiClient();
 
-  const handleLogin = async (): Promise<T> => {
-    const data: UserAuth = { email: email, password: password };
-
-    const response = await client.authApi.signinSigninPost(data);
-  };
-
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   };
@@ -117,11 +111,13 @@ function RightSide(props: StackProps) {
             <Stack sx={{ gap: "10px" }}>
               <TextField
                 id="outlined-read-only-input"
+                onChange={handleEmailChange}
                 placeholder="Логин"
                 name="login"
               />
               <TextField
                 id="outlined-read-only-input"
+                onChange={handlePasswordChange}
                 placeholder="Пароль"
                 name="password"
               />
