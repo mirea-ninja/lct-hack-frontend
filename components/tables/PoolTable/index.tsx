@@ -8,6 +8,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Pool } from './types';
+import PercentageItem from '../../items/PercentageItem';
 
 const StyledTableCell = styled(TableCell)({
   [`&.${tableCellClasses.head}`]: {
@@ -147,9 +148,11 @@ export default function PoolTable() {
             <StyledTableRow key={row.id}>
               <StyledTableCell scope='row'>
                 {row.pricePerSquareMeter} ₽
+                <PercentageItem value={4.5} />
               </StyledTableCell>
               <StyledTableCell align='right'>
                 {row.objectPrice} ₽
+                <PercentageItem value={-4.5} />
               </StyledTableCell>
               <StyledTableCell align='right'>{row.floor}</StyledTableCell>
               <StyledTableCell align='right'>{row.flatSquare}</StyledTableCell>
