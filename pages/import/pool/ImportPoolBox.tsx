@@ -35,6 +35,7 @@ export default function ImportPoolBox({}: Props) {
 
   const handleDrop = (acceptedFiles: File[]) => {
     console.log(acceptedFiles)
+    store.fileName = acceptedFiles[0].name
     setFile(acceptedFiles[0])
   }
 

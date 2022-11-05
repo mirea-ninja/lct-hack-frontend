@@ -6,10 +6,38 @@ import {
   Configuration,
   ConfigurationParameters,
 } from "../apiConnection/gen/configuration"
+import { create, persist } from "mobx-persist"
+import { enableStaticRendering } from "mobx-react"
+
+enableStaticRendering(typeof window === "undefined")
+
+export const isServer = typeof window === "undefined"
+
+let store: Store
+
+export const initializeStore = (): Store => {
+  const _store = store ?? new Store()
+
+  // For server side rendering always create a new store
+  if (typeof window === "undefined") return _store
+
+  // Create the store once in the client
+  if (!store) store = _store
+
+  const hydrate = create({
+    storage: localStorage,
+    jsonify: true,
+  })
+
+  hydrate("store", _store)
+
+  return _store
+}
 
 class Store {
-  queryGetData: QueryGet | null = null
-  isLoadedWithFile: boolean = false
+  @persist queryGetData: QueryGet | null = null
+  @persist fileName: string = ""
+  @persist isLoadedWithFile: boolean = false
 
   constructor() {
     makeAutoObservable(this)
@@ -23,18 +51,14 @@ class Store {
 const StoreContext = React.createContext<Store>(new Store())
 
 type Props = {
+  value: Store
   children: React.ReactNode
 }
 
-export const StoreContextProvider = ({ children }: Props) => {
-  return (
-    <StoreContext.Provider value={new Store()}>
-      {children}
-    </StoreContext.Provider>
-  )
+export const StoreContextProvider = ({ children, value }: Props) => {
+  return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
 }
 
 export const useStore = (): Store => {
-  const store = useContext(StoreContext)
-  return store
+  return useContext(StoreContext)
 }
