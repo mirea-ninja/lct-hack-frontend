@@ -8,39 +8,50 @@ import {
 } from "../apiConnection/gen/configuration"
 import { create, persist } from "mobx-persist"
 import { enableStaticRendering } from "mobx-react"
+import { makePersistable } from "mobx-persist-store"
 
 enableStaticRendering(typeof window === "undefined")
 
 export const isServer = typeof window === "undefined"
 
-let store: Store
+let localStore: Store
 
-export const initializeStore = (): Store => {
-  const _store = store ?? new Store()
+export const initializeStore = async (): Promise<Store> => {
+  const _store = localStore ?? new Store()
 
   // For server side rendering always create a new store
   if (typeof window === "undefined") return _store
 
   // Create the store once in the client
-  if (!store) store = _store
+  if (!localStore) localStore = _store
 
-  const hydrate = create({
-    storage: localStorage,
-    jsonify: true,
-  })
+  // const hydrate = create({
+  //   storage: localStorage,
+  //   jsonify: false,
+  // })
 
-  hydrate("store", _store)
+  // console.log("STORE LOCAL")
+  // await hydrate("some", localStore)
 
   return _store
 }
 
-class Store {
-  @persist queryGetData: QueryGet | null = null
-  @persist fileName: string = ""
-  @persist isLoadedWithFile: boolean = false
+export class Store {
+  queryGetData: QueryGet | null = null
+  fileName: string = ""
+  isLoadedWithFile: boolean = false
 
   constructor() {
     makeAutoObservable(this)
+
+    if (typeof window !== "undefined") {
+      console.log("Make persistable")
+      makePersistable(this, {
+        name: "Store",
+        properties: ["queryGetData"],
+        storage: window.localStorage,
+      })
+    }
   }
 
   updGetQueryData = (data: QueryGet) => {
@@ -51,12 +62,18 @@ class Store {
 const StoreContext = React.createContext<Store>(new Store())
 
 type Props = {
-  value: Store
+  value: Store | null
   children: React.ReactNode
 }
 
 export const StoreContextProvider = ({ children, value }: Props) => {
-  return <StoreContext.Provider value={value}>{children}</StoreContext.Provider>
+  console.log(value)
+
+  return (
+    <StoreContext.Provider value={value ?? new Store()}>
+      {children}
+    </StoreContext.Provider>
+  )
 }
 
 export const useStore = (): Store => {

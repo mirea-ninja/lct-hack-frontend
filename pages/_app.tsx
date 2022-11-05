@@ -6,11 +6,25 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ApiClientContextProvider } from "../logic/ApiClientHook"
 import { NextPage } from "next"
 import Head from "next/head"
-import { initializeStore, StoreContextProvider } from "../logic/DataStore"
+import {
+  initializeStore,
+  StoreContextProvider,
+  Store,
+} from "../logic/DataStore"
 import NonSSRWrapper from "../logic/NonSSRWrapper"
+import { useEffect, useState } from "react"
 
 export default function App({ Component, pageProps }: AppProps) {
-  const store = initializeStore()
+  const [store, setStore] = useState<Store | null>(null)
+
+  useEffect(() => {
+    async function init() {
+      const s = await initializeStore()
+      setStore(s)
+    }
+    init()
+  }, [])
+
   const queryClient = new QueryClient({
     defaultOptions: {
       queries: {

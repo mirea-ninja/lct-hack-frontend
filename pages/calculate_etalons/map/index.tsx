@@ -24,14 +24,14 @@ class TemplateProvider extends React.Component {
     }
 
     componentDidMount() {
+
         // Ждём загрузки модуля
         const interval = setInterval(() => {
             if (!this.state.ready) {
                 // Когда загрузился модуль
                 if (this.props.ymaps.hasOwnProperty('Map')) {
                     const MyBalloonContentLayout = this.props.ymaps.templateLayoutFactory.createClass(
-                        '<h3 class="popover-title">$[properties.balloonHeader]</h3>' +
-                        '<div class="popover-content">$[properties.balloonContent]</div>'
+                        '<div class="popover-content">$[properties.content]</div>'
                     )
                     this.setState({template: MyBalloonContentLayout, ready: true})
                     clearInterval(interval)
@@ -50,6 +50,25 @@ class TemplateProvider extends React.Component {
 const ConnectedTemplateProvider = withYMaps(TemplateProvider, true, [
     'templateLayoutFactory',
 ]);
+
+const getTagTemplate = (tag: string) => {
+    return `<div class="popover-tag">${tag}</div>`;
+}
+
+const getTagsTemplate = (data: any) => {
+    const {title, subtitle, tags} = data;
+    return `<div class="popover">
+                <div class="popover-header">
+                    <div class="popover-title">${title}</div>
+                    <div class="popover-subtitle">${subtitle}</div>
+                </div>
+                <div class="popover-body">
+                    <div class="popover-tags">
+                        ${tags.map(getTagTemplate).join("")}
+                    </div>
+                </div>
+            </div>`;
+}
 
 
 export default function Maps(props: Props) {
@@ -87,9 +106,11 @@ export default function Maps(props: Props) {
                                 <Placemark
                                     geometry={[55.8, 37.6]}
                                     properties={{
-                                        balloonContent: 'Содержимое балуна',
-                                        balloonHeader: 'Заголовок',
-                                        balloonFooter: 'Подвал'
+                                        content: getTagsTemplate({
+                                            title: "Ватутина, 24",
+                                            subtitle: "244 054 ₽ м²",
+                                            tags: ["1 этаж", "S 45 м²", "S кухня 10 м²", "нет балкона", "10 мин. до метро", "муниципальный ремонт"],
+                                        })
                                     }}
 
 
