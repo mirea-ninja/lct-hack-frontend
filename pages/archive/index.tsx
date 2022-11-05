@@ -10,11 +10,22 @@ import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '../../components/icons/SearchIcon';
 import ArchiveList from '../../components/lists/ArchiveList';
+import ArchiveFilterMenu from '../../components/menus/ArchiveFilterMenu';
 
 type Props = {};
 
 export default function ArchivePage({}: Props) {
   const [type, setType] = useState('');
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   const handleChange = (event: SelectChangeEvent) => {
     setType(event.target.value as string);
@@ -44,9 +55,15 @@ export default function ArchivePage({}: Props) {
             <AppButton
               variant='secondary'
               size='small'
-              startIcon={<FilterIcon />}>
+              startIcon={<FilterIcon />}
+              onClick={handleClick}>
               Фильтр
             </AppButton>
+            <ArchiveFilterMenu
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+            />
             <Select value={type} onChange={handleChange} displayEmpty>
               <MenuItem value=''>Сначала новые</MenuItem>
               <MenuItem value={10}>Ten</MenuItem>
