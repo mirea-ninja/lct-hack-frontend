@@ -7,43 +7,124 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import { Pool } from './types';
 
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
+const StyledTableCell = styled(TableCell)({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
-    color: theme.palette.common.white,
+    color: 'var(--text-clr-secondary)',
+    fontSize: 18,
   },
   [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
+    fontSize: 18,
+    backgroundColor: 'var(--bg-clr-main)',
   },
-}));
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  '&:nth-of-type(odd)': {
-    backgroundColor: theme.palette.action.hover,
+  '&:nth-of-type(1), &:nth-of-type(2)': {
+    backgroundColor: 'var(--bg-clr-pure-white)',
   },
-  // hide last border
-  '&:last-child td, &:last-child th': {
-    border: 0,
+});
+
+const StyledTableRow = styled(TableRow)({
+  '&:nth-of-type(1) td': {
+    fontWeight: 700,
+    boxShadow: 'var(--shadow-etalon)',
+    backgroundColor: 'var(--bg-clr-pure-white)',
   },
-}));
+  'td,  th': {
+    fontWeight: 500,
+    borderBottom: '5px solid #fff',
+  },
+});
 
-function createData(
-  name: string,
-  calories: number,
-  fat: number,
-  carbs: number,
-  protein: number
-) {
-  return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-  createData('Eclair', 262, 16.0, 24, 6.0),
-  createData('Cupcake', 305, 3.7, 67, 4.3),
-  createData('Gingerbread', 356, 16.0, 49, 3.9),
+const rows: Pool[] = [
+  {
+    id: Math.random(),
+    isBasic: true,
+    pricePerSquareMeter: 357100,
+    objectPrice: 39673490,
+    floor: 1,
+    flatSquare: 6,
+    kitchenSquare: 24,
+    hasBalcony: false,
+    state: 'Муниципальный ремонт',
+  },
+  {
+    id: Math.random(),
+    isBasic: true,
+    pricePerSquareMeter: 357100,
+    objectPrice: 39673490,
+    floor: 1,
+    flatSquare: 6,
+    kitchenSquare: 24,
+    hasBalcony: false,
+    state: 'Муниципальный ремонт',
+  },
+  {
+    id: Math.random(),
+    isBasic: true,
+    pricePerSquareMeter: 357100,
+    objectPrice: 39673490,
+    floor: 1,
+    flatSquare: 6,
+    kitchenSquare: 24,
+    hasBalcony: false,
+    state: 'Муниципальный ремонт',
+  },
+  {
+    id: Math.random(),
+    isBasic: true,
+    pricePerSquareMeter: 357100,
+    objectPrice: 39673490,
+    floor: 1,
+    flatSquare: 6,
+    kitchenSquare: 24,
+    hasBalcony: false,
+    state: 'Муниципальный ремонт',
+  },
+  {
+    id: Math.random(),
+    isBasic: true,
+    pricePerSquareMeter: 357100,
+    objectPrice: 39673490,
+    floor: 1,
+    flatSquare: 6,
+    kitchenSquare: 24,
+    hasBalcony: false,
+    state: 'Муниципальный ремонт',
+  },
+  {
+    id: Math.random(),
+    isBasic: true,
+    pricePerSquareMeter: 357100,
+    objectPrice: 39673490,
+    floor: 1,
+    flatSquare: 6,
+    kitchenSquare: 24,
+    hasBalcony: false,
+    state: 'Муниципальный ремонт',
+  },
+  {
+    id: Math.random(),
+    isBasic: true,
+    pricePerSquareMeter: 357100,
+    objectPrice: 39673490,
+    floor: 1,
+    flatSquare: 6,
+    kitchenSquare: 24,
+    hasBalcony: false,
+    state: 'Муниципальный ремонт',
+  },
+  {
+    id: Math.random(),
+    isBasic: true,
+    pricePerSquareMeter: 357100,
+    objectPrice: 39673490,
+    floor: 1,
+    flatSquare: 6,
+    kitchenSquare: 24,
+    hasBalcony: false,
+    state: 'Муниципальный ремонт',
+  },
 ];
 
 export default function PoolTable() {
@@ -52,23 +133,33 @@ export default function PoolTable() {
       <Table sx={{ minWidth: 700 }} stickyHeader>
         <TableHead>
           <TableRow>
-            <StyledTableCell>Dessert (100g serving)</StyledTableCell>
-            <StyledTableCell align='right'>Calories</StyledTableCell>
-            <StyledTableCell align='right'>Fat&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align='right'>Carbs&nbsp;(g)</StyledTableCell>
-            <StyledTableCell align='right'>Protein&nbsp;(g)</StyledTableCell>
+            <StyledTableCell align='left'>Цена за м2</StyledTableCell>
+            <StyledTableCell align='left'>Стоимость объекта</StyledTableCell>
+            <StyledTableCell align='left'>Этаж расположения</StyledTableCell>
+            <StyledTableCell align='left'>Площадь квартиры, м2</StyledTableCell>
+            <StyledTableCell align='left'>Площадь кухни, м2</StyledTableCell>
+            <StyledTableCell align='left'>Балкон или лоджия</StyledTableCell>
+            <StyledTableCell align='left'>Состояние</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
           {rows.map(row => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component='th' scope='row'>
-                {row.name}
+            <StyledTableRow key={row.id}>
+              <StyledTableCell scope='row'>
+                {row.pricePerSquareMeter} ₽
               </StyledTableCell>
-              <StyledTableCell align='right'>{row.calories}</StyledTableCell>
-              <StyledTableCell align='right'>{row.fat}</StyledTableCell>
-              <StyledTableCell align='right'>{row.carbs}</StyledTableCell>
-              <StyledTableCell align='right'>{row.protein}</StyledTableCell>
+              <StyledTableCell align='right'>
+                {row.objectPrice} ₽
+              </StyledTableCell>
+              <StyledTableCell align='right'>{row.floor}</StyledTableCell>
+              <StyledTableCell align='right'>{row.flatSquare}</StyledTableCell>
+              <StyledTableCell align='right'>
+                {row.kitchenSquare}
+              </StyledTableCell>
+              <StyledTableCell align='right'>
+                {row.hasBalcony ? 'Да' : 'Нет'}
+              </StyledTableCell>
+              <StyledTableCell align='right'>{row.state}</StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
