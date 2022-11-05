@@ -8,9 +8,9 @@ import {
 import {useTheme} from "@mui/material";
 import Box from "@mui/material/Box";
 
-import MapSlider from "../../components/map/MapSlider";
-import ReferenceCard from "../../components/map/ReferenceCard";
-import EditorModal from "../../components/map/EditorModal";
+import MapSlider from "../../../components/map/MapSlider";
+import ReferenceCard from "../../../components/map/ReferenceCard";
+import EditorModal from "../../../components/map/EditorModal";
 
 
 type Props = {};

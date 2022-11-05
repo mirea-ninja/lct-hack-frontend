@@ -7,14 +7,14 @@ import {
   Stack,
 } from "@mui/material"
 import React from "react"
-import Header from "../../components/main/Header"
-import ReferenceTableExpandable from "../../components/ImportDonePage/ReferenceTableExpandable"
+import Header from "../../../components/main/Header"
+import ReferenceTableExpandable from "../../../components/ImportDonePage/ReferenceTableExpandable"
 import {
   DataRow,
   FurnishQuality,
   SegmentType,
   WallMaterials,
-} from "../../components/ImportDonePage/types"
+} from "../../../components/ImportDonePage/types"
 import Button from "@mui/material/Button"
 
 const rows: DataRow[] = [

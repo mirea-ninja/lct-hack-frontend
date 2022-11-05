@@ -62,7 +62,20 @@ function LeftSide(props: BoxProps) {
       >
         Расчет рыночной стоимости жилых объектов в Москве
       </Typography>
-      <NinjaIcon />
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "flex-end",
+          alignItems: "center",
+        }}
+      >
+        {/* align text to bottom */}
+        <Typography variant="h6" color="white" padding={1} marginTop={6}>
+          by ninja
+        </Typography>
+        <NinjaIcon />
+      </Box>
+
     </Box>
   );
 }

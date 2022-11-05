@@ -1,7 +1,7 @@
 import React from "react"
-import Header from "../../components/main/Header"
+import Header from "../../../components/main/Header"
 import { Box, Stack } from "@mui/material"
-import StepProgress from "../../components/step/StepProgress"
+import StepProgress from "../../../components/step/StepProgress"
 import ImportPoolBox from "./ImportPoolBox"
 import LoadedPoolBox from "./LoadedPoolBox"
 
