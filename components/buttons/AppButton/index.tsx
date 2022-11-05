@@ -55,7 +55,7 @@ type Props = {
   children: string;
   variant?: 'primary' | 'secondary';
   size?: 'default' | 'small';
-  onClick?: () => void;
+  onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void;
   sx?: SxProps<Theme>;
   [props: string]: any;
 };
