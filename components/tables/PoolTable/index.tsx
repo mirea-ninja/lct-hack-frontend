@@ -9,6 +9,13 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import { Pool } from './types';
 import PercentageItem from '../../items/PercentageItem';
+import { Stack } from '@mui/system';
+
+const StyledStack = styled(Stack)({
+  display: 'flex',
+  flexDirection: 'row',
+  justifyContent: 'space-between',
+});
 
 const StyledTableCell = styled(TableCell)({
   [`&.${tableCellClasses.head}`]: {
@@ -33,7 +40,7 @@ const StyledTableRow = styled(TableRow)({
   },
   'td,  th': {
     fontWeight: 500,
-    borderBottom: '5px solid #fff',
+    borderBottom: '5px solid var(--bg-clr-pure-white)',
   },
 });
 
@@ -147,22 +154,38 @@ export default function PoolTable() {
           {rows.map(row => (
             <StyledTableRow key={row.id}>
               <StyledTableCell scope='row'>
-                {row.pricePerSquareMeter} ₽
-                <PercentageItem value={4.5} />
+                <StyledStack>
+                  {row.pricePerSquareMeter} ₽
+                  <PercentageItem value={4.5} />
+                </StyledStack>
               </StyledTableCell>
               <StyledTableCell align='right'>
-                {row.objectPrice} ₽
-                <PercentageItem value={-4.5} />
-              </StyledTableCell>
-              <StyledTableCell align='right'>{row.floor}</StyledTableCell>
-              <StyledTableCell align='right'>{row.flatSquare}</StyledTableCell>
-              <StyledTableCell align='right'>
-                {row.kitchenSquare}
+                <StyledStack>
+                  {row.objectPrice} ₽
+                  <PercentageItem value={-4.5} />
+                </StyledStack>
               </StyledTableCell>
               <StyledTableCell align='right'>
-                {row.hasBalcony ? 'Да' : 'Нет'}
+                <StyledStack>
+                  {row.floor}
+                  <PercentageItem value={4.5} />
+                </StyledStack>
               </StyledTableCell>
-              <StyledTableCell align='right'>{row.state}</StyledTableCell>
+              <StyledTableCell align='right'>
+                <StyledStack>
+                  {row.flatSquare}
+                  <PercentageItem value={-4.5} />
+                </StyledStack>
+              </StyledTableCell>
+              <StyledTableCell align='right'>
+                <StyledStack>{row.kitchenSquare}</StyledStack>
+              </StyledTableCell>
+              <StyledTableCell align='right'>
+                <StyledStack>{row.hasBalcony ? 'Да' : 'Нет'}</StyledStack>
+              </StyledTableCell>
+              <StyledTableCell align='right'>
+                <StyledStack>{row.state}</StyledStack>
+              </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
