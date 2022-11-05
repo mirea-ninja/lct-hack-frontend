@@ -69,7 +69,7 @@ const LoadedPoolBox = observer(({}: Props) => {
           width: "750px",
           overflow: "auto",
           scrollBehavior: "smooth",
-          overflowY: "scroll",
+          overflowY: "auto",
           overflowX: "hidden",
           scrollbarWidth: "thin",
           scrollbarColor: `${theme.palette.secondary.light} ${theme.palette.secondary.main}`,
@@ -94,7 +94,7 @@ const LoadedPoolBox = observer(({}: Props) => {
             <Grid item xs={6}>
               <PoolPreview />
             </Grid>
-            <Grid item xs={6}>
+            {/* <Grid item xs={6}>
               <PoolPreview />
             </Grid>
             <Grid item xs={6}>
@@ -105,7 +105,7 @@ const LoadedPoolBox = observer(({}: Props) => {
             </Grid>
             <Grid item xs={6}>
               <PoolPreview />
-            </Grid>
+            </Grid> */}
           </Grid>
         ) : (
           <Grid container item rowSpacing={2} columnSpacing={1}>
