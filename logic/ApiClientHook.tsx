@@ -12,6 +12,8 @@ import {
   SubqueryApi,
   UsersApi,
 } from "../apiConnection/gen/api"
+import globalAxios, { AxiosResponse, AxiosInstance } from "axios"
+import applyCaseMiddleware from "axios-case-converter"
 
 class ApiClient {
   apartmentApi: ApartmentApi
@@ -34,12 +36,14 @@ class ApiClient {
       },
     })
 
-    this.apartmentApi = new ApartmentApi(config)
-    this.authApi = new AuthApi(config)
-    this.poolApi = new PoolApi(config)
-    this.queryApi = new QueryApi(config)
-    this.subqueryApi = new SubqueryApi(config)
-    this.usersApi = new UsersApi(config)
+    let http = applyCaseMiddleware(globalAxios)
+
+    this.apartmentApi = new ApartmentApi(config, config.basePath, http)
+    this.authApi = new AuthApi(config, config.basePath, http)
+    this.poolApi = new PoolApi(config, config.basePath, http)
+    this.queryApi = new QueryApi(config, config.basePath, http)
+    this.subqueryApi = new SubqueryApi(config, config.basePath, http)
+    this.usersApi = new UsersApi(config, config.basePath, http)
   }
 }
 

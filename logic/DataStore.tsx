@@ -9,6 +9,7 @@ import {
 
 class Store {
   queryGetData: QueryGet | null = null
+  isLoadedWithFile: boolean = false
 
   constructor() {
     makeAutoObservable(this)

@@ -3,15 +3,15 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   reactStrictMode: false,
-  output: 'standalone',
+  output: "standalone",
   typescript: {
     ignoreBuildErrors: true,
   },
   async redirects() {
     return [
       {
-        source: '/',
-        destination: '/',
+        source: "/",
+        destination: "/",
         permanent: false,
       },
     ]
