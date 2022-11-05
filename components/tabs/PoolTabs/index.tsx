@@ -8,18 +8,25 @@ export default function PoolTabs() {
   return (
     <Paper
       sx={{
-        boxShadow: 'var(--shadow)',
+        boxShadow: 'var(--shadow-1)',
+        borderRadius: 'var(--border-radius-1)',
+        overflow: 'hidden',
       }}>
-      <Stack direction='row' alignItems='center' sx={{ gap: '15px' }}>
-        <Button variant='text'>Студии</Button>
-        <Button variant='text'>1-комнатные</Button>
-        <Button variant='text'>2-комнатные</Button>
-        <Button variant='text'>3-комнатные</Button>
-        <Button variant='text'>4-комнатные</Button>
-        <Button variant='text'>5-комнатные</Button>
-      </Stack>
+      <Stack sx={{ gap: '30px' }}>
+        <Stack
+          direction='row'
+          alignItems='center'
+          sx={{ gap: '15px', padding: '10px 20px 0' }}>
+          <Button variant='text'>Студии</Button>
+          <Button variant='text'>1-комнатные</Button>
+          <Button variant='text'>2-комнатные</Button>
+          <Button variant='text'>3-комнатные</Button>
+          <Button variant='text'>4-комнатные</Button>
+          <Button variant='text'>5-комнатные</Button>
+        </Stack>
 
-      <PoolTable />
+        <PoolTable />
+      </Stack>
     </Paper>
   );
 }
