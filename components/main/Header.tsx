@@ -20,9 +20,13 @@ import StepProgress from '../step/StepProgress';
 
 type Props = {
   hasStepProgress?: boolean;
+  currentStep?: number;
 };
 
-export default function Header({ hasStepProgress = true }: Props) {
+export default function Header({
+  hasStepProgress = true,
+  currentStep = 1,
+}: Props) {
   let theme = useTheme();
 
   return (
@@ -66,7 +70,11 @@ export default function Header({ hasStepProgress = true }: Props) {
                 display: 'flex',
                 flexGrow: 5,
               }}>
-              <StepProgress currentStep={1} stepsCount={5} width='50%' />
+              <StepProgress
+                currentStep={currentStep}
+                stepsCount={5}
+                width='50%'
+              />
             </Box>
           )}
         </Stack>
