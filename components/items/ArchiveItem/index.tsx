@@ -6,6 +6,7 @@ import { styled } from '@mui/material/styles';
 import Button from '@mui/material/Button';
 import DownloadIcon from '../../icons/DownloadIcon';
 import { ArrowRight } from '../../icons/ArrowRightIcon';
+import { ArchiveItemType } from './types';
 
 const PrimaryTypography = styled(Typography)({
   color: 'var(--text-clr-main)',
@@ -21,9 +22,9 @@ const SecondaryTypography = styled(Typography)({
   lineHeight: '20px',
 });
 
-type Props = {};
+type Props = { item: ArchiveItemType };
 
-export default function ArchiveItem({}: Props) {
+export default function ArchiveItem({ item }: Props) {
   return (
     <Paper
       elevation={0}
@@ -38,10 +39,10 @@ export default function ArchiveItem({}: Props) {
       }}>
       <Stack direction='row' alignItems='center' justifyContent='space-between'>
         <Stack direction='row' alignItems='center' sx={{ gap: '70px' }}>
-          <PrimaryTypography>03.10.2022</PrimaryTypography>
-          <PrimaryTypography>Название запроса</PrimaryTypography>
-          <SecondaryTypography>Ватутина, 34к2</SecondaryTypography>
-          <SecondaryTypography>50 квартир</SecondaryTypography>
+          <PrimaryTypography>{item.date}</PrimaryTypography>
+          <PrimaryTypography>{item.name}</PrimaryTypography>
+          <SecondaryTypography>{item.address}</SecondaryTypography>
+          <SecondaryTypography>{item.flatsAmount} квартир</SecondaryTypography>
         </Stack>
         <Stack direction='row' alignItems='center' sx={{ gap: '50px' }}>
           <Stack direction='row' alignItems='center' sx={{ gap: '10px' }}>
