@@ -181,7 +181,9 @@ function RightSide(props: StackProps) {
           </Stack>
 
           <Stack sx={{ gap: "30px", marginTop: "40px" }}>
-            <AppButton type="submit">Войти</AppButton>
+            <AppButton type="submit"
+              href="/import/pool"
+            >Войти</AppButton>
             <Typography
               align="center"
               sx={{

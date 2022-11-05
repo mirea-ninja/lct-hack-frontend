@@ -40,7 +40,7 @@ export default function StepProgress({
           <Step
             stepName={stepValues[i].stepName}
             key={i}
-            number={i + 1}
+            // number={i + 1}
             isActive={currentStep === i + 1}
             isProgressed={currentStep > i + 1}
             havePath={i !== stepsCount - 1}
