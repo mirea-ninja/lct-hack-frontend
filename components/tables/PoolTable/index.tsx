@@ -25,6 +25,7 @@ const StyledTableCell = styled(TableCell)({
   [`&.${tableCellClasses.body}`]: {
     fontSize: 18,
     backgroundColor: 'var(--bg-clr-main)',
+    borderRight: '1px solid #E9ECEE',
   },
 
   '&:nth-of-type(1), &:nth-of-type(2)': {
