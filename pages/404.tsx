@@ -1,21 +1,49 @@
-export default function Custom404() {
+import { Box, Typography } from '@mui/material';
+import AppButton from '../components/buttons/AppButton';
+import Header from '../components/main/Header';
+import { Stack } from '@mui/system';
+
+type Props = {};
+
+export default function Error404Page({}: Props) {
   return (
-      <div>
-          <h1>
-              Welcome to <span style={{ color: "green" }}>
-                  aboba
-              </span>
-          </h1>
-
-<p>Sorry😢, The page you are looking for can't be found</p>
-
-
-<p>Try checking your URL</p>
-
-
-          <h2>
-              This is a <span style={{ color: "red" }}>404 page</span>
-          </h2>
-      </div>
+    <Box
+      sx={{
+        height: '100vh',
+      }}>
+      <Header hasStepProgress={false} />
+      <Box sx={{ height: '100%', p: '110px 50px' }}>
+        <Typography
+          sx={{
+            fontWeight: 700,
+            fontSize: '55px',
+            lineHeight: '60px',
+            color: 'var(--text-clr-secondary)',
+            mb: '30px',
+          }}>
+          404
+          <br />
+          Страница не найдена
+        </Typography>
+        <Typography
+          sx={{
+            fontWeight: 500,
+            fontSize: '18px',
+            lineHeight: '22px',
+            color: 'var(--text-clr-main)',
+            mb: '50px',
+          }}>
+          Возможно, она была удалена
+          <br />
+          Попробуйте обновить страницу или вернуться на главную
+        </Typography>
+        <Stack
+          sx={{
+            width: '310px',
+          }}>
+          <AppButton href='/'>Вернуться на главную</AppButton>
+        </Stack>
+      </Box>
+    </Box>
   );
 }
