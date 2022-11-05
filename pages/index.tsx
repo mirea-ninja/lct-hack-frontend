@@ -4,14 +4,14 @@ export default function Home() {
   return (
     <div>
       <Header />
-      <a href="/login">Login</a>
-      <a href="/import/pool">Pool</a>
-      <a href="/import/etalons">Etalons</a>
-      <a href="/calculate_etalons/map">Calculate etalons on map</a>
-      <a href="/calculate_etalons/table">Calculate etalons in table</a>
-      <a href="/calculate_pool">Calculate pool</a>
-      <a href="/archive">Archive</a>
-      <a href="/user">User</a>
+      <a href="/login">Login</a><br />
+      <a href="/import/pool">Pool</a><br />
+      <a href="/import/etalons">Etalons</a><br />
+      <a href="/calculate_etalons/map">Calculate etalons on map</a><br />
+      <a href="/calculate_etalons/table">Calculate etalons in table</a><br />
+      <a href="/calculate_pool">Calculate pool</a><br />
+      <a href="/archive">Archive</a><br />
+      <a href="/user">User</a><br />
     </div>
   )
 }
