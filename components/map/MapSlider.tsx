@@ -49,7 +49,7 @@ const Hr = () => {
 };
 
 export default function MapSlider() {
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = React.useState(true);
     const [subquery, setSubquery] = React.useState(0);
     const [hiddenAnalogsShow, setHiddenAnalogsShow] = React.useState(false);
 
