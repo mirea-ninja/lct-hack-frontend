@@ -11,8 +11,8 @@ const nextConfig = {
     return [
       {
         source: '/',
-        destination: '/import-pool',
-        permanent: true,
+        destination: '/',
+        permanent: false,
       },
     ]
   },

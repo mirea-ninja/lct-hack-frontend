@@ -56,7 +56,7 @@ const commonTheme = createTheme({
     allVariants: {
       fontFamily: "'Montserrat', sans-serif",
       textTransform: "none",
-    },
+  },
   },
   components: {
     MuiButton: {

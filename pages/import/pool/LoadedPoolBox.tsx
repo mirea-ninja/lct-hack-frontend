@@ -13,7 +13,7 @@ import {
 import { truncateSync } from "fs"
 import { sizing } from "@mui/system"
 import { observer } from "mobx-react"
-import { useStore } from "../../logic/DataStore"
+import { useStore } from "../../../logic/DataStore"
 
 type Props = {}
 

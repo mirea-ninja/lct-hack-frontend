@@ -14,6 +14,7 @@ import ReferenceTable from "./ReferenceTable"
 import DoneIcon from "@mui/icons-material/Done"
 import { DataRow } from "./types"
 import { GridCellEditCommitParams } from "@mui/x-data-grid"
+import TextBox from "../TextBox/TextBox"
 
 type Props = {
   isReferenceSelected: boolean
@@ -34,19 +35,13 @@ export default function ReferenceTableExpandable({
 
   console.log(rowsData)
 
-  let icon = isReferenceSelected ? (
-    <DoneIcon
-      style={{
-        color: "#0202a1",
-      }}
-    />
-  ) : (
+  let selected = (
     <Typography
-      fontSize={24}
-      color={theme.palette.secondary.dark}
+      fontSize="20px"
+      lineHeight="22px"
+      color={theme.text.secondary}
       fontWeight={700}
-    >
-      выберите эталон
+    > {isReferenceSelected ? "эталон выбран" : "выберите эталон"}
     </Typography>
   )
 
@@ -55,23 +50,22 @@ export default function ReferenceTableExpandable({
   }
 
   const addRow = () => {
-    console.log("Amogus")
     setRowsData([
       ...rowsData,
-      { id: rowsData[rowsData.length - 1].id + 1, KitchenSpace: 0 },
+      { id: rowsData[rowsData.length - 1].id + 1 },
     ])
   }
 
-  const deleteRow = (id: number) => {
-    setRowsData(rowsData.filter((row) => row.id != id))
-  }
+  // const deleteRow = (id: number) => {
+  //   setRowsData(rowsData.filter((row) => row.id != id))
+  // }
 
-  const onCellEdit = (params: GridCellEditCommitParams) => {
-    console.log(params)
-    ;(rowsData.find((el) => el.id == params.id) as any)[params.field] =
-      params.value
-    setRowsData([...rowsData])
-  }
+  // const onCellEdit = (params: GridCellEditCommitParams) => {
+  //   console.log(params)
+  //   ;(rowsData.find((el) => el.id == params.id) as any)[params.field] =
+  //     params.value
+  //   setRowsData([...rowsData])
+  // }
 
   return (
     <Accordion
@@ -80,42 +74,73 @@ export default function ReferenceTableExpandable({
       onChange={(_, isExpanded) => onAccordionChange(isExpanded)}
       sx={{
         borderRadius: "10px",
+        gap: "10px",
+        paddingRight: "10px",
+        marginBottom: "10px",
+        overflowX: "hidden",
+        overflowY: "hidden",
+        minHeight: "54px",
+
       }}
     >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"
         id="panel1a-header"
+        sx={{
+          overflowX: "hidden",
+        }}
       >
-        <Stack direction="row" alignItems="center" gap={5}>
+        <Stack direction="row" alignItems="center" gap="10px">
+          <TextBox
+            text={rowsData.length}
+            textColor={expanded ? theme.palette.primary.main : ""}
+            backgroundColor={expanded ? theme.palette.accent.main : ""}
+          />
           <Typography
-            fontSize={24}
-            color={
-              expanded ? theme.palette.primary.main : theme.palette.text.primary
-            }
+            fontSize="20px"
+            lineHeight="22px"
+            color={expanded ? theme.palette.primary.main : theme.text.primary}
             fontWeight={700}
           >
-            {text} + {rowsData.length}
+            {text}
           </Typography>
-          {icon}
+          {selected}
         </Stack>
       </AccordionSummary>
       <AccordionDetails
         sx={{
-          padding: 0,
+          padding: "0px",
+          maxHeight: "350px",
+          overflowY: "auto",
+          overflowX: "hidden",
+          gap: "10px",
+          scrollbarWidth: "thin",
+          scrollbarColor: `#DFE1E3 #A6A8B5`,
+          "&::-webkit-scrollbar": {
+            width: "6px",
+          },
+          "&::-webkit-scrollbar-track": {
+            backgroundColor: "#DFE1E3",
+            borderRadius: "10px",
+          },
+          "&::-webkit-scrollbar-thumb": {
+            backgroundColor: "#A6A8B5",
+            borderRadius: "10px",
+          },
         }}
       >
         <Stack gap={2}>
           <Stack direction="row" gap={2} paddingLeft={1.5}>
-            <Button variant="accentActive" onClick={(data) => addRow()}>
+            {/* <Button variant="accentActive" onClick={(data) => addRow()}>
               Добавить строку
             </Button>
-            <TextField placeholder="Поиск по таблице" size="small" />
+            <TextField placeholder="Поиск по таблице" size="small" /> */}
           </Stack>
           <ReferenceTable
             data={rowsData}
-            onCellEditCommit={onCellEdit}
-            deleteRow={deleteRow}
+            // onCellEditCommit={onCellEdit}
+            // deleteRow={deleteRow}
           />
         </Stack>
       </AccordionDetails>

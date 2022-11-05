@@ -24,7 +24,7 @@ export default function LoginPage({}: Props) {
     <Box
       sx={{
         display: "flex",
-        height: "100vh",
+        height: "100%",
       }}
     >
       <LeftSide></LeftSide>
@@ -69,13 +69,11 @@ function LeftSide(props: BoxProps) {
           alignItems: "center",
         }}
       >
-        {/* align text to bottom */}
         <Typography variant="h6" color="white" padding={1} marginTop={6}>
           by ninja
         </Typography>
         <NinjaIcon />
       </Box>
-
     </Box>
   );
 }
@@ -143,9 +141,23 @@ function RightSide(props: StackProps) {
               <Stack direction="row" alignItems="center">
                 <FormControlLabel
                   control={<AppCheckbox defaultChecked />}
-                  label="Сохранить данные"
+                  label={
+                    <Typography
+                      sx={{
+                        fontSize: "16px",
+                        lineHeight: "18px",
+                        fontWeight: 500,
+                      }}
+                    >
+                      Сохранить данные
+                    </Typography>
+                  }
                   sx={{
+                    fontSize: "16px",
+                    lineHeight: "18px",
+                    fontWeight: 500,
                     marginLeft: 0,
+                    color: "#3E3E41",
                   }}
                 />
               </Stack>
@@ -175,9 +187,10 @@ function RightSide(props: StackProps) {
               sx={{
                 fontWeight: 500,
                 fontSize: "16px",
+                color: "#3E3E41",
               }}
             >
-              ИЛИ
+              или
             </Typography>
             <Stack sx={{ gap: "20px" }}>
               <AppButton variant="secondary">Войти через SSO</AppButton>

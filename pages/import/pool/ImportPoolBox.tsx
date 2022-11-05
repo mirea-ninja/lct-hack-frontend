@@ -17,6 +17,7 @@ import HeaderTab from "../../../components/main/HeaderTab"
 import StepProgress from "../../../components/step/StepProgress"
 import DeleteIcon from "../../../components/icons/DeleteIcon/DeleteIcon"
 import NewFileIcon from "../../../components/icons/NewFileIcon/NewFileIcon"
+import { useStore } from "../../../logic/DataStore"
 
 type Props = {}
 
