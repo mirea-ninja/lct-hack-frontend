@@ -10,8 +10,14 @@ import { initializeStore, StoreContextProvider } from "../logic/DataStore"
 import NonSSRWrapper from "../logic/NonSSRWrapper"
 
 export default function App({ Component, pageProps }: AppProps) {
-  const queryClient = new QueryClient()
   const store = initializeStore()
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      },
+    },
+  })
 
   return (
     <ThemeProvider theme={theme}>
