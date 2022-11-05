@@ -11,6 +11,7 @@ import Slider from '@mui/material/Slider';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
 import { MainTitle, Subtitle } from './styled';
+import Button from '@mui/material/Button';
 
 function valuetext(value: number) {
   return `${value}°C`;
@@ -38,6 +39,7 @@ export default function ArchiveFilterMenu({ anchorEl, open, onClose }: Props) {
         '& .MuiPaper-root': {
           marginTop: '20px',
           p: '30px',
+          backgroundColor: 'var(--bg-clr-main)',
           borderRadius: 'var(--border-radius-1)',
           boxShadow: 'var(--shadow-controls)',
         },
@@ -163,7 +165,15 @@ export default function ArchiveFilterMenu({ anchorEl, open, onClose }: Props) {
       </Stack>
 
       <Stack direction='row' sx={{ gap: '30px' }}>
-        <AppButton variant='secondary'>Очистить</AppButton>
+        <Button
+          variant='outlined'
+          fullWidth
+          sx={{
+            color: 'var(--accent-clr)',
+            borderWidth: '2px',
+          }}>
+          Очистить
+        </Button>
         <AppButton onClick={onClose}>Применить</AppButton>
       </Stack>
     </Menu>
