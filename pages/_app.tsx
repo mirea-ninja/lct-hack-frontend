@@ -51,7 +51,7 @@ const commonTheme = createTheme({
     danger: orange[500],
   },
   background: {
-    primary: "#F7F8FA",
+    primary: "#EEF2F5",
   },
   text: {
     primary: "#3E3E41",
@@ -78,6 +78,11 @@ const commonTheme = createTheme({
     allVariants: {
       fontFamily: "'Montserrat', sans-serif",
       textTransform: "none",
+    },
+    body2: {
+      fontSize: "16px",
+      lineHeight: "18px",
+      fontWeight: 500,
     },
   },
   components: {

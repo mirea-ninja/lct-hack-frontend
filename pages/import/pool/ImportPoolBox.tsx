@@ -49,7 +49,7 @@ export default function ImportPoolBox({}: Props) {
       return
     }
 
-    mutate({ name: newName ?? "", file: file as Blob })
+    mutate({ name: poolName ? poolName : newName ?? "", file: file as Blob })
   }
 
   const { mutate, isLoading, isError, isSuccess } = useMutation({
@@ -222,6 +222,7 @@ export default function ImportPoolBox({}: Props) {
       <Box display="flex" justifyContent="center" marginTop="50px">
         <Button
           variant={isLoadedWithFile ? "mainActive" : "mainDisabled"}
+          disabled={!isLoadedWithFile}
           sx={{
             height: "52px",
             width: "329px",

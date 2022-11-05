@@ -18,16 +18,20 @@ import { QueryGet } from "../../../apiConnection/gen/models/query-get"
 import { toJS } from "mobx"
 import { SubQueryGet } from "../../../apiConnection/gen/models/sub-query-get"
 
-type Props = {}
+type Props = {
+  onActiveChange: (active: boolean) => void
+}
 
-const LoadedPoolBox = observer(({}: Props) => {
+const LoadedPoolBox = observer(({
+  onActiveChange
+}: Props) => {
   let theme = useTheme()
   let data = useStore()
 
-  console.log("AMOGUS FUCK YES")
   console.log(toJS(data.queryGetData))
 
-  const isActive = data.queryGetData !== null // Поменять на логику с query в бэк
+  const isActive = data.queryGetData !== null
+  onActiveChange(isActive)
 
   return (
     <Stack
@@ -124,6 +128,8 @@ const LoadedPoolBox = observer(({}: Props) => {
             width: "330px",
           }}
           variant={isActive ? "mainActive" : "mainDisabled"}
+          disabled={!isActive}
+          href="/calculate_etalons/map"
         >
           Найти аналоги
         </Button>
@@ -305,7 +311,7 @@ function PoolPreview() {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Link href="/">
+          {/* <Link href="/"> */}
             <Typography
               variant="body2"
               sx={{
@@ -315,7 +321,7 @@ function PoolPreview() {
             >
               сменить
             </Typography>
-          </Link>
+          {/* </Link> */}
         </Grid>
       </Grid>
       <Box>

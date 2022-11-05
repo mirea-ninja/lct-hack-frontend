@@ -2,15 +2,9 @@ import React from "react";
 
 import {useTheme} from "@mui/material";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import Modal from "@mui/material/Modal";
-import FormControl from "@mui/material/FormControl";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import MenuItem from "@mui/material/MenuItem";
-import TextField from "@mui/material/TextField";
 import {CloseIcon} from "../icons/CloseIcon";
 import AnalogInfo from "./AnalogInfo";
 import styles from "./HiddenAnalogsModal.module.scss";

@@ -20,13 +20,11 @@ import StepProgress from '../step/StepProgress';
 
 type Props = {
   hasStepProgress?: boolean;
-  currentStep?: number;
+  stepProgress?: number;
+  isArchive?: boolean;
 };
 
-export default function Header({
-  hasStepProgress = true,
-  currentStep = 1,
-}: Props) {
+export default function Header({ hasStepProgress = true, stepProgress = 0 , isArchive = true}: Props) {
   let theme = useTheme();
 
   return (
@@ -48,6 +46,13 @@ export default function Header({
         <Link href='/'>
           <Image src='/logo.svg' alt='logo' width={32} height={32} />
         </Link>
+
+        {isArchive &&
+          <Stack direction='row' paddingLeft="60px" alignItems='center'>
+            <HeaderTab isActive={false} link='/import/pool' text='Новый запрос' />
+          </Stack>
+        }
+
         <Stack
           direction='row'
           gap={5}
@@ -59,9 +64,11 @@ export default function Header({
             paddingLeft: '20px',
             paddingRight: '20px',
             borderRadius: '10px',
-            backgroundColor: theme.palette.accent.light,
+            backgroundColor: theme.background.primary,
           }}>
-          <HeaderTab isActive={true} link='/' text='Новый запрос' />
+          {!isArchive
+          ? <HeaderTab isActive={true} link='/import/pool' text='Новый запрос' />
+          : <HeaderTab isActive={true} link='/archive' text='Архив запросов' />}
           {hasStepProgress && (
             <Box
               justifyContent='center'
@@ -70,17 +77,13 @@ export default function Header({
                 display: 'flex',
                 flexGrow: 5,
               }}>
-              <StepProgress
-                currentStep={currentStep}
-                stepsCount={5}
-                width='50%'
-              />
+              <StepProgress currentStep={stepProgress} stepsCount={5} width='50%' />
             </Box>
           )}
         </Stack>
-        <Stack direction='row' gap={10} marginLeft='auto'>
-          <HeaderTab isActive={false} link='/' text='Архив запросов' />
-          <Link href='/'>
+        <Stack direction='row' gap={10} alignItems='center' marginLeft='auto'>
+          {!isArchive && <HeaderTab isActive={false} link='/archive' text='Архив запросов' />}
+          <Link href='/docs'>
             <HelpOutlineIcon color='primary' />
           </Link>
           <Link href='/'>
