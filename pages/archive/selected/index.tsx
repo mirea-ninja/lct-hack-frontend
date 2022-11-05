@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import Header from '../../../components/main/Header';
 import { Box, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
-
 import AppButton from '../../../components/buttons/AppButton';
 import IconButton from '@mui/material/IconButton';
 import { CloseIcon } from '../../../components/icons/CloseIcon';
 import { FormControlLabel } from '@mui/material';
 import AppCheckbox from '../../../components/checkboxes/AppCheckbox';
+import PoolTabs from '../../../components/tabs/PoolTabs';
 
 type Props = {};
 
@@ -89,6 +89,7 @@ export default function ArchiveSelectedPage({}: Props) {
             </Stack>
           </Stack>
         </Stack>
+        <PoolTabs />
       </Box>
     </Box>
   );
