@@ -7,7 +7,7 @@ import {
 } from "react-yandex-maps";
 import {useTheme} from "@mui/material";
 import Box from "@mui/material/Box";
-
+import Button from "@mui/material/IconButton";
 import MapSlider from "../../../components/map/MapSlider";
 import ReferenceCard from "../../../components/map/ReferenceCard";
 import Header from "../../../components/main/Header"
@@ -70,9 +70,28 @@ const getTagsTemplate = (data: any) => {
             </div>`;
 }
 
+const zoomButton = (onClick: void | (() => void), icon: string) => {
+    const theme = useTheme();
+    return (
+        <Button
+            sx={{
+                color: theme.palette.primary.main,
+                padding: "10px",
+                "&:hover": {
+                    background: "transparent",
+                },
+            }}
+            onClick={onClick}
+        >
+            {icon}
+        </Button>
+    )
+}
 
 export default function Maps(props: Props) {
     const theme = useTheme();
+
+    const mapRef = React.useRef(null);
 
     // @ts-ignore
     return (
@@ -80,6 +99,32 @@ export default function Maps(props: Props) {
             <Header/>
             <MapSlider/>
             <ReferenceCard/>
+
+            {/* Кнопки зума (+/-) справа экрана */}
+            <Box
+                sx={{
+                    position: "absolute",
+                    top: "50%",
+                    right: "30px",
+                    transform: "translateY(-50%)",
+                    zIndex: 1000,
+
+                    background: "#FFFFFF",
+                    boxShadow: "0px 0px 23px rgba(5, 4, 39, 0.05)",
+                    borderRadius: "10px",
+
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "5px",
+                    padding: "5px",
+
+                    minWidth: "40px",
+                    minHeight: "80px",
+                }}
+            >
+                {zoomButton(() => mapRef.current.setZoom(mapRef.current.getZoom() + 1), "+")}
+                {zoomButton(() => mapRef.current.setZoom(mapRef.current.getZoom() - 1), "-")}
+            </Box>
 
             {/* Map */}
             <Box
@@ -94,7 +139,7 @@ export default function Maps(props: Props) {
                     <ConnectedTemplateProvider>
                         {({template}) => (
                             <Map
-
+                                instanceRef={mapRef}
                                 defaultState={{center: [55.75, 37.57], zoom: 9}}
                                 width="100%"
                                 height="100vh"
