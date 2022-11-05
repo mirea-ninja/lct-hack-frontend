@@ -9,7 +9,15 @@ import Head from "next/head"
 import { StoreContextProvider } from "../logic/DataStore"
 
 export default function App({ Component, pageProps }: AppProps) {
-  const queryClient = new QueryClient()
+  const queryClient = new QueryClient(
+    {
+        defaultOptions: {
+            queries: {
+                refetchOnWindowFocus: false,
+            }
+        }
+    }
+  )
 
   return (
     <ThemeProvider theme={theme}>
