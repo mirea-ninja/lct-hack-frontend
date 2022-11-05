@@ -53,16 +53,11 @@ const ConnectedTemplateProvider = withYMaps(TemplateProvider, true, [
 
 
 export default function Maps(props: Props) {
-    const [open, setOpen] = React.useState(false);
-    const [ymaps, setYmaps] = React.useState<any>();
-    const [editorOpen, setEditorOpen] = React.useState(false);
-
     const theme = useTheme();
 
     // @ts-ignore
     return (
-
-        <Box>
+        <Box sx={{overflowX: "hidden", overflowY: "hidden"}}>
             <Header/>
             <MapSlider/>
             <ReferenceCard/>
@@ -76,9 +71,7 @@ export default function Maps(props: Props) {
                     zIndex: 0,
                 }}
             >
-                <YMaps onLoad={(ymaps: any) => console.log('loaded YMaps', ymaps)} instanceRef={(ref: any) => {
-                    console.log('instanceRef YMaps', ref);
-                }}>
+                <YMaps>
                     <ConnectedTemplateProvider>
                         {({template}) => (
                             <Map
