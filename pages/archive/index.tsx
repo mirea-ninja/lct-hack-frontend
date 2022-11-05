@@ -9,6 +9,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import InputAdornment from '@mui/material/InputAdornment';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '../../components/icons/SearchIcon';
+import ArchiveList from '../../components/lists/ArchiveList';
 
 type Props = {};
 
@@ -65,6 +66,8 @@ export default function ArchivePage({}: Props) {
             }}
           />
         </Stack>
+
+        <ArchiveList />
       </Box>
     </Box>
   );
