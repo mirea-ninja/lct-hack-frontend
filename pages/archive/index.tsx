@@ -11,6 +11,7 @@ import TextField from '@mui/material/TextField';
 import SearchIcon from '../../components/icons/SearchIcon';
 import ArchiveList from '../../components/lists/ArchiveList';
 import ArchiveFilterMenu from '../../components/menus/ArchiveFilterMenu';
+import TagItem from '../../components/items/TagItem';
 
 type Props = {};
 
@@ -31,6 +32,10 @@ export default function ArchivePage({}: Props) {
     setType(event.target.value as string);
   };
 
+  const handleDelete = () => {
+    console.info('You clicked the delete icon.');
+  };
+
   return (
     <Box>
       <Header hasStepProgress={false} />
@@ -46,42 +51,53 @@ export default function ArchivePage({}: Props) {
           }}>
           Архив запросов
         </Typography>
-        <Stack
-          direction='row'
-          justifyContent='space-between'
-          alignItems='center'
-          sx={{ mb: '30px' }}>
-          <Stack direction='row' sx={{ gap: '20px' }}>
-            <AppButton
-              variant='secondary'
-              size='small'
-              startIcon={<FilterIcon />}
-              onClick={handleClick}>
-              Фильтр
-            </AppButton>
-            <ArchiveFilterMenu
-              anchorEl={anchorEl}
-              open={open}
-              onClose={handleClose}
+        <Stack sx={{ mb: '30px', gap: '20px' }}>
+          <Stack
+            direction='row'
+            justifyContent='space-between'
+            alignItems='center'>
+            <Stack direction='row' sx={{ gap: '20px' }}>
+              <AppButton
+                variant='secondary'
+                size='small'
+                startIcon={<FilterIcon />}
+                onClick={handleClick}>
+                Фильтр
+              </AppButton>
+              <ArchiveFilterMenu
+                anchorEl={anchorEl}
+                open={open}
+                onClose={handleClose}
+              />
+              <Select value={type} onChange={handleChange} displayEmpty>
+                <MenuItem value=''>Сначала новые</MenuItem>
+                <MenuItem value={10}>Ten</MenuItem>
+                <MenuItem value={20}>Twenty</MenuItem>
+                <MenuItem value={30}>Thirty</MenuItem>
+              </Select>
+            </Stack>
+            <TextField
+              placeholder='Поиск'
+              sx={{ width: '330px' }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position='start'>
+                    <SearchIcon />
+                  </InputAdornment>
+                ),
+              }}
             />
-            <Select value={type} onChange={handleChange} displayEmpty>
-              <MenuItem value=''>Сначала новые</MenuItem>
-              <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem>
-            </Select>
           </Stack>
-          <TextField
-            placeholder='Поиск'
-            sx={{ width: '330px' }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position='start'>
-                  <SearchIcon />
-                </InputAdornment>
-              ),
-            }}
-          />
+          <Stack direction='row' sx={{ gap: '20px' }}>
+            <TagItem
+              label='Запросы с 01.01.2022 по 04.11.2022'
+              onDelete={handleDelete}
+            />
+            <TagItem
+              label='Запросы с 01.01.2022 по 04.11.2022'
+              onDelete={handleDelete}
+            />
+          </Stack>
         </Stack>
 
         <ArchiveList />
