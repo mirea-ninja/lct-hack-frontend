@@ -3,13 +3,13 @@ import {
   Box,
   Button,
   Grid,
-  Link,
   Paper,
   Stack,
   TextField,
   Typography,
   useTheme,
 } from "@mui/material"
+import Link from "next/link"
 import { truncateSync } from "fs"
 import { sizing } from "@mui/system"
 import { observer } from "mobx-react"
@@ -25,6 +25,7 @@ const LoadedPoolBox = observer(({}: Props) => {
   let data = useStore()
 
   console.log("AMOGUS FUCK YES")
+  console.log(toJS(data.queryGetData))
 
   const isActive = data.queryGetData !== null // Поменять на логику с query в бэк
 
@@ -48,7 +49,9 @@ const LoadedPoolBox = observer(({}: Props) => {
           opacity: isActive ? 1 : 0.7,
         }}
       >
-        Название запроса
+        {data.queryGetData?.name == ""
+          ? data.fileName
+          : data.queryGetData?.name}
       </Typography>
       <Typography
         variant="body2"
@@ -58,9 +61,7 @@ const LoadedPoolBox = observer(({}: Props) => {
           color: theme.text.secondary,
           opacity: isActive ? 1 : 0.7,
         }}
-      >
-        Сегмент, этажность, материал стен
-      </Typography>
+      ></Typography>
       <Box
         sx={{
           marginTop: "20px",
@@ -219,12 +220,7 @@ function PoolData({ data, id }: PoolDataProps) {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Link
-            href="/"
-            sx={{
-              textDecoration: "none",
-            }}
-          >
+          <Link href="/import/etalons">
             <Typography
               variant="body2"
               sx={{
@@ -309,12 +305,7 @@ function PoolPreview() {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Link
-            href="/"
-            sx={{
-              textDecoration: "none",
-            }}
-          >
+          <Link href="/">
             <Typography
               variant="body2"
               sx={{

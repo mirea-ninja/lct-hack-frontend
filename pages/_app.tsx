@@ -6,14 +6,16 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ApiClientContextProvider } from "../logic/ApiClientHook"
 import { NextPage } from "next"
 import Head from "next/head"
-import { StoreContextProvider } from "../logic/DataStore"
+import { initializeStore, StoreContextProvider } from "../logic/DataStore"
+import NonSSRWrapper from "../logic/NonSSRWrapper"
 
 export default function App({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient()
+  const store = initializeStore()
 
   return (
     <ThemeProvider theme={theme}>
-      <StoreContextProvider>
+      <StoreContextProvider value={store}>
         <QueryClientProvider client={queryClient}>
           <ApiClientContextProvider>
             <Component {...pageProps} />
@@ -56,7 +58,7 @@ const commonTheme = createTheme({
     allVariants: {
       fontFamily: "'Montserrat', sans-serif",
       textTransform: "none",
-  },
+    },
   },
   components: {
     MuiButton: {
