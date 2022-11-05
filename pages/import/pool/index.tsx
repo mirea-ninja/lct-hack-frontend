@@ -1,7 +1,7 @@
 import React from "react"
-import Header from "../../components/main/Header"
+import Header from "../../../components/main/Header"
 import { Box, Stack } from "@mui/material"
-import StepProgress from "../../components/step/StepProgress"
+import StepProgress from "../../../components/step/StepProgress"
 import ImportPoolBox from "./ImportPoolBox"
 import LoadedPoolBox from "./LoadedPoolBox"
 
@@ -19,6 +19,9 @@ export default function ImportPoolPage({}: Props) {
       <Stack
         direction="row"
         marginTop="30px"
+        marginLeft="100px"
+        marginRight="100px"
+        justifyContent="center"
         padding={5}
         gap={7}
         sx={{
@@ -32,3 +35,5 @@ export default function ImportPoolPage({}: Props) {
     </Stack>
   )
 }
+
+ImportPoolPage.requireAuth = true

@@ -18,10 +18,10 @@ export enum WallMaterials {
   Monolith,
 }
 
-export enum FurnishQuality {
-  WithoutFurnish,
-  Municipal,
-  Modern,
+export enum RepairType {
+  WithoutRepair,
+  MunicipalRepair,
+  ModernRepair,
 }
 
 export type DataRow = {
@@ -39,11 +39,11 @@ export type RequiredData = {
 
 export type CorrectableData = {
   Floor?: number
-  TotalSpace?: number
-  KitchenSpace?: number
-  WithBalcony?: boolean
-  TimeToMetroInMinutes?: number
-  FurnishQuality?: FurnishQuality
+  AptArea?: number
+  KitchenArea?: number
+  HasBalcony?: boolean
+  ToMetro?: number
+  RepairType?: RepairType
 }
 
 export * from "./types"

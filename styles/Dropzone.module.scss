@@ -6,14 +6,15 @@
   border-radius: 10px;
   margin-bottom: 20px;
   margin-top: 20px;
-
-  &:active {
-    border-color: #0b23c5 !important;
-  }
 }
 
+.file_loaded {
+  border-color: #038CD2 !important;
+}
+
+
 .accept {
-  border-color: #0b23c5 !important;
+  border-color: #038CD2 !important;
 }
 
 .reject {

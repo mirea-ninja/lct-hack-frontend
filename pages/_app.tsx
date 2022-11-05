@@ -1,21 +1,25 @@
 import "../styles/globals.scss"
 import type { AppProps } from "next/app"
 import { createTheme, ThemeProvider } from "@mui/material"
-import { blue, orange } from "@mui/material/colors"
-import { Box } from "@mui/system"
+import { orange } from "@mui/material/colors"
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ApiClientContextProvider } from "../logic/ApiClientHook"
-
-const queryClient = new QueryClient()
+import { NextPage } from "next"
+import Head from "next/head"
+import { StoreContextProvider } from "../logic/DataStore"
 
 export default function App({ Component, pageProps }: AppProps) {
+  const queryClient = new QueryClient()
+
   return (
     <ThemeProvider theme={theme}>
-      <QueryClientProvider client={queryClient}>
-        <ApiClientContextProvider>
-          <Component {...pageProps} />
-        </ApiClientContextProvider>
-      </QueryClientProvider>
+      <StoreContextProvider>
+        <QueryClientProvider client={queryClient}>
+          <ApiClientContextProvider>
+            <Component {...pageProps} />
+          </ApiClientContextProvider>
+        </QueryClientProvider>
+      </StoreContextProvider>
     </ThemeProvider>
   )
 }
@@ -29,13 +33,13 @@ const commonTheme = createTheme({
   },
   text: {
     primary: "#3E3E41",
-    secondary: "#FFFFFF",
+    secondary: "#A6A8B5",
     light: "#FFFFFF",
   },
   palette: {
     primary: {
       main: "#038CD2",
-      darker: "#145a9f",
+      darker: "#00699e",
     },
     secondary: {
       main: "#A6A8B5",
@@ -45,14 +49,14 @@ const commonTheme = createTheme({
     accent: {
       main: "#c5ecff",
       color: "#038CD2",
-      light: "#c5ecff",
+      light: "#E5F3FA",
     },
   },
   typography: {
     allVariants: {
       fontFamily: "'Montserrat', sans-serif",
       textTransform: "none",
-    },
+  },
   },
   components: {
     MuiButton: {
@@ -88,7 +92,7 @@ const theme = createTheme(
             props: { variant: "mainActive" },
             style: {
               backgroundColor: commonTheme.palette.primary.main,
-              color: commonTheme.text.secondary,
+              color: commonTheme.text.light,
               fontWeight: "500",
               "&:hover": {
                 backgroundColor: commonTheme.palette.primary.darker,
