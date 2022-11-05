@@ -31,7 +31,7 @@ const InfoCard = ({title, description, isPositive}: InfoCardProps) => {
                 flexDirection: "column",
                 justifyContent: "center",
                 alignItems: "center",
-                padding: "5px 0px",
+                padding: "5px",
                 gap: "2px",
 
                 minWidth: "90px",
@@ -64,10 +64,9 @@ const InfoCard = ({title, description, isPositive}: InfoCardProps) => {
     );
 };
 
-export default function SliderCollapseInfo() {
+export default function AnalogInfo() {
     const theme = useTheme();
 
-    const [isCollapsed, setIsCollapsed] = React.useState(false);
     const [editorOpen, setEditorOpen] = React.useState(false);
 
     return (
@@ -76,40 +75,24 @@ export default function SliderCollapseInfo() {
                 sx={{
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "space-between",
                     paddingTop: "10px",
                     paddingBottom: "15px",
                 }}
             >
-                <Box
-                    sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        width: "100%",
-                    }}
+                <Typography
+                    fontSize={20}
+                    color={theme.palette.text.primary}
+                    fontWeight={700}
+                    lineHeight={"22px"}
+                    marginRight={"20px"}
                 >
-                    <Typography
-                        fontSize={20}
-                        color={theme.palette.text.primary}
-                        fontWeight={700}
-                        lineHeight={"22px"}
-                        marginRight={"20px"}
-                    >
-                        Ватунина, 24
-                    </Typography>
-                    <IconButton onClick={() => setEditorOpen(true)}>
-                        <PenIcon/>
-                    </IconButton>
-                    <IconButton>
-                        <ClosedEyeIcon/>
-                    </IconButton>
-                </Box>
-                <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-                    {isCollapsed ? (
-                        <ArrowLeft sx={{transform: "rotate(90deg)"}}/>
-                    ) : (
-                        <ArrowLeft sx={{transform: "rotate(-90deg)"}}/>
-                    )}
+                    Ватунина, 24
+                </Typography>
+                <IconButton onClick={() => setEditorOpen(true)}>
+                    <PenIcon/>
+                </IconButton>
+                <IconButton>
+                    <ClosedEyeIcon/>
                 </IconButton>
             </Box>
             <Box display={"flex"} alignItems={"center"} marginBottom={"5px"}>
@@ -159,7 +142,7 @@ export default function SliderCollapseInfo() {
                     итог
                 </Typography>
             </Box>
-            <Collapse in={isCollapsed}>
+            <Box>
                 <Typography
                     fontSize={16}
                     lineHeight={"18px"}
@@ -170,45 +153,50 @@ export default function SliderCollapseInfo() {
                     Современное жилье, 22 этажа, панель
                 </Typography>
 
-                <Grid container spacing={"10px"}>
-                    <Grid item xs={4}>
-                        <InfoCard title={"торг"} description={"-4,5%"} isPositive={false}/>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <InfoCard title={"этаж 4"} description={"0"} isPositive={null}/>
-                    </Grid>
-                    <Grid item xs={4}>
-                        <InfoCard
-                            title={"S 45 м²"}
-                            description={"+1,5%"}
-                            isPositive={true}/>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <InfoCard
-                            title={"S кухня 45 м²"}
-                            description={"+1,5%"}
-                            isPositive={true}/>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <InfoCard
-                            title={"нет балкона"}
-                            description={"0"}
-                            isPositive={null}/>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <InfoCard
-                            title={"до метро 10 мин."}
-                            description={"0"}
-                            isPositive={null}/>
-                    </Grid>
-                    <Grid item xs={6}>
-                        <InfoCard
-                            title={"без отделки"}
-                            description={"-10 300 ₽"}
-                            isPositive={false}/>
-                    </Grid>
-                </Grid>
-            </Collapse>
-        </Box></>
-    );
+                <Box sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        gap: "10px",
+                    }}>
+                    <InfoCard title={"торг"} description={"-4,5%"} isPositive={false}/>
+
+
+                    <InfoCard title={"этаж 4"} description={"0"} isPositive={null}/>
+
+
+                    <InfoCard
+                        title={"S 45 м²"}
+                        description={"+1,5%"}
+                        isPositive={true}/>
+
+
+                    <InfoCard
+                        title={"S кухня 45 м²"}
+                        description={"+1,5%"}
+                        isPositive={true}/>
+
+
+                    <InfoCard
+                        title={"нет балкона"}
+                        description={"0"}
+                        isPositive={null}/>
+
+
+                    <InfoCard
+                        title={"до метро 10 мин."}
+                        description={"0"}
+                        isPositive={null}/>
+
+
+                    <InfoCard
+                        title={"без отделки"}
+                        description={"-10 300 ₽"}
+                        isPositive={false}/>
+                </Box>
+            </Box>
+        </Box>
+        </>
+    )
+        ;
 };

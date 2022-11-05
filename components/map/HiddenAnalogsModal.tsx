@@ -11,8 +11,23 @@ import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
-import styles from "./HiddenAnalogsModal.module.scss";
 import {CloseIcon} from "../icons/CloseIcon";
+import AnalogInfo from "./AnalogInfo";
+import styles from "./HiddenAnalogsModal.module.scss";
+
+const Hr = () => {
+    const theme = useTheme();
+    return (
+        <Box
+            sx={{
+                height: "1px",
+                backgroundColor: theme.palette.secondary.light,
+                marginTop: "20px",
+                marginBottom: "10px",
+            }}
+        />
+    );
+};
 
 type Props = {
     open: boolean,
@@ -54,7 +69,12 @@ export default function HiddenAnalogsModal({open, setOpen}: Props) {
 
                 {/* body */}
                 <Box sx={{width: "100%", marginTop: "30px"}}>
-
+                    <Hr/>
+                    <AnalogInfo/>
+                    <Hr/>
+                    <AnalogInfo/>
+                    <Hr/>
+                    <AnalogInfo/>
                 </Box>
             </Box>
         </Modal>

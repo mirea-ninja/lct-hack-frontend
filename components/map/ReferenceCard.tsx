@@ -59,7 +59,7 @@ export default function ReferenceCard({}) {
                 width: "360px",
                 minHeight: "135px",
                 right: "30px",
-                top: "73px",
+                top: "127px",
 
                 backgroundColor: "#FFFFFF",
 
