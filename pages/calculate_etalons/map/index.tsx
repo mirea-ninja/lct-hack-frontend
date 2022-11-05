@@ -66,8 +66,8 @@ export default function Maps(props: Props) {
             <Box
                 sx={{
                     width: "100%",
-                    height: "100%",
                     position: "relative",
+                    height: "calc(100vh - 64px)",
                     zIndex: 0,
                 }}
             >
