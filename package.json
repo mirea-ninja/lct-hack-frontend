@@ -23,6 +23,7 @@
     "localforage": "^1.10.0",
     "mobx": "^6.6.2",
     "mobx-persist": "^0.4.1",
+    "mobx-persist-store": "^1.1.2",
     "mobx-react": "^7.5.3",
     "next": "13.0.0",
     "node-sass": "^7.0.3",
