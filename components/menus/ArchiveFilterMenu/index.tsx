@@ -23,7 +23,7 @@ type Props = {
 };
 
 export default function ArchiveFilterMenu({ anchorEl, open, onClose }: Props) {
-  const [value, setValue] = React.useState<number[]>([20, 37]);
+  const [value, setValue] = React.useState<number[]>([1, 37]);
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number[]);
@@ -49,23 +49,43 @@ export default function ArchiveFilterMenu({ anchorEl, open, onClose }: Props) {
       }}>
       <Stack direction='row' justifyContent='space-between' alignItems='center'>
         <MainTitle>Фильтр</MainTitle>
-        <IconButton>
+        <IconButton onClick={onClose}>
           <CloseIcon />
         </IconButton>
       </Stack>
 
-      <Stack>
+      <Stack sx={{ gap: '20px' }}>
         <Subtitle>Даты запроса</Subtitle>
-        <Stack direction='row'>
-          <Typography>с</Typography>
-          <TextField type='date' variant='outlined' />
-          <Typography>по</Typography>
-          <TextField type='date' variant='outlined' />
+        <Stack direction='row' alignItems='center' sx={{ gap: '20px' }}>
+          <Stack direction='row' alignItems='center' sx={{ gap: '10px' }}>
+            <Typography>с</Typography>
+            <TextField
+              type='date'
+              variant='outlined'
+              sx={{
+                '& input': {
+                  padding: '10px 20px',
+                },
+              }}
+            />
+          </Stack>
+          <Stack direction='row' alignItems='center' sx={{ gap: '10px' }}>
+            <Typography>по</Typography>
+            <TextField
+              type='date'
+              variant='outlined'
+              sx={{
+                '& input': {
+                  padding: '10px 20px',
+                },
+              }}
+            />
+          </Stack>
         </Stack>
       </Stack>
 
       <Stack direction='row' sx={{ gap: '30px' }}>
-        <Stack>
+        <Stack sx={{ gap: '20px' }}>
           <Subtitle>Сегмент</Subtitle>
           <FormGroup>
             <FormControlLabel
@@ -82,7 +102,7 @@ export default function ArchiveFilterMenu({ anchorEl, open, onClose }: Props) {
             />
           </FormGroup>
         </Stack>
-        <Stack>
+        <Stack sx={{ gap: '20px' }}>
           <Subtitle>Материал стен</Subtitle>
           <FormGroup>
             <FormControlLabel
@@ -101,20 +121,44 @@ export default function ArchiveFilterMenu({ anchorEl, open, onClose }: Props) {
         </Stack>
       </Stack>
 
-      <Stack>
+      <Stack sx={{ gap: '10px' }}>
         <Subtitle>Этажность дома</Subtitle>
-        <Slider
-          getAriaLabel={() => 'Temperature range'}
-          value={value}
-          onChange={handleChange}
-          valueLabelDisplay='auto'
-          getAriaValueText={valuetext}
-        />
-        <Stack direction='row' justifyContent='space-between'>
-          <Typography>с</Typography>
-          <TextField variant='outlined' />
-          <Typography>по</Typography>
-          <TextField variant='outlined' />
+        <Stack sx={{ maxWidth: '320px', gap: '5px' }}>
+          <Slider
+            getAriaLabel={() => 'Temperature range'}
+            value={value}
+            onChange={handleChange}
+            valueLabelDisplay='auto'
+            getAriaValueText={valuetext}
+            min={1}
+            max={30}
+          />
+          <Stack direction='row' alignItems='center' sx={{ gap: '20px' }}>
+            <Stack direction='row' alignItems='center' sx={{ gap: '10px' }}>
+              <Typography>с</Typography>
+              <TextField
+                variant='outlined'
+                sx={{
+                  maxWidth: '70px',
+                  '& input': {
+                    padding: '10px 20px',
+                  },
+                }}
+              />
+            </Stack>
+            <Stack direction='row' alignItems='center' sx={{ gap: '10px' }}>
+              <Typography>по</Typography>
+              <TextField
+                variant='outlined'
+                sx={{
+                  maxWidth: '70px',
+                  '& input': {
+                    padding: '10px 20px',
+                  },
+                }}
+              />
+            </Stack>
+          </Stack>
         </Stack>
       </Stack>
 
