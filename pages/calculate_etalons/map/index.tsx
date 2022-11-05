@@ -10,7 +10,7 @@ import Box from "@mui/material/Box";
 
 import MapSlider from "../../../components/map/MapSlider";
 import ReferenceCard from "../../../components/map/ReferenceCard";
-import EditorModal from "../../../components/map/EditorModal";
+import Header from "../../../components/main/Header"
 
 
 type Props = {};
@@ -63,6 +63,7 @@ export default function Maps(props: Props) {
     return (
 
         <Box>
+            <Header/>
             <MapSlider/>
             <ReferenceCard/>
 
