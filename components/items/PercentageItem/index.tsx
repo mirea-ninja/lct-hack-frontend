@@ -12,6 +12,7 @@ type Props = {
 export default function PercentageItem({ value, sx, ...props }: Props) {
   return (
     <Typography
+      component='span'
       sx={[
         {
           fontWeight: 500,
