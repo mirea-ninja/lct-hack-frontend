@@ -30,17 +30,20 @@ export default function ImportPoolBox({}: Props) {
   const [newName, setNewName] = useState<string | null>(null)
   const isLoadedWithFile = file != null
 
+  const store = useStore()
+  console.log(store.queryGetData)
+
   const handleDrop = (acceptedFiles: File[]) => {
     console.log(acceptedFiles)
     setFile(acceptedFiles[0])
   }
 
   const onButtonClick = () => {
-    if (file == null) {
+    if (!isLoadedWithFile) {
       return
     }
 
-    mutate({ name: newName ?? "123", file: file as Blob })
+    mutate({ name: newName ?? "", file: file as Blob })
   }
 
   const { mutate, isLoading, isError, isSuccess } = useMutation({
@@ -53,9 +56,13 @@ export default function ImportPoolBox({}: Props) {
       console.log(variables)
       console.log(context)
     },
+    onSuccess(data) {
+      console.log("SUCCESS")
+      store.updGetQueryData(data.data)
+    },
   })
 
-  if (isLoading) return "Loading..."
+  if (isLoading) return <div>Loading...</div>
 
   return (
     <Stack

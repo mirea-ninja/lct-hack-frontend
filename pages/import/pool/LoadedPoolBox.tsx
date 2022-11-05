@@ -12,12 +12,28 @@ import {
 } from "@mui/material"
 import { truncateSync } from "fs"
 import { sizing } from "@mui/system"
+import { observer } from "mobx-react"
+import { useStore } from "../../logic/DataStore"
 
 type Props = {}
 
-export default function LoadedPoolBox({}: Props) {
+const LoadedPoolBox = observer((props: Props) => {
+  console.log("OBSERVERD")
+  let data = useStore()
+  console.log(data.queryGetData)
+
+  return <LoadedPoolBoxIn {...props} />
+})
+
+export default LoadedPoolBox
+
+function LoadedPoolBoxIn({}: Props) {
   let isActive = false // Поменять на логику с query в бэк
   let theme = useTheme()
+  let data = useStore()
+
+  console.log("AMOGUS FUCK YES")
+  console.log(data.queryGetData)
 
   return (
     <Stack
@@ -76,7 +92,9 @@ export default function LoadedPoolBox({}: Props) {
           },
         }}
       >
-        <Grid container item rowSpacing={2} columnSpacing={1}> {/* Поменять на логику c бэка */}
+        <Grid container item rowSpacing={2} columnSpacing={1}>
+          {" "}
+          {/* Поменять на логику c бэка */}
           <Grid item xs={6}>
             <PoolPreview />
           </Grid>
@@ -103,7 +121,7 @@ export default function LoadedPoolBox({}: Props) {
             height: "52px",
             width: "330px",
           }}
-          variant = {isActive ? "mainActive" : "mainDisabled"}
+          variant={isActive ? "mainActive" : "mainDisabled"}
         >
           Найти аналоги
         </Button>
