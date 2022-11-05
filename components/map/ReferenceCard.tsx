@@ -132,6 +132,5 @@ export default function ReferenceCard({}) {
                 Рассчитать пул
             </Button>
         </Box>
-    )ё
-
+    );
 };
