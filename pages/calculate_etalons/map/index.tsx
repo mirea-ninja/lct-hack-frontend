@@ -109,7 +109,19 @@ const Maps = observer(({}: Props) => {
       console.log("QUERY", query);
       const response = await apiClient.parser.parseParsePost(query);
       console.log("RESPONSE", response);
-      return response;
+
+      return { subqueryGuid: query.subqueryId, response };
+    },
+    onSuccess: (data) => {
+      console.log("SUCCESS DATA: ", data)
+      
+      const subquery = store.queryGetData?.subQueries.find(
+        (subquery) => subquery.guid === data.subqueryGuid
+      );
+      if (subquery) {
+        subquery.analogs = data.response.data;
+        console.log("UPDATED SUBQUERY", toJS(store.queryGetData));
+      }
     },
   });
 
