@@ -38,8 +38,8 @@ export const initializeStore = async (): Promise<Store> => {
 
 export class Store {
   queryGetData: QueryGet | null = null
-  fileName: string = ""
-  isLoadedWithFile: boolean = false
+  file: File | null = null
+  poolName: string = ""
 
   constructor() {
     makeAutoObservable(this)

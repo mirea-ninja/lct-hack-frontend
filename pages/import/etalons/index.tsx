@@ -21,7 +21,6 @@ import {
 import { useStore } from "../../../logic/DataStore"
 import { toJS } from "mobx"
 
-
 export default function ImportDonePage() {
   let store = useStore()
   let api = useApiClient()
@@ -31,7 +30,7 @@ export default function ImportDonePage() {
 
   return (
     <Box>
-      <Header stepProgress={2}/>
+      <Header stepProgress={2} />
       <Stack padding={5} gap={3}>
         <Stack gap={2}>
           <Typography variant="h5" fontWeight="bold" color="#3E3E41">
@@ -40,13 +39,10 @@ export default function ImportDonePage() {
           <Stack direction="row" justifyContent="space-between">
             <Stack gap={1}>
               <Typography variant="h6" color="#3E3E41">
-                {store.queryGetData?.name ?? store.fileName}
+                {store.queryGetData?.name ?? store.file.name}
               </Typography>
               <Typography variant="body1" color="#3E3E41">
-                {
-                  store!.queryGetData!.subQueries[0]!.inputApartments[0]!
-                    .address
-                }
+                {store!.queryGetData!.subQueries[0]!.standartObject!.address}
               </Typography>
             </Stack>
             <Stack direction="row" gap={3} height="80%">
@@ -77,12 +73,7 @@ export default function ImportDonePage() {
           }}
         >
           {rows.map((row, i) => (
-            <ReferenceTableExpandable
-              key={i}
-              isReferenceSelected={false}
-              data={row}
-              roomsCount={i}
-            />
+            <ReferenceTableExpandable key={i} data={row} roomsCount={i} />
           ))}
         </Box>
       </Stack>

@@ -20,14 +20,13 @@ import { SubQueryGet } from "../../../apiConnection/gen/models/sub-query-get"
 import { ApartmentGet } from "../../../apiConnection/gen"
 import { useApiClient } from "../../../logic/ApiClientHook"
 import { useMutation } from "@tanstack/react-query"
+import { RepairType } from "../../../components/ImportDonePage/types"
 
 type Props = {
   onActiveChange: (active: boolean) => void
 }
 
-const LoadedPoolBox = observer(({
-  onActiveChange
-}: Props) => {
+const LoadedPoolBox = observer(({ onActiveChange }: Props) => {
   let theme = useTheme()
   let data = useStore()
   let api = useApiClient()
@@ -58,7 +57,7 @@ const LoadedPoolBox = observer(({
         }}
       >
         {data.queryGetData?.name == ""
-          ? data.fileName
+          ? data.file?.name
           : data.queryGetData?.name}
       </Typography>
       <Typography
@@ -161,8 +160,20 @@ const SkeletonBox = ({ text }: SkeletonProps) => {
         height: "25px",
         backgroundColor: theme.text.light,
       }}
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
     >
-      {text != null ? <Typography>{text}</Typography> : null}
+      {text != null ? (
+        <Typography
+          variant="body2"
+          sx={{
+            fontSize: "70%",
+          }}
+        >
+          {text}
+        </Typography>
+      ) : null}
     </Box>
   )
 }
@@ -253,8 +264,16 @@ const PoolData = observer(({ data, id }: PoolDataProps) => {
           color: theme.palette.text.secondary,
         }}
       >
-        {data.inputApartments!.length} объект{
-        data.inputApartments!.length % 10 == 1 && data.inputApartments!.length % 100 != 11 ? "" : data.inputApartments!.length % 10 >= 2 && data.inputApartments!.length % 10 <= 4 && (data.inputApartments!.length % 100 < 10 || data.inputApartments!.length % 100 >= 20) ? "а" : "ов"}
+        {data.inputApartments!.length} объект
+        {data.inputApartments!.length % 10 == 1 &&
+        data.inputApartments!.length % 100 != 11
+          ? ""
+          : data.inputApartments!.length % 10 >= 2 &&
+            data.inputApartments!.length % 10 <= 4 &&
+            (data.inputApartments!.length % 100 < 10 ||
+              data.inputApartments!.length % 100 >= 20)
+          ? "а"
+          : "ов"}
       </Typography>
       <Box height={"15px"} />
       <Grid container spacing={1}>
@@ -286,21 +305,29 @@ const PoolData = observer(({ data, id }: PoolDataProps) => {
         <Grid container spacing={1}>
           <Grid container item spacing={1}>
             <Grid item xs={5}>
-              <SkeletonBox />
+              <SkeletonBox
+                text={`Площадь ${data.standartObject?.apartmentArea} м^2` ?? ""}
+              />
             </Grid>
             <Grid item xs={4}>
-              <SkeletonBox />
+              <SkeletonBox
+                text={`Кухня ${data.standartObject?.kitchenArea} м^2` ?? ""}
+              />
             </Grid>
             <Grid item xs={3}>
-              <SkeletonBox />
+              <SkeletonBox
+                text={
+                  data.standartObject?.hasBalcony ? "Балкон" : "Без балкона"
+                }
+              />
             </Grid>
           </Grid>
           <Grid container item spacing={1}>
             <Grid item xs={8}>
-              <SkeletonBox />
+              <SkeletonBox text={data.standartObject?.quality} />
             </Grid>
             <Grid item xs={3}>
-              <SkeletonBox />
+              <SkeletonBox text={"этаж " + data.standartObject?.floor} />
             </Grid>
           </Grid>
         </Grid>
@@ -355,15 +382,15 @@ function PoolPreview() {
         </Grid>
         <Grid item xs={6}>
           {/* <Link href="/"> */}
-            <Typography
-              variant="body2"
-              sx={{
-                textAlign: "right",
-                color: theme.palette.accent.color,
-              }}
-            >
-              сменить
-            </Typography>
+          <Typography
+            variant="body2"
+            sx={{
+              textAlign: "right",
+              color: theme.palette.accent.color,
+            }}
+          >
+            сменить
+          </Typography>
           {/* </Link> */}
         </Grid>
       </Grid>

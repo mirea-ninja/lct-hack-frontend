@@ -24,9 +24,9 @@ type Props = {
 
 export default function ReferenceTable({
   data,
-  // onCellEditCommit,
-  // deleteRow,
-}: Props): JSX.Element {
+}: // onCellEditCommit,
+// deleteRow,
+Props): JSX.Element {
   // const deleteUser = React.useCallback(
   //   (id: number) => () => {
   //     deleteRow(id)
@@ -88,42 +88,50 @@ export default function ReferenceTable({
   ]
 
   return (
-      <DataGrid
-        rows={data}
-        // onCellEditCommit={onCellEditCommit}
-        columns={columns}
-        pageSize={5}
-        rowsPerPageOptions={[]}
-        autoHeight={true}
-        sx={{
-          [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]: {
-            outline: 'none',
+    <DataGrid
+      rows={data}
+      // onCellEditCommit={onCellEditCommit}
+      columns={columns}
+      pageSize={5}
+      onStateChange={(state, event, change) => {
+        console.log(state)
+        console.log(event)
+        console.log(change)
+      }}
+      selectionModel={0}
+      onSelectionModelChange={(newSelection) => {
+        console.log(newSelection)
+      }}
+      rowsPerPageOptions={[]}
+      autoHeight={true}
+      sx={{
+        [`& .${gridClasses.cell}:focus, & .${gridClasses.cell}:focus-within`]: {
+          outline: "none",
+        },
+        [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]:
+          {
+            outline: "none",
           },
-          [`& .${gridClasses.columnHeader}:focus, & .${gridClasses.columnHeader}:focus-within`]:
-            {
-              outline: 'none',
-            },
-            height: 'fit-content',
-            maxHeight: '300px',
-            overflowX: "hidden",
-            scrollBehavior: "smooth",
-            overflowY: "auto",
+        height: "fit-content",
+        maxHeight: "300px",
+        overflowX: "hidden",
+        scrollBehavior: "smooth",
+        overflowY: "auto",
 
-            scrollbarWidth: "thin",
-            scrollbarColor: `#DFE1E3 #A6A8B5`,
-            "&::-webkit-scrollbar": {
-              width: "6px",
-            },
-            "&::-webkit-scrollbar-track": {
-              backgroundColor: "#DFE1E3",
-              borderRadius: "10px",
-            },
-            "&::-webkit-scrollbar-thumb": {
-              backgroundColor: "#A6A8B5",
-              borderRadius: "10px",
-            },
-        }}
-
-      />
+        scrollbarWidth: "thin",
+        scrollbarColor: `#DFE1E3 #A6A8B5`,
+        "&::-webkit-scrollbar": {
+          width: "6px",
+        },
+        "&::-webkit-scrollbar-track": {
+          backgroundColor: "#DFE1E3",
+          borderRadius: "10px",
+        },
+        "&::-webkit-scrollbar-thumb": {
+          backgroundColor: "#A6A8B5",
+          borderRadius: "10px",
+        },
+      }}
+    />
   )
 }

@@ -19,7 +19,6 @@ import { SubQueryGet } from "../../apiConnection/gen/models/sub-query-get"
 import { useStore } from "../../logic/DataStore"
 
 type Props = {
-  isReferenceSelected: boolean
   roomsCount: number
   data: SubQueryGet
 }
@@ -28,6 +27,7 @@ function SubqueryToDataRow(data: SubQueryGet): DataRow[] {
   return data.inputApartments?.map((apartment, i) => {
     return {
       id: i,
+      guid: apartment.guid,
       AptArea: apartment.apartmentArea,
       Floor: apartment.floor,
       KitchenArea: apartment.kitchenArea,
@@ -37,16 +37,14 @@ function SubqueryToDataRow(data: SubQueryGet): DataRow[] {
   }) as DataRow[]
 }
 
-export default function ReferenceTableExpandable({
-  roomsCount,
-  isReferenceSelected,
-  data,
-}: Props) {
+export default function ReferenceTableExpandable({ roomsCount, data }: Props) {
   let theme = useTheme()
   let text = roomsCount != 0 ? `${roomsCount}-комнатные` : "Студии"
 
   let store = useStore()
   let [expanded, setExpanded] = useState(false)
+
+  let isReferenceSelected = true
 
   let rowsData = store.queryGetData
   let rows = SubqueryToDataRow(data)

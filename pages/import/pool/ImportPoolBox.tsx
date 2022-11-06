@@ -19,29 +19,27 @@ import StepProgress from "../../../components/step/StepProgress"
 import DeleteIcon from "../../../components/icons/DeleteIcon/DeleteIcon"
 import NewFileIcon from "../../../components/icons/NewFileIcon/NewFileIcon"
 import { useStore } from "../../../logic/DataStore"
+import { observer } from "mobx-react"
 
 type Props = {}
 
-export default function ImportPoolBox({}: Props) {
+export const ImportPoolBox = observer(({}: Props) => {
   let theme = useTheme()
   const [poolName, setPoolName] = useState("")
   const client = useApiClient()
   const store = useStore()
 
-  const [file, setFile] = useState<File | null>(null)
-  const [newName, setNewName] = useState<string | null>(null)
-  const isLoadedWithFile = file != null
+  const isLoadedWithFile = store.file != null
   const isActive = store.queryGetData == null
 
   const handleDrop = (acceptedFiles: File[]) => {
     console.log(acceptedFiles)
-    store.fileName = acceptedFiles[0].name
-    setFile(acceptedFiles[0])
+    store.file = acceptedFiles[0]
   }
 
   const discardFile = () => {
     store.queryGetData = null
-    setFile(null)
+    store.file = null
   }
 
   const onButtonClick = () => {
@@ -49,7 +47,7 @@ export default function ImportPoolBox({}: Props) {
       return
     }
 
-    mutate({ name: poolName ? poolName : newName ?? "", file: file as Blob })
+    mutate({ name: store.poolName ?? "", file: store.file as Blob })
   }
 
   const { mutate, isLoading, isError, isSuccess } = useMutation({
@@ -171,7 +169,7 @@ export default function ImportPoolBox({}: Props) {
                                 width: "330px",
                               }}
                             >
-                              {file.name}
+                              {store.file.name}
                             </Typography>
 
                             <Button
@@ -222,7 +220,6 @@ export default function ImportPoolBox({}: Props) {
       <Box display="flex" justifyContent="center" marginTop="50px">
         <Button
           variant={isLoadedWithFile ? "mainActive" : "mainDisabled"}
-          disabled={!isLoadedWithFile}
           sx={{
             height: "52px",
             width: "329px",
@@ -236,4 +233,6 @@ export default function ImportPoolBox({}: Props) {
       </Box>
     </Stack>
   )
-}
+})
+
+export default ImportPoolBox
