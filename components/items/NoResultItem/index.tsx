@@ -12,20 +12,20 @@ export default function NoResultItem() {
         p: '30px 20px',
         borderRadius: 'var(--border-radius-1)',
       }}>
-      <Typography
-        sx={{
-          fontWeight: 500,
-          fontSize: 18,
-          lineHeight: '22px',
-          color: 'var(--text-clr-secondary)',
-        }}>
-        <Stack direction='row' alignItems='center' sx={{ gap: '10px' }}>
-          <SadIcon />
+      <Stack direction='row' alignItems='center' sx={{ gap: '10px' }}>
+        <SadIcon />
+        <Typography
+          sx={{
+            fontWeight: 500,
+            fontSize: 18,
+            lineHeight: '22px',
+            color: 'var(--text-clr-secondary)',
+          }}>
           По вашему запросу ничего не найдено
           <br />
           Пожалуйста, измените параметры фильтра
-        </Stack>
-      </Typography>
+        </Typography>
+      </Stack>
     </Paper>
   );
 }
