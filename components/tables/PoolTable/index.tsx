@@ -127,12 +127,12 @@ export default function PoolTable({ hasMetroAttribute = false }: Props) {
             <StyledTableCell align='left'>Площадь квартиры, м2</StyledTableCell>
             <StyledTableCell align='left'>Площадь кухни, м2</StyledTableCell>
             <StyledTableCell align='left'>Балкон или лоджия</StyledTableCell>
-            <StyledTableCell align='left'>Состояние</StyledTableCell>
             {hasMetroAttribute && (
               <StyledTableCell align='left'>
                 Время до метро, мин
               </StyledTableCell>
             )}
+            <StyledTableCell align='left'>Состояние</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -181,14 +181,6 @@ export default function PoolTable({ hasMetroAttribute = false }: Props) {
                   )}
                 </StyledStack>
               </StyledTableCell>
-              <StyledTableCell align='right'>
-                <StyledStack>
-                  {row.state.value}
-                  {row.state.change && (
-                    <PercentageItem value={row.state.change} />
-                  )}
-                </StyledStack>
-              </StyledTableCell>
               {hasMetroAttribute && (
                 <StyledTableCell align='right'>
                   <StyledStack>
@@ -199,6 +191,14 @@ export default function PoolTable({ hasMetroAttribute = false }: Props) {
                   </StyledStack>
                 </StyledTableCell>
               )}
+              <StyledTableCell align='right'>
+                <StyledStack>
+                  {row.state.value}
+                  {row.state.change && (
+                    <PercentageItem value={row.state.change} />
+                  )}
+                </StyledStack>
+              </StyledTableCell>
             </StyledTableRow>
           ))}
         </TableBody>
