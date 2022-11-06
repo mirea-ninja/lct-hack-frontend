@@ -135,7 +135,7 @@ export default function MapSlider() {
               >
                 <ClosedEyeIcon />
               </IconButton>
-              <IconButton className={styles.button}>
+              <IconButton className={styles.button} href="/calculate_etalons/table">
                 <OpenIcon />
               </IconButton>
             </Box>

@@ -188,7 +188,7 @@ export default function ReferenceCard({
           </Stack>
         </Box>
       </Collapse>
-      <Link href="/calculate_etalons/etalon">
+      <Link href="/calculate_pool">
         <Button variant={"mainActive"} sx={{ width: "100%", height: "50px" }}>
           Рассчитать пул
         </Button>
