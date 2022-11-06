@@ -36,14 +36,29 @@ function SubQueryToPoolTableRender(subquery: SubQueryGet): Pool[] {
     return {
       id: i,
       isBasic: true,
-      pricePerSquareMeter: { value: object.m2price! },
+      pricePerSquareMeter: {
+        value: object.m2price!,
+        change: object.adjustment?.priceArea,
+      },
       objectPrice: object.price!,
-      floor: { value: object.floor! },
-      flatSquare: { value: object.apartmentArea! },
-      kitchenSquare: { value: object.kitchenArea! },
-      hasBalcony: { value: object.hasBalcony! },
-      state: { value: object.quality! },
-      metro: { value: object.distanceToMetro! },
+      floor: { value: object.floor!, change: object.adjustment?.floor },
+      flatSquare: {
+        value: object.apartmentArea!,
+        change: object.adjustment?.aptArea,
+      },
+      kitchenSquare: {
+        value: object.kitchenArea!,
+        change: object.adjustment?.kitchenArea,
+      },
+      hasBalcony: {
+        value: object.hasBalcony!,
+        change: object.adjustment?.hasBalcony,
+      },
+      state: { value: object.quality!, change: object.adjustment?.quality },
+      metro: {
+        value: object.distanceToMetro!,
+        change: object.adjustment?.quality,
+      },
     }
   })
 }
