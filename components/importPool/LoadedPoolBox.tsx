@@ -184,20 +184,24 @@ const SkeletonBox = ({ text }: SkeletonProps) => {
   return (
     <Box
       sx={{
+        padding: "5px 5px",
+        margin: "3px ",
+        width: "fit-content",
+        // minWidth: "80px",
         borderRadius: "10px",
         height: "25px",
         backgroundColor: theme.text.light,
       }}
       display="flex"
-      justifyContent="center"
+      justifyContent="left"
       alignItems="center"
     >
       {text != null ? (
         <Typography
-          variant="body2"
-          sx={{
-            fontSize: "70%",
-          }}
+          fontSize="14px"
+          lineHeight="16px"
+          color={theme.palette.text.primary}
+          fontWeight={400}
         >
           {text}
         </Typography>
@@ -298,16 +302,15 @@ const PoolData = observer(({ data, id }: PoolDataProps) => {
           color: theme.palette.text.secondary,
         }}
       >
-        {data.inputApartments!.length} объект
-        {data.inputApartments!.length % 10 == 1 &&
-        data.inputApartments!.length % 100 != 11
+        {data.inputApartments!.length} объект{
+          () => {
+          const count = data.inputApartments!.length
+          count % 10 == 1 && count % 100 != 11
           ? ""
-          : data.inputApartments!.length % 10 >= 2 &&
-            data.inputApartments!.length % 10 <= 4 &&
-            (data.inputApartments!.length % 100 < 10 ||
-              data.inputApartments!.length % 100 >= 20)
+          : count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 10 || count % 100 >= 20)
           ? "а"
-          : "ов"}
+          : "ов"
+        }}
       </Typography>
       <Box height={"15px"} />
       <Grid container spacing={1}>
@@ -336,35 +339,66 @@ const PoolData = observer(({ data, id }: PoolDataProps) => {
         </Grid>
       </Grid>
       <Box>
-        <Grid container spacing={1}>
+        {/* <Stack paddingBottom="10px">
+            <Stack direction="row" gap="5px">
+              {FloorTag(floor)}
+              {AreaTag(area)}
+              {KitchenAreaTag(kitchenArea)}
+            </Stack>
+            <Stack direction="row" gap="5px">
+              {HasBalconyTag(hasBalcony)}
+              {ToMetroTag(toMetro)}
+            </Stack>
+            {RepairTypeTag(repairType)}
+          </Stack> */}
+          <Stack paddingBottom="10px">
+            <Stack direction="row" gap="5px">
+              <SkeletonBox
+                text={`S ${data.standartObject?.apartmentArea} м²` ?? ""}
+              />
+              <SkeletonBox
+                text={`S кухни ${data.standartObject?.kitchenArea} м²` ?? ""}
+              />
+              <SkeletonBox
+                text={data.standartObject?.hasBalcony ? "есть балкон" : "нет балкона"}
+              />
+            </Stack>
+            <Stack direction="row" gap="5px">
+              <SkeletonBox text={data.standartObject?.quality?.toLowerCase()} />
+              <SkeletonBox text={data.standartObject?.floor + " этаж"} />
+            </Stack>
+          </Stack>
+        {/* <Grid container spacing={1}>
           <Grid container item spacing={1}>
+
+
             <Grid item xs={5}>
               <SkeletonBox
-                text={`Площадь ${data.standartObject?.apartmentArea} м^2` ?? ""}
+                text={`Площадь ${data.standartObject?.apartmentArea} м²` ?? ""}
               />
             </Grid>
             <Grid item xs={4}>
               <SkeletonBox
-                text={`Кухня ${data.standartObject?.kitchenArea} м^2` ?? ""}
+                text={`Площадь кухни ${data.standartObject?.kitchenArea} м²` ?? ""}
               />
             </Grid>
             <Grid item xs={3}>
               <SkeletonBox
                 text={
-                  data.standartObject?.hasBalcony ? "Балкон" : "Без балкона"
+                  data.standartObject?.hasBalcony ? "есть балкон" : "нет балкона"
                 }
               />
             </Grid>
           </Grid>
           <Grid container item spacing={1}>
             <Grid item xs={8}>
-              <SkeletonBox text={data.standartObject?.quality} />
+              <SkeletonBox text={data.standartObject?.quality?.toLowerCase()} />
             </Grid>
             <Grid item xs={3}>
-              <SkeletonBox text={"этаж " + data.standartObject?.floor} />
+              <SkeletonBox text={data.standartObject?.floor + " этаж"} />
             </Grid>
           </Grid>
-        </Grid>
+        </Grid> */}
       </Box>
     </Stack>
   )
@@ -429,27 +463,17 @@ function PoolPreview() {
         </Grid>
       </Grid>
       <Box>
-        <Grid container spacing={1}>
-          <Grid container item spacing={1}>
-            <Grid item xs={5}>
-              <SkeletonBox />
-            </Grid>
-            <Grid item xs={4}>
-              <SkeletonBox />
-            </Grid>
-            <Grid item xs={3}>
-              <SkeletonBox />
-            </Grid>
-          </Grid>
-          <Grid container item spacing={1}>
-            <Grid item xs={8}>
-              <SkeletonBox />
-            </Grid>
-            <Grid item xs={3}>
-              <SkeletonBox />
-            </Grid>
-          </Grid>
-        </Grid>
+      <Stack paddingBottom="10px">
+            <Stack direction="row" gap="5px">
+              <SkeletonBox text={"S м²"}/>
+              <SkeletonBox text={"S кухни м²"}/>
+              <SkeletonBox text={"наличие балкона"}/>
+            </Stack>
+            <Stack direction="row" gap="5px">
+              <SkeletonBox text={"отделка"}/>
+              <SkeletonBox text={"этаж"}/>
+            </Stack>
+          </Stack>
       </Box>
     </Stack>
   )
