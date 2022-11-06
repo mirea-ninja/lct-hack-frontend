@@ -28,7 +28,7 @@ class ApiClient {
 
   constructor() {
     let config = new Configuration({
-      basePath: "http://37.230.196.151:8080",
+      basePath: process.env.NEXT_APP_API_URL || "https://lct.mirea.ninja",
       //accessToken: "Bearer " + window.sessionStorage.getItem("user"),
       baseOptions: {
         headers: {
