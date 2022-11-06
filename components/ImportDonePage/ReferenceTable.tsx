@@ -60,7 +60,7 @@ export const ReferenceTable = observer(
 
     const { mutate, isLoading, isError, isSuccess } = useMutation({
       mutationFn: (params: { id1: string; id2: string; id3: string }) => {
-        return api.subqueryApi.setBaseQueryIdSubquerySubidBaseApartmentPost(
+        return api.subqueryApi.setBaseApiQueryIdSubquerySubidBaseApartmentPost(
           params.id1,
           params.id2,
           { guid: params.id3 }
