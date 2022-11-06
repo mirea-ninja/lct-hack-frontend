@@ -16,19 +16,20 @@ export default function DisconnectModal({ open = false, onClose }: Props) {
 
   return (
     <BasicModal open={open} onClose={onClose}>
-      <Typography
-        sx={{
-          fontWeight: 700,
-          fontSize: '24px',
-          lineHeight: '26px',
-          color: 'var(--negative-clr)',
-          mb: '20px',
-        }}>
-        <Stack direction='row' alignItems='center' sx={{ gap: '10px' }}>
-          <DisconnectIcon />
+      <Stack
+        direction='row'
+        alignItems='center'
+        sx={{ gap: '10px', color: 'var(--negative-clr)', mb: '20px' }}>
+        <DisconnectIcon />
+        <Typography
+          sx={{
+            fontWeight: 700,
+            fontSize: '24px',
+            lineHeight: '26px',
+          }}>
           Нет соединения с интернетом
-        </Stack>
-      </Typography>
+        </Typography>
+      </Stack>
       <Typography
         sx={{
           fontWeight: 500,
