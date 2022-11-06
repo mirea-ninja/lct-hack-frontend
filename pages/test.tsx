@@ -1,6 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
 import BasicModal from '../components/modals/BasicModal';
+import InternetErrorModal from '../components/modals/InternetErrorModal';
 
 const TestPage = () => {
   const [open, setOpen] = React.useState(false);
@@ -10,9 +11,7 @@ const TestPage = () => {
   return (
     <div>
       <Button onClick={handleOpen}>Open modal</Button>
-      <BasicModal open={open} onClose={handleClose}>
-        <h1>hello</h1>
-      </BasicModal>
+      <InternetErrorModal open={open} onClose={handleClose} />
     </div>
   );
 };
