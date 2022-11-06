@@ -13,18 +13,23 @@ type Props = {
 const stepValues = [
   {
     stepName: "Загрузка пула",
+    link: "/import/pool",
   },
   {
     stepName: "Выбор эталонов",
+    link: "/import/etalons",
   },
   {
     stepName: "Расчет эталонов",
+    link: "/calculate_etalons/map",
   },
   {
     stepName: "Расчет пула",
+    link: "/import/pool",
   },
   {
     stepName: "Экспорт",
+    link: "/import/pool",
   },
 ]
 
@@ -41,6 +46,7 @@ export default function StepProgress({
             stepName={stepValues[i].stepName}
             key={i}
             // number={i + 1}
+            link={stepValues[i].link}
             isActive={currentStep === i + 1}
             isProgressed={currentStep > i + 1}
             havePath={i !== stepsCount - 1}

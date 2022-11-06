@@ -19,8 +19,9 @@ import { toJS } from "mobx"
 import { SubQueryGet } from "../../../apiConnection/gen/models/sub-query-get"
 import { ApartmentGet } from "../../../apiConnection/gen"
 import { useApiClient } from "../../../logic/ApiClientHook"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { RepairType } from "../../../components/ImportDonePage/types"
+import { ApartmentGet } from "../../../apiConnection/gen/models/apartment-get"
 
 type Props = {
   onActiveChange: (active: boolean) => void
@@ -35,6 +36,9 @@ const LoadedPoolBox = observer(({ onActiveChange }: Props) => {
 
   const isActive = data.queryGetData !== null
   onActiveChange(isActive)
+
+  if (isActive) {
+  }
 
   return (
     <Stack
@@ -226,10 +230,36 @@ const PoolData = observer(({ data, id }: PoolDataProps) => {
     },
   })
 
+  const set = useMutation({
+    mutationFn: async (params: {
+      apt: ApartmentGet
+      queryId: string
+      subqueryId: string
+    }) => {
+      let data = await api.parser.parseParsePost({
+        address: params.apt.address,
+        floors: params.apt.floors,
+        rooms: params.apt.rooms,
+        segment: params.apt.segment!.toString().toLowerCase(),
+        walls: params.apt.walls!.toString().toLowerCase(),
+        radius: 1500,
+        queryId: params.queryId,
+        subqueryId: params.subqueryId,
+      })
+
+      console.log(data.data)
+    },
+  })
+
   if (isEtalonSelected) {
     let etalon = getRandomEtalon(data)
     data.standartObject = etalon
     mutate({ id1: store.queryGetData!.guid, id2: data.guid, id3: etalon.guid })
+    set.mutate({
+      apt: etalon,
+      queryId: store.queryGetData!.guid,
+      subqueryId: data.guid,
+    })
   }
 
   if (isLoading) {
