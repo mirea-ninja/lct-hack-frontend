@@ -15,6 +15,7 @@ const StyledStack = styled(Stack)({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
+  alignItems: 'center',
 });
 
 const StyledTableCell = styled(TableCell)({
