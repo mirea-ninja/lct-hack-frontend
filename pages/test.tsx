@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import BasicModal from '../components/modals/BasicModal';
 import DisconnectModal from '../components/modals/DisconnectModal';
+import SuccessModal from '../components/modals/SuccessModal';
 
 const TestPage = () => {
   const [open, setOpen] = React.useState(false);
@@ -11,7 +11,8 @@ const TestPage = () => {
   return (
     <div>
       <Button onClick={handleOpen}>Open modal</Button>
-      <DisconnectModal open={open} onClose={handleClose} />
+      {/* <DisconnectModal open={open} onClose={handleClose} /> */}
+      <SuccessModal open={open} onClose={handleClose} />
     </div>
   );
 };
