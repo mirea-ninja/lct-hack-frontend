@@ -42,6 +42,7 @@ const StyledTableRow = styled(TableRow)({
     fontWeight: 700,
     backgroundColor: 'var(--bg-clr-pure-white)',
     borderBottom: '5px solid #1E1E1E32',
+    borderRight: 'none',
   },
 });
 
