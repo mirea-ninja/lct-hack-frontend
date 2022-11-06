@@ -89,7 +89,7 @@ export default function CalculateEtalonsPage({}: Props) {
             </Stack>
           </Stack>
         </Stack>
-        <PoolTabs />
+        <PoolTabs hasMetroAttribute />
       </Box>
     </Box>
   );

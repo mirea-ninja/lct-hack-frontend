@@ -4,7 +4,11 @@ import Button from '@mui/material/Button';
 import { Stack } from '@mui/system';
 import PoolTable from '../../tables/PoolTable';
 
-export default function PoolTabs() {
+type Props = {
+  hasMetroAttribute?: boolean;
+};
+
+export default function PoolTabs({ hasMetroAttribute = false }: Props) {
   return (
     <Paper
       sx={{
@@ -25,7 +29,7 @@ export default function PoolTabs() {
           <Button variant='text'>5-комнатные</Button>
         </Stack>
 
-        <PoolTable />
+        <PoolTable hasMetroAttribute={hasMetroAttribute} />
       </Stack>
     </Paper>
   );

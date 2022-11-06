@@ -15,6 +15,7 @@ const StyledStack = styled(Stack)({
   display: 'flex',
   flexDirection: 'row',
   justifyContent: 'space-between',
+  alignItems: 'center',
 });
 
 const StyledTableCell = styled(TableCell)({
@@ -34,14 +35,16 @@ const StyledTableCell = styled(TableCell)({
 });
 
 const StyledTableRow = styled(TableRow)({
-  '&:nth-of-type(1) td': {
-    fontWeight: 700,
-    boxShadow: 'var(--shadow-etalon)',
-    backgroundColor: 'var(--bg-clr-pure-white)',
-  },
-  'td,  th': {
+  'td, th': {
     fontWeight: 500,
     borderBottom: '5px solid var(--bg-clr-pure-white)',
+  },
+
+  '&:nth-of-type(1) td': {
+    fontWeight: 700,
+    backgroundColor: 'var(--bg-clr-pure-white)',
+    borderBottom: '5px solid #1E1E1E32',
+    borderRight: 'none',
   },
 });
 
@@ -49,94 +52,70 @@ const rows: Pool[] = [
   {
     id: Math.random(),
     isBasic: true,
-    pricePerSquareMeter: 357100,
+    pricePerSquareMeter: { value: 357100 },
     objectPrice: 39673490,
-    floor: 1,
-    flatSquare: 6,
-    kitchenSquare: 24,
-    hasBalcony: false,
-    state: 'Муниципальный ремонт',
+    floor: { value: 1 },
+    flatSquare: { value: 6 },
+    kitchenSquare: { value: 24 },
+    hasBalcony: { value: false },
+    state: { value: 'Муниципальный ремонт' },
+    metro: { value: 5 },
   },
   {
     id: Math.random(),
-    isBasic: true,
-    pricePerSquareMeter: 357100,
+    isBasic: false,
+    pricePerSquareMeter: { value: 357100, change: 4.5 },
     objectPrice: 39673490,
-    floor: 1,
-    flatSquare: 6,
-    kitchenSquare: 24,
-    hasBalcony: false,
-    state: 'Муниципальный ремонт',
+    floor: { value: 1, change: -4.5 },
+    flatSquare: { value: 6, change: 4.5 },
+    kitchenSquare: { value: 24, change: -4.5 },
+    hasBalcony: { value: false, change: 4.5 },
+    state: { value: 'Муниципальный ремонт', change: 4.5 },
+    metro: { value: 43, change: -4.5 },
   },
   {
     id: Math.random(),
-    isBasic: true,
-    pricePerSquareMeter: 357100,
+    isBasic: false,
+    pricePerSquareMeter: { value: 357100, change: 4.5 },
     objectPrice: 39673490,
-    floor: 1,
-    flatSquare: 6,
-    kitchenSquare: 24,
-    hasBalcony: false,
-    state: 'Муниципальный ремонт',
+    floor: { value: 1, change: 4.5 },
+    flatSquare: { value: 6, change: 4.5 },
+    kitchenSquare: { value: 24, change: -4.5 },
+    hasBalcony: { value: false, change: 4.5 },
+    state: { value: 'Муниципальный ремонт', change: 4.5 },
+    metro: { value: 43, change: 4.5 },
   },
   {
     id: Math.random(),
-    isBasic: true,
-    pricePerSquareMeter: 357100,
+    isBasic: false,
+    pricePerSquareMeter: { value: 357100, change: -4.5 },
     objectPrice: 39673490,
-    floor: 1,
-    flatSquare: 6,
-    kitchenSquare: 24,
-    hasBalcony: false,
-    state: 'Муниципальный ремонт',
+    floor: { value: 1, change: 4.5 },
+    flatSquare: { value: 6, change: 4.5 },
+    kitchenSquare: { value: 24, change: -4.5 },
+    hasBalcony: { value: false, change: 4.5 },
+    state: { value: 'Муниципальный ремонт', change: 4.5 },
+    metro: { value: 43, change: 4.5 },
   },
   {
     id: Math.random(),
-    isBasic: true,
-    pricePerSquareMeter: 357100,
+    isBasic: false,
+    pricePerSquareMeter: { value: 357100, change: 4.5 },
     objectPrice: 39673490,
-    floor: 1,
-    flatSquare: 6,
-    kitchenSquare: 24,
-    hasBalcony: false,
-    state: 'Муниципальный ремонт',
-  },
-  {
-    id: Math.random(),
-    isBasic: true,
-    pricePerSquareMeter: 357100,
-    objectPrice: 39673490,
-    floor: 1,
-    flatSquare: 6,
-    kitchenSquare: 24,
-    hasBalcony: false,
-    state: 'Муниципальный ремонт',
-  },
-  {
-    id: Math.random(),
-    isBasic: true,
-    pricePerSquareMeter: 357100,
-    objectPrice: 39673490,
-    floor: 1,
-    flatSquare: 6,
-    kitchenSquare: 24,
-    hasBalcony: false,
-    state: 'Муниципальный ремонт',
-  },
-  {
-    id: Math.random(),
-    isBasic: true,
-    pricePerSquareMeter: 357100,
-    objectPrice: 39673490,
-    floor: 1,
-    flatSquare: 6,
-    kitchenSquare: 24,
-    hasBalcony: false,
-    state: 'Муниципальный ремонт',
+    floor: { value: 1, change: -4.5 },
+    flatSquare: { value: 6, change: 4.5 },
+    kitchenSquare: { value: 24, change: -4.5 },
+    hasBalcony: { value: false, change: 4.5 },
+    state: { value: 'Муниципальный ремонт', change: 4.5 },
+    metro: { value: 43, change: -4.5 },
   },
 ];
 
-export default function PoolTable() {
+type Props = {
+  hasMetroAttribute?: boolean;
+};
+
+export default function PoolTable({ hasMetroAttribute = false }: Props) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} stickyHeader>
@@ -149,44 +128,77 @@ export default function PoolTable() {
             <StyledTableCell align='left'>Площадь кухни, м2</StyledTableCell>
             <StyledTableCell align='left'>Балкон или лоджия</StyledTableCell>
             <StyledTableCell align='left'>Состояние</StyledTableCell>
+            {hasMetroAttribute && (
+              <StyledTableCell align='left'>
+                Время до метро, мин
+              </StyledTableCell>
+            )}
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map(row => (
+          {rows.map((row, index) => (
             <StyledTableRow key={row.id}>
               <StyledTableCell scope='row'>
                 <StyledStack>
-                  {row.pricePerSquareMeter} ₽
-                  <PercentageItem value={4.5} />
+                  {row.pricePerSquareMeter.value} ₽
+                  {row.pricePerSquareMeter.change && (
+                    <PercentageItem value={row.pricePerSquareMeter.change} />
+                  )}
+                </StyledStack>
+              </StyledTableCell>
+              <StyledTableCell align='right'>
+                <StyledStack>{row.objectPrice} ₽</StyledStack>
+              </StyledTableCell>
+              <StyledTableCell align='right'>
+                <StyledStack>
+                  {row.floor.value}
+                  {row.floor.change && (
+                    <PercentageItem value={row.floor.change} />
+                  )}
                 </StyledStack>
               </StyledTableCell>
               <StyledTableCell align='right'>
                 <StyledStack>
-                  {row.objectPrice} ₽
-                  <PercentageItem value={-4.5} />
+                  {row.flatSquare.value}
+                  {row.flatSquare.change && (
+                    <PercentageItem value={row.flatSquare.change} />
+                  )}
                 </StyledStack>
               </StyledTableCell>
               <StyledTableCell align='right'>
                 <StyledStack>
-                  {row.floor}
-                  <PercentageItem value={4.5} />
+                  {row.kitchenSquare.value}
+                  {row.kitchenSquare.change && (
+                    <PercentageItem value={row.kitchenSquare.change} />
+                  )}
                 </StyledStack>
               </StyledTableCell>
               <StyledTableCell align='right'>
                 <StyledStack>
-                  {row.flatSquare}
-                  <PercentageItem value={-4.5} />
+                  {row.hasBalcony.value ? 'Да' : 'Нет'}
+                  {row.hasBalcony.change && (
+                    <PercentageItem value={row.hasBalcony.change} />
+                  )}
                 </StyledStack>
               </StyledTableCell>
               <StyledTableCell align='right'>
-                <StyledStack>{row.kitchenSquare}</StyledStack>
+                <StyledStack>
+                  {row.state.value}
+                  {row.state.change && (
+                    <PercentageItem value={row.state.change} />
+                  )}
+                </StyledStack>
               </StyledTableCell>
-              <StyledTableCell align='right'>
-                <StyledStack>{row.hasBalcony ? 'Да' : 'Нет'}</StyledStack>
-              </StyledTableCell>
-              <StyledTableCell align='right'>
-                <StyledStack>{row.state}</StyledStack>
-              </StyledTableCell>
+              {hasMetroAttribute && (
+                <StyledTableCell align='right'>
+                  <StyledStack>
+                    {row.metro.value}
+                    {row.metro.change && (
+                      <PercentageItem value={row.metro.change} />
+                    )}
+                  </StyledStack>
+                </StyledTableCell>
+              )}
             </StyledTableRow>
           ))}
         </TableBody>
