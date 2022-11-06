@@ -2,7 +2,6 @@ import React from "react";
 import { YMaps, Map, withYMaps, Placemark, Circle } from "react-yandex-maps";
 import { Typography, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/IconButton";
 import MapSlider from "../../../components/map/MapSlider";
 import ReferenceCard from "../../../components/map/ReferenceCard";
 import Header from "../../../components/main/Header";
@@ -17,38 +16,10 @@ import { observer } from "mobx-react";
 import { SearchBase } from "../../../apiConnection/parser/models/search-base";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { useApiClient } from "../../../logic/ApiClientHook";
+import { TemplateProvider } from "../../../components/map/TemplateProvider";
+import { ZoomButton } from "../../../components/map/ZoomButton";
 
 type Props = {};
-
-class TemplateProvider extends React.Component {
-  constructor() {
-    // @ts-ignore
-    super();
-    this.state = { template: null };
-  }
-
-  componentDidMount() {
-    // Ждём загрузки модуля
-    const interval = setInterval(() => {
-      if (!this.state.ready) {
-        // Когда загрузился модуль
-        if (this.props.ymaps.hasOwnProperty("Map")) {
-          const MyBalloonContentLayout =
-            this.props.ymaps.templateLayoutFactory.createClass(
-              '<div class="popover-content">$[properties.content]</div>'
-            );
-          this.setState({ template: MyBalloonContentLayout, ready: true });
-          clearInterval(interval);
-        }
-      }
-    }, 300);
-  }
-
-  render() {
-    // @ts-ignore
-    return this.props.children({ template: this.state.template });
-  }
-}
 
 const ConnectedTemplateProvider = withYMaps(TemplateProvider, true, [
   "templateLayoutFactory",
@@ -71,29 +42,6 @@ const getTagsTemplate = (data: any) => {
                     </div>
                 </div>
             </div>`;
-};
-
-type ZoomButtonProps = {
-  onClick: () => void;
-  icon: JSX.Element;
-};
-
-const ZoomButton = (props: ZoomButtonProps) => {
-  const theme = useTheme();
-  return (
-    <Button
-      sx={{
-        color: theme.palette.primary.main,
-        padding: "5px",
-        "&:hover": {
-          background: "transparent",
-        },
-      }}
-      onClick={props.onClick}
-    >
-      {props.icon}
-    </Button>
-  );
 };
 
 const Maps = observer(({}: Props) => {
@@ -281,7 +229,6 @@ const Maps = observer(({}: Props) => {
                   suppressObsoleteBrowserNotifier: true,
                 }}
               >
- 
                 {isSuccess &&
                   analogs.map((analog) => (
                     <Placemark
