@@ -4,7 +4,7 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
 type Props = {
-  value: number;
+  value?: number;
   sx?: SxProps<Theme>;
   [props: string]: any;
 };
@@ -18,12 +18,12 @@ export default function PercentageItem({ value, sx, ...props }: Props) {
           fontWeight: 500,
           fontSize: 18,
           lineHeight: '20px',
-          color: value > 0 ? 'var(--positive-clr)' : 'var(--negative-clr)',
+          color: value! > 0 ? 'var(--positive-clr)' : 'var(--negative-clr)',
         },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
       {...props}>
-      {value > 0 ? `+${value}%` : `${value}%`}
+      {value! > 0 ? `+${value}%` : `${value}%`}
     </Typography>
   );
 }
