@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Header from "../../../components/main/Header"
 import { Box, Typography } from "@mui/material"
 import { Stack } from "@mui/system"
@@ -11,6 +11,7 @@ import PoolTabs from "../../../components/tabs/PoolTabs"
 import { useStore } from "../../../logic/DataStore"
 import Link from "next/link"
 import { useApiClient } from "../../../logic/ApiClientHook"
+import { useMutation, useQuery } from "@tanstack/react-query"
 
 type Props = {}
 
@@ -19,6 +20,27 @@ export default function CalculateEtalonsPage({}: Props) {
   const api = useApiClient()
 
   const standart = store.queryGetData?.subQueries[0].standartObject
+
+  const { mutate, isLoading, isError, isSuccess } = useMutation({
+    mutationFn: (params: { queryId: string; subqueryId: string }) => {
+      return api.subqueryApi.calculateAnalogsApiQueryIdSubquerySubidCalculateAnalogsPost(
+        params.queryId,
+        params.subqueryId
+      )
+    },
+    onSettled(data, error, variables, context) {},
+    onSuccess(data) {
+      console.log(data.data)
+      store.queryGetData = data.data
+    },
+  })
+
+  useEffect(() => {
+    for (let i = 0; i < store.queryGetData!.subQueries.length; i++) {
+      let subQuery = store.queryGetData?.subQueries[i]
+      mutate({ queryId: store.queryGetData!.guid, subqueryId: subQuery!.guid })
+    }
+  }, [])
 
   return (
     <Box>
