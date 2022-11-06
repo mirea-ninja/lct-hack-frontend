@@ -1,17 +1,26 @@
 import Header from "../components/main/Header"
+import Link from "next/link"
 
 export default function Home() {
   return (
     <div>
       <Header />
-      <a href="/login">Login</a><br />
-      <a href="/import/pool">Pool</a><br />
-      <a href="/import/etalons">Etalons</a><br />
-      <a href="/calculate_etalons/map">Calculate etalons on map</a><br />
-      <a href="/calculate_etalons/table">Calculate etalons in table</a><br />
-      <a href="/calculate_pool">Calculate pool</a><br />
-      <a href="/archive">Archive</a><br />
-      <a href="/user">User</a><br />
+      <Link href="/login">Login</Link>
+      <br />
+      <Link href="/import/pool">Pool</Link>
+      <br />
+      <Link href="/import/etalons">Etalons</Link>
+      <br />
+      <Link href="/calculate_etalons/map">Calculate etalons on map</Link>
+      <br />
+      <Link href="/calculate_etalons/table">Calculate etalons in table</Link>
+      <br />
+      <Link href="/calculate_pool">Calculate pool</Link>
+      <br />
+      <Link href="/archive">Archive</Link>
+      <br />
+      <Link href="/user">User</Link>
+      <br />
     </div>
   )
 }
