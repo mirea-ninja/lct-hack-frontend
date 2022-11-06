@@ -293,7 +293,7 @@ const Maps = observer(({}: Props) => {
                           subtitle: analog.price,
                           tags: [
                             `${analog.floor} этаж`,
-                            `S ${analog.area} м²`,
+                            `S ${analog.apartmentArea} м²`,
                             `S кухня ${analog.kitchenArea} м²`,
                             analog.hasBalcony ? "есть балкон" : "нет балкона",
                             `${analog.distanceToMetro} мин. до метро`,
@@ -310,6 +310,7 @@ const Maps = observer(({}: Props) => {
                         iconLayout: "default#image",
                         iconImageHref: "/placemark.svg",
                         iconImageSize: [18, 22],
+                        iconImageOffset: [-9, -22],
                       }}
                       modules={["geoObject.addon.balloon"]}
                     />
