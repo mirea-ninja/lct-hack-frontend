@@ -1,5 +1,5 @@
 import React from "react";
-import { YMaps, Map, withYMaps, Placemark } from "react-yandex-maps";
+import { YMaps, Map, withYMaps, Placemark, Circle } from "react-yandex-maps";
 import { Typography, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/IconButton";
@@ -113,8 +113,8 @@ const Maps = observer(({}: Props) => {
       return { subqueryGuid: query.subqueryId, response };
     },
     onSuccess: (data) => {
-      console.log("SUCCESS DATA: ", data)
-      
+      console.log("SUCCESS DATA: ", data);
+
       const subquery = store.queryGetData?.subQueries.find(
         (subquery) => subquery.guid === data.subqueryGuid
       );
@@ -147,6 +147,17 @@ const Maps = observer(({}: Props) => {
           mutate(data);
         }
       }
+    }
+  }, [store.queryGetData]);
+
+  const [analogs, setAnalogs] = React.useState<any[]>([]);
+
+  React.useEffect(() => {
+    if (store.queryGetData?.subQueries) {
+      const analogs = store.queryGetData.subQueries
+        .map((subQuery) => subQuery.analogs)
+        .flat();
+      setAnalogs(analogs);
     }
   }, [store.queryGetData]);
 
@@ -270,33 +281,55 @@ const Maps = observer(({}: Props) => {
                   suppressObsoleteBrowserNotifier: true,
                 }}
               >
-                <Placemark
-                  geometry={[55.8, 37.6]}
-                  properties={{
-                    content: getTagsTemplate({
-                      title: "Ватутина, 24",
-                      subtitle: "244 054 ₽ м²",
-                      tags: [
-                        "1 этаж",
-                        "S 45 м²",
-                        "S кухня 10 м²",
-                        "нет балкона",
-                        "10 мин. до метро",
-                        "муниципальный ремонт",
-                      ],
-                    }),
-                    title: "Ватутина, 24",
-                  }}
-                  options={{
-                    // Применяем шаблон
-                    balloonContentLayout: template,
-                    balloonPanelMaxMapArea: 0,
+ 
+                {isSuccess &&
+                  analogs.map((analog) => (
+                    <Placemark
+                      key={analog.id}
+                      geometry={[analog.lat, analog.lon]}
+                      properties={{
+                        content: getTagsTemplate({
+                          title: analog.address,
+                          subtitle: analog.price,
+                          tags: [
+                            `${analog.floor} этаж`,
+                            `S ${analog.area} м²`,
+                            `S кухня ${analog.kitchenArea} м²`,
+                            analog.hasBalcony ? "есть балкон" : "нет балкона",
+                            `${analog.distanceToMetro} мин. до метро`,
+                            analog.quality,
+                          ],
+                        }),
+                        title: analog.address,
+                      }}
+                      options={{
+                        // Применяем шаблон
+                        balloonContentLayout: template,
+                        balloonPanelMaxMapArea: 0,
 
-                    iconLayout: "default#image",
-                    iconImageHref: "/placemark.svg",
-                    iconImageSize: [18, 22],
+                        iconLayout: "default#image",
+                        iconImageHref: "/placemark.svg",
+                        iconImageSize: [18, 22],
+                      }}
+                      modules={["geoObject.addon.balloon"]}
+                    />
+                  ))}
+
+                <Circle
+                  geometry={[
+                    [
+                      store.queryGetData.subQueries[0].standartObject.lat,
+                      store.queryGetData.subQueries[0].standartObject.lon,
+                    ],
+                    1500,
+                  ]}
+                  options={{
+                    fillColor: "#FF0000",
+                    fillOpacity: 0.1,
+                    strokeColor: "#FF0000",
+                    strokeOpacity: 0.5,
+                    strokeWidth: 1,
                   }}
-                  modules={["geoObject.addon.balloon"]}
                 />
               </Map>
             )}
