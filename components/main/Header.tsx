@@ -107,7 +107,10 @@ export default function Header({
           {!isArchive && (
             <HeaderTab isActive={false} link="/archive" text="Архив запросов" />
           )}
-          <Link href="/docs">
+          <Link
+            href="https://lct.mirea.ninja/static/documentation.pdf"
+            target="_blank"
+          >
             <HelpOutlineIcon color="primary" />
           </Link>
           <Link href="/">
