@@ -12,6 +12,7 @@ import SearchIcon from '../../components/icons/SearchIcon';
 import ArchiveList from '../../components/lists/ArchiveList';
 import ArchiveFilterMenu from '../../components/menus/ArchiveFilterMenu';
 import TagItem from '../../components/items/TagItem';
+import NoResultItem from '../../components/items/NoResultItem';
 
 type Props = {};
 
@@ -99,6 +100,10 @@ export default function ArchivePage({}: Props) {
             />
           </Stack>
         </Stack>
+
+        <br />
+        <NoResultItem />
+        <br />
 
         <ArchiveList />
       </Box>
