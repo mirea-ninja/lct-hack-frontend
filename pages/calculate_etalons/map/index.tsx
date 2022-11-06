@@ -116,17 +116,17 @@ const Maps = observer(({}: Props) => {
           );
 
         const analogs = analogsRes.data;
+        const validAnalogs = getOnlyValidAnalogs(analogs);
 
         analogsResult.push(analogs);
-        selectedAnalogsResult.push(getOnlyValidAnalogs(analogs));
+        selectedAnalogsResult.push(validAnalogs);
 
         if (selectedAnalogsResult.length > 0) {
-          console.log("ANALOGS TO SELECT: ", selectedAnalogsResult);
           // Выбираем аналоги на удалённом сервере. Выбранные аналоги будут использоваться для рассчётов
           await apiClient.subqueryApi.setAnalogsApiQueryIdSubquerySubidUserAnalogsPost(
             item.queryId,
             item.subqueryId,
-            { guids: selectedAnalogsResult[i].map((analog) => analog.guid) }
+            { guids: validAnalogs.map((el) => el.guid) }
           );
         }
 
@@ -142,8 +142,6 @@ const Maps = observer(({}: Props) => {
     },
 
     onSuccess: (data) => {
-      console.log("SUCCESS DATA: ", data);
-
       const subqueries = store.queryGetData?.subQueries;
 
       if (subqueries) {
