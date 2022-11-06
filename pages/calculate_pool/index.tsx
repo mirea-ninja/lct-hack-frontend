@@ -1,21 +1,20 @@
-import React, { useState, useEffect } from "react"
-import Header from "../../../components/main/Header"
+import React, { useEffect, useState } from "react"
+import Header from "../../components/main/Header"
 import { Box, Typography } from "@mui/material"
 import { Stack } from "@mui/system"
-import AppButton from "../../../components/buttons/AppButton"
+import AppButton from "../../components/buttons/AppButton"
 import IconButton from "@mui/material/IconButton"
-import { CloseIcon } from "../../../components/icons/CloseIcon"
+import { CloseIcon } from "../../components/icons/CloseIcon"
 import { FormControlLabel } from "@mui/material"
-import AppCheckbox from "../../../components/checkboxes/AppCheckbox"
-import PoolTabs from "../../../components/tabs/PoolTabs"
-import { useStore } from "../../../logic/DataStore"
-import Link from "next/link"
-import { useApiClient } from "../../../logic/ApiClientHook"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import AppCheckbox from "../../components/checkboxes/AppCheckbox"
+import PoolTabs from "../../components/tabs/PoolTabs"
+import { useStore } from "../../logic/DataStore"
+import { useApiClient } from "../../logic/ApiClientHook"
+import { useMutation } from "@tanstack/react-query"
 
 type Props = {}
 
-export default function CalculateEtalonsPage({}: Props) {
+export default function CalculatePoolPage({}: Props) {
   const store = useStore()
   const api = useApiClient()
 
@@ -23,7 +22,7 @@ export default function CalculateEtalonsPage({}: Props) {
 
   const { mutate, isLoading, isError, isSuccess } = useMutation({
     mutationFn: (params: { queryId: string; subqueryId: string }) => {
-      return api.subqueryApi.calculateAnalogsApiQueryIdSubquerySubidCalculateAnalogsPost(
+      return api.subqueryApi.calculatePoolApiQueryIdSubquerySubidCalculatePoolPost(
         params.queryId,
         params.subqueryId
       )
@@ -44,7 +43,7 @@ export default function CalculateEtalonsPage({}: Props) {
 
   return (
     <Box>
-      <Header stepProgress={4} />
+      <Header stepProgress={5} />
       <Box sx={{ padding: "30px" }}>
         <Stack sx={{ mb: "30px", gap: "20px" }}>
           <Stack
@@ -61,7 +60,7 @@ export default function CalculateEtalonsPage({}: Props) {
                 color: "var(--text-clr-main)",
               }}
             >
-              Расчет цены эталонного объекта
+              Расчет цен для пула объектов
             </Typography>
             <IconButton>
               <CloseIcon />
@@ -126,14 +125,7 @@ export default function CalculateEtalonsPage({}: Props) {
                   color: "#3E3E41",
                 }}
               />
-              <Link href="/calculate_etalons/map">
-                <AppButton size="small" variant="secondary">
-                  Вернуться на карту
-                </AppButton>
-              </Link>
-              <Link href="/calculate_etalons/pool">
-                <AppButton size="small">Рассчитать пул</AppButton>
-              </Link>
+              <AppButton size="small">Экспортировать пул</AppButton>
             </Stack>
           </Stack>
         </Stack>
@@ -185,7 +177,6 @@ export default function CalculateEtalonsPage({}: Props) {
               },
             ]
           }
-          hasMetroAttribute
         />
       </Box>
     </Box>

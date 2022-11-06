@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState, useEffect } from "react"
 import Header from "../../../components/main/Header"
 import { Box, Typography } from "@mui/material"
 import { Stack } from "@mui/system"
@@ -9,12 +9,13 @@ import { FormControlLabel } from "@mui/material"
 import AppCheckbox from "../../../components/checkboxes/AppCheckbox"
 import PoolTabs from "../../../components/tabs/PoolTabs"
 import { useStore } from "../../../logic/DataStore"
+import Link from "next/link"
 import { useApiClient } from "../../../logic/ApiClientHook"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 
 type Props = {}
 
-export default function CalculatePoolPage({}: Props) {
+export default function CalculateEtalonsPage({}: Props) {
   const store = useStore()
   const api = useApiClient()
 
@@ -22,7 +23,7 @@ export default function CalculatePoolPage({}: Props) {
 
   const { mutate, isLoading, isError, isSuccess } = useMutation({
     mutationFn: (params: { queryId: string; subqueryId: string }) => {
-      return api.subqueryApi.calculatePoolApiQueryIdSubquerySubidCalculatePoolPost(
+      return api.subqueryApi.calculateAnalogsApiQueryIdSubquerySubidCalculateAnalogsPost(
         params.queryId,
         params.subqueryId
       )
@@ -43,7 +44,7 @@ export default function CalculatePoolPage({}: Props) {
 
   return (
     <Box>
-      <Header stepProgress={5} />
+      <Header stepProgress={4} />
       <Box sx={{ padding: "30px" }}>
         <Stack sx={{ mb: "30px", gap: "20px" }}>
           <Stack
@@ -60,7 +61,7 @@ export default function CalculatePoolPage({}: Props) {
                 color: "var(--text-clr-main)",
               }}
             >
-              Расчет цен для пула объектов
+              Расчет цены эталонного объекта
             </Typography>
             <IconButton>
               <CloseIcon />
@@ -125,7 +126,14 @@ export default function CalculatePoolPage({}: Props) {
                   color: "#3E3E41",
                 }}
               />
-              <AppButton size="small">Экспортировать пул</AppButton>
+              <Link href="/calculate_etalons/map">
+                <AppButton size="small" variant="secondary">
+                  Вернуться на карту
+                </AppButton>
+              </Link>
+              <Link href="/calculate_pool">
+                <AppButton size="small">Рассчитать пул</AppButton>
+              </Link>
             </Stack>
           </Stack>
         </Stack>
@@ -177,6 +185,7 @@ export default function CalculatePoolPage({}: Props) {
               },
             ]
           }
+          hasMetroAttribute
         />
       </Box>
     </Box>
