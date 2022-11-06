@@ -47,8 +47,13 @@ export default function ImportDonePage() {
               </Typography>
             </Stack>
             <Stack direction="row" gap={3} height="80%">
+            <Link href="/import/etalons">
+                <Button variant="accentActive">
+                  Вернуться к загрузке
+                </Button>
+              </Link>
               <Link href="/calculate_etalons/map">
-                <Button variant="contained">Найти аналоги</Button>
+                <Button variant="mainActive">Найти аналоги</Button>
               </Link>
             </Stack>
           </Stack>

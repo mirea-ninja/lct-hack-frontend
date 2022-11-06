@@ -97,7 +97,7 @@ export const ReferenceTable = observer(
       },
       {
         field: "KitchenArea",
-        headerName: "Прощадь кухни, кв.м",
+        headerName: "Площадь кухни, кв.м",
         type: "number",
         // editable: true,
         align: "left",
