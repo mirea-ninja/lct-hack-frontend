@@ -115,15 +115,15 @@ export interface ApartmentGet {
      */
     price?: number;
     /**
-     * Список корректировок
-     * @type {AdjustmentGet}
-     * @memberof ApartmentGet
-     */
-    adjustment?: AdjustmentGet;
-    /**
      * Уникальный идентификатор квартиры
      * @type {string}
      * @memberof ApartmentGet
      */
     guid: string;
+    /**
+     * Список корректировок
+     * @type {AdjustmentGet}
+     * @memberof ApartmentGet
+     */
+    adjustment?: AdjustmentGet;
 }

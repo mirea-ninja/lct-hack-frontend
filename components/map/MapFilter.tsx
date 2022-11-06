@@ -2,12 +2,13 @@ import React from "react";
 import Paper from "@mui/material/Paper";
 import { Stack } from "@mui/system";
 import Typography from "@mui/material/Typography";
-import { CloseIcon } from "../icons/CloseIcon";
 import IconButton from "@mui/material/IconButton";
 import { Collapse } from "@mui/material";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import AppCheckbox from "../checkboxes/AppCheckbox";
+import ArrowLeft from "@mui/icons-material/ChevronLeft";
+
 
 type Props = {
   setShowEtalon: (value: boolean) => void;
@@ -50,7 +51,12 @@ export default function MapFilter(props: Props) {
           Показывать
         </Typography>
         <IconButton onClick={() => setIsExpanded((prev) => !prev)}>
-          <CloseIcon />
+          <ArrowLeft
+            sx={{
+              transform: isExpanded ? "rotate(90deg)" : "rotate(-90deg)",
+              transition: "transform .3s",
+            }}
+          />
         </IconButton>
       </Stack>
       <Collapse in={isExpanded}>
