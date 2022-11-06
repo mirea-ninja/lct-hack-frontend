@@ -69,30 +69,43 @@ const Maps = observer(({}: Props) => {
 
   const mapRef = React.useRef(null);
 
-  // Запрос в парсер (parser в api)
   const { mutate, isLoading, isError, isSuccess } = useMutation({
-    mutationFn: async (query: SearchBase) => {
-      console.log("QUERY", query);
-      const response = await apiClient.parser.parseParsePost(query);
-      console.log("RESPONSE", response);
+    mutationFn: async (query: any) => {
+      let results: any[] = [];
+      for (let i = 0; i < query.length; i++) {
+        const item = query[i];
+        const res = await apiClient.parser.parseParsePost(item);
+        results.push(res);
+      }
 
-      return { subqueryGuid: query.subqueryId, response };
+      return results.map((result, index) => {
+        return { subqueryGuid: query[index].subqueryId, response: result };
+      });
     },
+
     onSuccess: (data) => {
       console.log("SUCCESS DATA: ", data);
 
-      const subquery = store.queryGetData?.subQueries.find(
-        (subquery) => subquery.guid === data.subqueryGuid
-      );
-      if (subquery) {
-        subquery.analogs = data.response.data;
-        console.log("UPDATED SUBQUERY", toJS(store.queryGetData));
+      const subqueries = store.queryGetData?.subQueries;
+
+      if (subqueries) {
+        data.forEach((item) => {
+          const subquery = getSubqueryByGuid(item.subqueryGuid, subqueries);
+
+          if (subquery) {
+            subquery.analogs = item.response.data;
+          }
+        });
       }
+
+      console.log("UPDATED SUBQUERY", toJS(store.queryGetData));
+    },
+    onError: (error) => {
+      console.log("ERROR", error);
     },
   });
 
   React.useEffect(() => {
-    console.log("STORE: ", store);
     if (store.queryGetData?.subQueries) {
       const subqieries = store.queryGetData.subQueries;
 
@@ -102,6 +115,8 @@ const Maps = observer(({}: Props) => {
 
       const subquery = subqieries[0];
       setSelectedSubQuery(subquery.guid);
+
+      const dataToQuery = [];
 
       for (const subQuery of subqieries) {
         const standartObject = subQuery.standartObject;
@@ -117,9 +132,11 @@ const Maps = observer(({}: Props) => {
             subqueryId: subQuery.guid,
           };
 
-          mutate(data);
+          dataToQuery.push(data);
         }
       }
+
+      mutate(dataToQuery);
     }
   }, [store.queryGetData]);
 
@@ -274,7 +291,7 @@ const Maps = observer(({}: Props) => {
                         properties={{
                           content: getTagsTemplate({
                             title: analog.address,
-                            subtitle: analog.price,
+                            subtitle: `${analog.price} ₽`,
                             tags: [
                               `${analog.floor} этаж`,
                               `S ${analog.apartmentArea} м²`,
