@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
-@import './base';
+@import url("https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import "./base";
 
 html,
 body {
@@ -7,8 +7,8 @@ body {
   padding: 0;
   margin: 0;
   background-color: #f7f8fa;
-  font-family: 'Montserrat' -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
-  Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+  font-family: "Montserrat" -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Oxygen, Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
 }
 
 html,
@@ -36,19 +36,19 @@ a {
 }
 
 .ymaps-2-1-79-balloon {
-  background: #3E3E41 !important;
+  background: #3e3e41 !important;
   backdrop-filter: blur(2px) !important;
   border-radius: 10px !important;
 }
 
 .ymaps-2-1-79-balloon__layout {
-  background: #3E3E41 !important;
+  background: #3e3e41 !important;
   backdrop-filter: blur(2px) !important;
   border-radius: 10px !important;
 }
 
 .ymaps-2-1-79-balloon__content {
-  background: #3E3E41 !important;
+  background: #3e3e41 !important;
 }
 
 .ymaps-2-1-79-balloon__tail {
@@ -56,12 +56,13 @@ a {
 }
 
 .ymaps-2-1-79-balloon__tail::after {
-  background: #3E3E41 !important;
+  background: #3e3e41 !important;
 }
 
 .ymaps-2-1-79-balloon__close-button {
   // Белый крестик
-  background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAxNSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCjxwYXRoIGQ9Ik0xMS4wMzY0IDMuMDgwNTJDMTEuMjgwNSAyLjgzNjQ0IDExLjY3NjMgMi44MzY0NCAxMS45MjAzIDMuMDgwNTJDMTIuMTY0NCAzLjMyNDU5IDEyLjE2NDQgMy43MjAzMyAxMS45MjAzIDMuOTY0NEw4LjM4NDc1IDcuNDk5OTdMMTEuOTIwMyAxMS4wMzU1QzEyLjE2NDQgMTEuMjc5NSAxMi4xNjQ0IDExLjY3NTMgMTEuOTIwMyAxMS45MTkzQzExLjY3NjMgMTIuMTYzNCAxMS4yODA1IDEyLjE2MzQgMTEuMDM2NCAxMS45MTkzTDcuNTAwODggOC4zODM4NEwzLjk2NTM5IDExLjkxOTNDMy45NjE1NyAxMS45MjMyIDMuOTU3NzIgMTEuOTI2OSAzLjk1MzgzIDExLjkzMDZDMy43MDg5NyAxMi4xNjMzIDMuMzIxNzYgMTIuMTU5NiAzLjA4MTUgMTEuOTE5M0MyLjg5ODQ0IDExLjczNjMgMi44NTI2NyAxMS40Njc5IDIuOTQ0MiAxMS4yNDIyQzIuOTc0NzEgMTEuMTY3IDMuMDIwNDggMTEuMDk2NSAzLjA4MTUgMTEuMDM1NUw2LjYxNyA3LjQ5OTk3TDMuMDgxNSAzLjk2NDQzQzIuODM3NDIgMy43MjAzNiAyLjgzNzQyIDMuMzI0NjMgMy4wODE1IDMuMDgwNTVDMy4zMjU1NyAyLjgzNjQ3IDMuNzIxMyAyLjgzNjQ3IDMuOTY1MzggMy4wODA1NUw3LjUwMDg4IDYuNjE2MDNMMTEuMDM2NCAzLjA4MDUyWiIgZmlsbD0iI0VFRjJGNSIvPg0KPC9zdmc+DQo=) center no-repeat !important;
+  background: url(data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUiIGhlaWdodD0iMTUiIHZpZXdCb3g9IjAgMCAxNSAxNSIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4NCjxwYXRoIGQ9Ik0xMS4wMzY0IDMuMDgwNTJDMTEuMjgwNSAyLjgzNjQ0IDExLjY3NjMgMi44MzY0NCAxMS45MjAzIDMuMDgwNTJDMTIuMTY0NCAzLjMyNDU5IDEyLjE2NDQgMy43MjAzMyAxMS45MjAzIDMuOTY0NEw4LjM4NDc1IDcuNDk5OTdMMTEuOTIwMyAxMS4wMzU1QzEyLjE2NDQgMTEuMjc5NSAxMi4xNjQ0IDExLjY3NTMgMTEuOTIwMyAxMS45MTkzQzExLjY3NjMgMTIuMTYzNCAxMS4yODA1IDEyLjE2MzQgMTEuMDM2NCAxMS45MTkzTDcuNTAwODggOC4zODM4NEwzLjk2NTM5IDExLjkxOTNDMy45NjE1NyAxMS45MjMyIDMuOTU3NzIgMTEuOTI2OSAzLjk1MzgzIDExLjkzMDZDMy43MDg5NyAxMi4xNjMzIDMuMzIxNzYgMTIuMTU5NiAzLjA4MTUgMTEuOTE5M0MyLjg5ODQ0IDExLjczNjMgMi44NTI2NyAxMS40Njc5IDIuOTQ0MiAxMS4yNDIyQzIuOTc0NzEgMTEuMTY3IDMuMDIwNDggMTEuMDk2NSAzLjA4MTUgMTEuMDM1NUw2LjYxNyA3LjQ5OTk3TDMuMDgxNSAzLjk2NDQzQzIuODM3NDIgMy43MjAzNiAyLjgzNzQyIDMuMzI0NjMgMy4wODE1IDMuMDgwNTVDMy4zMjU1NyAyLjgzNjQ3IDMuNzIxMyAyLjgzNjQ3IDMuOTY1MzggMy4wODA1NUw3LjUwMDg4IDYuNjE2MDNMMTEuMDM2NCAzLjA4MDUyWiIgZmlsbD0iI0VFRjJGNSIvPg0KPC9zdmc+DQo=)
+    center no-repeat !important;
 }
 
 .popover {
@@ -83,7 +84,7 @@ a {
     font-size: 14px;
     line-height: 16px;
 
-    color: #EEF2F5;
+    color: #eef2f5;
 
     padding: 10px 0px;
   }
@@ -93,7 +94,7 @@ a {
     font-size: 16px;
     line-height: 18px;
 
-    color: #EEF2F5;
+    color: #eef2f5;
   }
 
   .popover-tags {
@@ -112,11 +113,11 @@ a {
       font-size: 14px;
       line-height: 16px;
 
-      color: #DFE1E3;
+      color: #dfe1e3;
 
       padding: 5px;
 
-      background: #2B2B2C;
+      background: #2b2b2c;
       border-radius: 10px;
     }
   }
@@ -152,7 +153,7 @@ a {
   p {
     padding: 0;
     margin: 0;
-    font-family: 'Montserrat';
+    font-family: "Montserrat";
     font-style: normal;
     font-weight: 500;
     font-size: 16px;
@@ -172,4 +173,41 @@ a {
   position: absolute;
   right: 5px;
   top: 1px;
+}
+
+.tooltip {
+  font-family: "Montserrat";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 18px;
+
+  opacity: 1;
+  display: inline-block;
+
+  width: 120px;
+  position: absolute;
+  margin-left: -60px;
+  bottom: calc(150%);
+}
+
+.tooltip .tooltiptext {
+  width: 120px;
+  background: #3e3e41;
+  border-radius: 10px;
+  color: #fff;
+  text-align: center;
+  padding: 5px 0;
+  display: block;
+}
+
+.tooltip .tooltiptext::after {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  margin-left: -5px;
+  border-width: 5px;
+  border-style: solid;
+  border-color: #3e3e41 transparent transparent transparent;
 }
