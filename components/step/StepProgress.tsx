@@ -25,11 +25,11 @@ const stepValues = [
   },
   {
     stepName: "Расчет пула",
-    link: "/import/pool",
+    link: "/calculate_etalons/etalon",
   },
   {
     stepName: "Экспорт",
-    link: "/import/pool",
+    link: "calculate_etalons/pool",
   },
 ]
 
