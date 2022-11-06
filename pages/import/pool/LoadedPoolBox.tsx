@@ -230,36 +230,36 @@ const PoolData = observer(({ data, id }: PoolDataProps) => {
     },
   })
 
-  const set = useMutation({
-    mutationFn: async (params: {
-      apt: ApartmentGet
-      queryId: string
-      subqueryId: string
-    }) => {
-      let data = await api.parser.parseParsePost({
-        address: params.apt.address,
-        floors: params.apt.floors,
-        rooms: params.apt.rooms,
-        segment: params.apt.segment!.toString().toLowerCase(),
-        walls: params.apt.walls!.toString().toLowerCase(),
-        radius: 1500,
-        queryId: params.queryId,
-        subqueryId: params.subqueryId,
-      })
+  // const set = useMutation({
+  //   mutationFn: async (params: {
+  //     apt: ApartmentGet
+  //     queryId: string
+  //     subqueryId: string
+  //   }) => {
+  //     let data = await api.parser.parseParsePost({
+  //       address: params.apt.address,
+  //       floors: params.apt.floors,
+  //       rooms: params.apt.rooms,
+  //       segment: params.apt.segment!.toString().toLowerCase(),
+  //       walls: params.apt.walls!.toString().toLowerCase(),
+  //       radius: 1500,
+  //       queryId: params.queryId,
+  //       subqueryId: params.subqueryId,
+  //     })
 
-      console.log(data.data)
-    },
-  })
+  //     console.log(data.data)
+  //   },
+  // })
 
   if (isEtalonSelected) {
     let etalon = getRandomEtalon(data)
     data.standartObject = etalon
     mutate({ id1: store.queryGetData!.guid, id2: data.guid, id3: etalon.guid })
-    set.mutate({
-      apt: etalon,
-      queryId: store.queryGetData!.guid,
-      subqueryId: data.guid,
-    })
+    // set.mutate({
+    //   apt: etalon,
+    //   queryId: store.queryGetData!.guid,
+    //   subqueryId: data.guid,
+    // })
   }
 
   if (isLoading) {
