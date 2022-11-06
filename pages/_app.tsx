@@ -35,13 +35,15 @@ export default function App({ Component, pageProps }: AppProps) {
 
   return (
     <ThemeProvider theme={theme}>
-      <StoreContextProvider value={store}>
-        <QueryClientProvider client={queryClient}>
-          <ApiClientContextProvider>
-            <Component {...pageProps} />
-          </ApiClientContextProvider>
-        </QueryClientProvider>
-      </StoreContextProvider>
+      <NonSSRWrapper>
+        <StoreContextProvider value={store}>
+          <QueryClientProvider client={queryClient}>
+            <ApiClientContextProvider>
+              <Component {...pageProps} />
+            </ApiClientContextProvider>
+          </QueryClientProvider>
+        </StoreContextProvider>
+      </NonSSRWrapper>
     </ThemeProvider>
   )
 }

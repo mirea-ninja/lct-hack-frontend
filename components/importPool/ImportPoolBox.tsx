@@ -9,17 +9,14 @@ import {
 } from "@mui/material"
 import React, { useState } from "react"
 import Dropzone from "react-dropzone"
-import styles from "../../../styles/Dropzone.module.scss"
+import styles from "../../styles/Dropzone.module.scss"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { useApiClient } from "../../../logic/ApiClientHook"
-import { QueryGet } from "../../../apiConnection/gen"
 import axios from "axios"
-import HeaderTab from "../../../components/main/HeaderTab"
-import StepProgress from "../../../components/step/StepProgress"
-import DeleteIcon from "../../../components/icons/DeleteIcon/DeleteIcon"
-import NewFileIcon from "../../../components/icons/NewFileIcon/NewFileIcon"
-import { useStore } from "../../../logic/DataStore"
 import { observer } from "mobx-react"
+import NewFileIcon from "../icons/NewFileIcon/NewFileIcon"
+import DeleteIcon from "../icons/DeleteIcon/DeleteIcon"
+import { useApiClient } from "../../logic/ApiClientHook"
+import { useStore } from "../../logic/DataStore"
 
 type Props = {}
 

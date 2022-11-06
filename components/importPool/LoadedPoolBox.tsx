@@ -13,15 +13,14 @@ import Link from "next/link"
 import { truncateSync } from "fs"
 import { sizing } from "@mui/system"
 import { observer } from "mobx-react"
-import { useStore } from "../../../logic/DataStore"
-import { QueryGet } from "../../../apiConnection/gen/models/query-get"
+import { useStore } from "../../logic/DataStore"
+import { QueryGet } from "../../apiConnection/gen/models/query-get"
 import { toJS } from "mobx"
-import { SubQueryGet } from "../../../apiConnection/gen/models/sub-query-get"
-import { ApartmentGet } from "../../../apiConnection/gen"
-import { useApiClient } from "../../../logic/ApiClientHook"
+import { SubQueryGet } from "../../apiConnection/gen/models/sub-query-get"
+import { useApiClient } from "../../logic/ApiClientHook"
 import { useMutation, useQuery } from "@tanstack/react-query"
-import { RepairType } from "../../../components/ImportDonePage/types"
-import { ApartmentGet } from "../../../apiConnection/gen/models/apartment-get"
+import { RepairType } from "../ImportDonePage/types"
+import { ApartmentGet } from "../../apiConnection/gen/models/apartment-get"
 
 type Props = {
   onActiveChange: (active: boolean) => void
@@ -37,8 +36,32 @@ const LoadedPoolBox = observer(({ onActiveChange }: Props) => {
   const isActive = data.queryGetData !== null
   onActiveChange(isActive)
 
-  if (isActive) {
-  }
+  const set = useMutation({
+    mutationFn: (params: {
+      apt: ApartmentGet
+      queryId: string
+      subqueryId: string
+    }) => {
+      console.log("GET ANALOG REQUEST:")
+      return api.parser.parseParsePost({
+        address: params.apt.address,
+        floors: params.apt.floors,
+        rooms: params.apt.rooms,
+        segment: params.apt.segment!.toString().toLowerCase(),
+        walls: params.apt.walls!.toString().toLowerCase(),
+        radius: 1500,
+        queryId: params.queryId,
+        subqueryId: params.subqueryId,
+      })
+    },
+    onSettled(data, error, variables, context) {
+      console.log(data)
+      console.log("GOT A")
+    },
+    onSuccess(data) {
+      console.log("GOT ANALOG")
+    },
+  })
 
   return (
     <Stack
@@ -229,27 +252,6 @@ const PoolData = observer(({ data, id }: PoolDataProps) => {
       )!.standartObject = aptData.data
     },
   })
-
-  // const set = useMutation({
-  //   mutationFn: async (params: {
-  //     apt: ApartmentGet
-  //     queryId: string
-  //     subqueryId: string
-  //   }) => {
-  //     let data = await api.parser.parseParsePost({
-  //       address: params.apt.address,
-  //       floors: params.apt.floors,
-  //       rooms: params.apt.rooms,
-  //       segment: params.apt.segment!.toString().toLowerCase(),
-  //       walls: params.apt.walls!.toString().toLowerCase(),
-  //       radius: 1500,
-  //       queryId: params.queryId,
-  //       subqueryId: params.subqueryId,
-  //     })
-
-  //     console.log(data.data)
-  //   },
-  // })
 
   if (isEtalonSelected) {
     let etalon = getRandomEtalon(data)
