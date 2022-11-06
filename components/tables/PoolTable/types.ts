@@ -13,6 +13,7 @@ export type Pool = {
   kitchenSquare: CellValue<number>;
   hasBalcony: CellValue<boolean>;
   state: CellValue<string>;
+  metro: CellValue<number>;
 };
 
 export * from './types';

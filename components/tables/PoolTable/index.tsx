@@ -59,6 +59,19 @@ const rows: Pool[] = [
     kitchenSquare: { value: 24 },
     hasBalcony: { value: false },
     state: { value: 'Муниципальный ремонт' },
+    metro: { value: 5 },
+  },
+  {
+    id: Math.random(),
+    isBasic: false,
+    pricePerSquareMeter: { value: 357100, change: 4.5 },
+    objectPrice: 39673490,
+    floor: { value: 1, change: -4.5 },
+    flatSquare: { value: 6, change: 4.5 },
+    kitchenSquare: { value: 24, change: -4.5 },
+    hasBalcony: { value: false, change: 4.5 },
+    state: { value: 'Муниципальный ремонт', change: 4.5 },
+    metro: { value: 43, change: -4.5 },
   },
   {
     id: Math.random(),
@@ -70,17 +83,7 @@ const rows: Pool[] = [
     kitchenSquare: { value: 24, change: -4.5 },
     hasBalcony: { value: false, change: 4.5 },
     state: { value: 'Муниципальный ремонт', change: 4.5 },
-  },
-  {
-    id: Math.random(),
-    isBasic: false,
-    pricePerSquareMeter: { value: 357100, change: 4.5 },
-    objectPrice: 39673490,
-    floor: { value: 1, change: -4.5 },
-    flatSquare: { value: 6, change: 4.5 },
-    kitchenSquare: { value: 24, change: 4.5 },
-    hasBalcony: { value: false, change: 4.5 },
-    state: { value: 'Муниципальный ремонт', change: -4.5 },
+    metro: { value: 43, change: 4.5 },
   },
   {
     id: Math.random(),
@@ -92,21 +95,27 @@ const rows: Pool[] = [
     kitchenSquare: { value: 24, change: -4.5 },
     hasBalcony: { value: false, change: 4.5 },
     state: { value: 'Муниципальный ремонт', change: 4.5 },
+    metro: { value: 43, change: 4.5 },
   },
   {
     id: Math.random(),
     isBasic: false,
     pricePerSquareMeter: { value: 357100, change: 4.5 },
     objectPrice: 39673490,
-    floor: { value: 1, change: 4.5 },
+    floor: { value: 1, change: -4.5 },
     flatSquare: { value: 6, change: 4.5 },
-    kitchenSquare: { value: 24, change: 4.5 },
+    kitchenSquare: { value: 24, change: -4.5 },
     hasBalcony: { value: false, change: 4.5 },
     state: { value: 'Муниципальный ремонт', change: 4.5 },
+    metro: { value: 43, change: -4.5 },
   },
 ];
 
-export default function PoolTable() {
+type Props = {
+  hasMetroAttribute?: boolean;
+};
+
+export default function PoolTable({ hasMetroAttribute = false }: Props) {
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} stickyHeader>
@@ -119,6 +128,11 @@ export default function PoolTable() {
             <StyledTableCell align='left'>Площадь кухни, м2</StyledTableCell>
             <StyledTableCell align='left'>Балкон или лоджия</StyledTableCell>
             <StyledTableCell align='left'>Состояние</StyledTableCell>
+            {hasMetroAttribute && (
+              <StyledTableCell align='left'>
+                Время до метро, мин
+              </StyledTableCell>
+            )}
           </TableRow>
         </TableHead>
         <TableBody>
@@ -175,6 +189,16 @@ export default function PoolTable() {
                   )}
                 </StyledStack>
               </StyledTableCell>
+              {hasMetroAttribute && (
+                <StyledTableCell align='right'>
+                  <StyledStack>
+                    {row.metro.value}
+                    {row.metro.change && (
+                      <PercentageItem value={row.metro.change} />
+                    )}
+                  </StyledStack>
+                </StyledTableCell>
+              )}
             </StyledTableRow>
           ))}
         </TableBody>
