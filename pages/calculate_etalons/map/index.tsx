@@ -6,6 +6,8 @@ import Button from "@mui/material/IconButton";
 import MapSlider from "../../../components/map/MapSlider";
 import ReferenceCard from "../../../components/map/ReferenceCard";
 import Header from "../../../components/main/Header";
+import MinusIcon from "../../../components/icons/MinusIcon";
+import PlusIcon from "../../../components/icons/PlusIcon";
 
 type Props = {};
 
@@ -47,7 +49,7 @@ const getTagTemplate = (tag: string) => {
   return `<div class="popover-tag">${tag}</div>`;
 };
 
-const getTagsTemplate = (data: any) => {
+const  getTagsTemplate = (data: any) => {
   const { title, subtitle, tags } = data;
   return `<div class="popover">
                 <div class="popover-header">
@@ -73,7 +75,7 @@ const ZoomButton = (props: ZoomButtonProps) => {
     <Button
       sx={{
         color: theme.palette.primary.main,
-        padding: "10px",
+        padding: "5px",
         "&:hover": {
           background: "transparent",
         },
@@ -93,15 +95,29 @@ export default function Maps(props: Props) {
   // @ts-ignore
   return (
     <Box sx={{ overflowX: "hidden", overflowY: "hidden" }}>
-      <Header />
+      <Header stepProgress={3}/>
       <MapSlider />
-      <ReferenceCard />
+      <ReferenceCard
+        isExpanded={true}
+        address = "ул. Ленина, 1"
+        price = {1000000}
+        buildingType = "Современное жилье"
+        floors = {22}
+        walls = "панель"
+
+        floor = {1}
+        area = {100}
+        kitchenArea = {10}
+        hasBalcony = {true}
+        toMetro = {10}
+        repairType = "муниципальный ремонт"
+      />
 
       {/* Кнопки зума (+/-) справа экрана */}
       <Box
         sx={{
           position: "absolute",
-          top: "50%",
+          top: "57%",
           right: "30px",
           transform: "translateY(-50%)",
           zIndex: 1000,
@@ -121,11 +137,11 @@ export default function Maps(props: Props) {
       >
         <ZoomButton
           onClick={() => mapRef.current.setZoom(mapRef.current.getZoom() + 1)}
-          icon="+"
+          icon={<PlusIcon/>}
         />
         <ZoomButton
           onClick={() => mapRef.current.setZoom(mapRef.current.getZoom() - 1)}
-          icon="-"
+          icon={<MinusIcon/>}
         />
       </Box>
 
