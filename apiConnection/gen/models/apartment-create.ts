@@ -11,6 +11,7 @@
  * https://github.com/swagger-api/swagger-codegen.git
  * Do not edit the class manually.
  */
+import { AdjustmentGet } from './adjustment-get';
 /**
  * 
  * @export
@@ -113,4 +114,10 @@ export interface ApartmentCreate {
      * @memberof ApartmentCreate
      */
     price?: number;
+    /**
+     * Список корректировок
+     * @type {AdjustmentGet}
+     * @memberof ApartmentCreate
+     */
+    adjustment?: AdjustmentGet;
 }

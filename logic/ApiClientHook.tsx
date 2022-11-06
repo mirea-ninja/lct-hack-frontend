@@ -23,11 +23,12 @@ class ApiClient {
   queryApi: QueryApi
   subqueryApi: SubqueryApi
   usersApi: UsersApi
+
   parser: ParserApi
 
   constructor() {
     let config = new Configuration({
-      basePath: "http://37.230.196.151:8080/api",
+      basePath: "http://37.230.196.151:8080",
       //accessToken: "Bearer " + window.sessionStorage.getItem("user"),
       baseOptions: {
         headers: {

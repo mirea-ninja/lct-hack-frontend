@@ -48,7 +48,7 @@ export const ImportPoolBox = observer(({}: Props) => {
 
   const { mutate, isLoading, isError, isSuccess } = useMutation({
     mutationFn: (params: { name: string; file: Blob }) => {
-      return client.poolApi.createPoolPostForm(params.file, params.name)
+      return client.poolApi.createApiPoolPostForm(params.file, params.name)
     },
     onSettled(data, error, variables, context) {},
     onSuccess(data) {

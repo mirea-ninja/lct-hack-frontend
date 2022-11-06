@@ -35,20 +35,20 @@ export const ApartmentApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createQueryIdSubquerySubidApartmentPost: async (body: ApartmentCreate, id: string, subid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createApiQueryIdSubquerySubidApartmentPost: async (body: ApartmentCreate, id: string, subid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
             if (body === null || body === undefined) {
-                throw new RequiredError('body','Required parameter body was null or undefined when calling createQueryIdSubquerySubidApartmentPost.');
+                throw new RequiredError('body','Required parameter body was null or undefined when calling createApiQueryIdSubquerySubidApartmentPost.');
             }
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
-                throw new RequiredError('id','Required parameter id was null or undefined when calling createQueryIdSubquerySubidApartmentPost.');
+                throw new RequiredError('id','Required parameter id was null or undefined when calling createApiQueryIdSubquerySubidApartmentPost.');
             }
             // verify required parameter 'subid' is not null or undefined
             if (subid === null || subid === undefined) {
-                throw new RequiredError('subid','Required parameter subid was null or undefined when calling createQueryIdSubquerySubidApartmentPost.');
+                throw new RequiredError('subid','Required parameter subid was null or undefined when calling createApiQueryIdSubquerySubidApartmentPost.');
             }
-            const localVarPath = `/query/{id}/subquery/{subid}/apartment`
+            const localVarPath = `/api/query/{id}/subquery/{subid}/apartment`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)))
                 .replace(`{${"subid"}}`, encodeURIComponent(String(subid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -92,20 +92,20 @@ export const ApartmentApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteQueryIdSubquerySubidApartmentAidDelete: async (id: string, subid: string, aid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deleteApiQueryIdSubquerySubidApartmentAidDelete: async (id: string, subid: string, aid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
-                throw new RequiredError('id','Required parameter id was null or undefined when calling deleteQueryIdSubquerySubidApartmentAidDelete.');
+                throw new RequiredError('id','Required parameter id was null or undefined when calling deleteApiQueryIdSubquerySubidApartmentAidDelete.');
             }
             // verify required parameter 'subid' is not null or undefined
             if (subid === null || subid === undefined) {
-                throw new RequiredError('subid','Required parameter subid was null or undefined when calling deleteQueryIdSubquerySubidApartmentAidDelete.');
+                throw new RequiredError('subid','Required parameter subid was null or undefined when calling deleteApiQueryIdSubquerySubidApartmentAidDelete.');
             }
             // verify required parameter 'aid' is not null or undefined
             if (aid === null || aid === undefined) {
-                throw new RequiredError('aid','Required parameter aid was null or undefined when calling deleteQueryIdSubquerySubidApartmentAidDelete.');
+                throw new RequiredError('aid','Required parameter aid was null or undefined when calling deleteApiQueryIdSubquerySubidApartmentAidDelete.');
             }
-            const localVarPath = `/query/{id}/subquery/{subid}/apartment/{aid}`
+            const localVarPath = `/api/query/{id}/subquery/{subid}/apartment/{aid}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)))
                 .replace(`{${"subid"}}`, encodeURIComponent(String(subid)))
                 .replace(`{${"aid"}}`, encodeURIComponent(String(aid)));
@@ -147,16 +147,16 @@ export const ApartmentApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllQueryIdSubquerySubidApartmentGet: async (id: string, subid: string, limit?: number, offset?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getAllApiQueryIdSubquerySubidApartmentGet: async (id: string, subid: string, limit?: number, offset?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
-                throw new RequiredError('id','Required parameter id was null or undefined when calling getAllQueryIdSubquerySubidApartmentGet.');
+                throw new RequiredError('id','Required parameter id was null or undefined when calling getAllApiQueryIdSubquerySubidApartmentGet.');
             }
             // verify required parameter 'subid' is not null or undefined
             if (subid === null || subid === undefined) {
-                throw new RequiredError('subid','Required parameter subid was null or undefined when calling getAllQueryIdSubquerySubidApartmentGet.');
+                throw new RequiredError('subid','Required parameter subid was null or undefined when calling getAllApiQueryIdSubquerySubidApartmentGet.');
             }
-            const localVarPath = `/query/{id}/subquery/{subid}/apartment`
+            const localVarPath = `/api/query/{id}/subquery/{subid}/apartment`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)))
                 .replace(`{${"subid"}}`, encodeURIComponent(String(subid)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
@@ -204,20 +204,20 @@ export const ApartmentApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getQueryIdSubquerySubidApartmentAidGet: async (id: string, subid: string, aid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getApiQueryIdSubquerySubidApartmentAidGet: async (id: string, subid: string, aid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
-                throw new RequiredError('id','Required parameter id was null or undefined when calling getQueryIdSubquerySubidApartmentAidGet.');
+                throw new RequiredError('id','Required parameter id was null or undefined when calling getApiQueryIdSubquerySubidApartmentAidGet.');
             }
             // verify required parameter 'subid' is not null or undefined
             if (subid === null || subid === undefined) {
-                throw new RequiredError('subid','Required parameter subid was null or undefined when calling getQueryIdSubquerySubidApartmentAidGet.');
+                throw new RequiredError('subid','Required parameter subid was null or undefined when calling getApiQueryIdSubquerySubidApartmentAidGet.');
             }
             // verify required parameter 'aid' is not null or undefined
             if (aid === null || aid === undefined) {
-                throw new RequiredError('aid','Required parameter aid was null or undefined when calling getQueryIdSubquerySubidApartmentAidGet.');
+                throw new RequiredError('aid','Required parameter aid was null or undefined when calling getApiQueryIdSubquerySubidApartmentAidGet.');
             }
-            const localVarPath = `/query/{id}/subquery/{subid}/apartment/{aid}`
+            const localVarPath = `/api/query/{id}/subquery/{subid}/apartment/{aid}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)))
                 .replace(`{${"subid"}}`, encodeURIComponent(String(subid)))
                 .replace(`{${"aid"}}`, encodeURIComponent(String(aid)));
@@ -259,24 +259,24 @@ export const ApartmentApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        patchQueryIdSubquerySubidApartmentAidPatch: async (body: ApartmentPatch, id: string, subid: string, aid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        patchApiQueryIdSubquerySubidApartmentAidPatch: async (body: ApartmentPatch, id: string, subid: string, aid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
             if (body === null || body === undefined) {
-                throw new RequiredError('body','Required parameter body was null or undefined when calling patchQueryIdSubquerySubidApartmentAidPatch.');
+                throw new RequiredError('body','Required parameter body was null or undefined when calling patchApiQueryIdSubquerySubidApartmentAidPatch.');
             }
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
-                throw new RequiredError('id','Required parameter id was null or undefined when calling patchQueryIdSubquerySubidApartmentAidPatch.');
+                throw new RequiredError('id','Required parameter id was null or undefined when calling patchApiQueryIdSubquerySubidApartmentAidPatch.');
             }
             // verify required parameter 'subid' is not null or undefined
             if (subid === null || subid === undefined) {
-                throw new RequiredError('subid','Required parameter subid was null or undefined when calling patchQueryIdSubquerySubidApartmentAidPatch.');
+                throw new RequiredError('subid','Required parameter subid was null or undefined when calling patchApiQueryIdSubquerySubidApartmentAidPatch.');
             }
             // verify required parameter 'aid' is not null or undefined
             if (aid === null || aid === undefined) {
-                throw new RequiredError('aid','Required parameter aid was null or undefined when calling patchQueryIdSubquerySubidApartmentAidPatch.');
+                throw new RequiredError('aid','Required parameter aid was null or undefined when calling patchApiQueryIdSubquerySubidApartmentAidPatch.');
             }
-            const localVarPath = `/query/{id}/subquery/{subid}/apartment/{aid}`
+            const localVarPath = `/api/query/{id}/subquery/{subid}/apartment/{aid}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)))
                 .replace(`{${"subid"}}`, encodeURIComponent(String(subid)))
                 .replace(`{${"aid"}}`, encodeURIComponent(String(aid)));
@@ -322,24 +322,24 @@ export const ApartmentApiAxiosParamCreator = function (configuration?: Configura
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateQueryIdSubquerySubidApartmentAidPut: async (body: ApartmentCreate, id: string, subid: string, aid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateApiQueryIdSubquerySubidApartmentAidPut: async (body: ApartmentCreate, id: string, subid: string, aid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
             if (body === null || body === undefined) {
-                throw new RequiredError('body','Required parameter body was null or undefined when calling updateQueryIdSubquerySubidApartmentAidPut.');
+                throw new RequiredError('body','Required parameter body was null or undefined when calling updateApiQueryIdSubquerySubidApartmentAidPut.');
             }
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
-                throw new RequiredError('id','Required parameter id was null or undefined when calling updateQueryIdSubquerySubidApartmentAidPut.');
+                throw new RequiredError('id','Required parameter id was null or undefined when calling updateApiQueryIdSubquerySubidApartmentAidPut.');
             }
             // verify required parameter 'subid' is not null or undefined
             if (subid === null || subid === undefined) {
-                throw new RequiredError('subid','Required parameter subid was null or undefined when calling updateQueryIdSubquerySubidApartmentAidPut.');
+                throw new RequiredError('subid','Required parameter subid was null or undefined when calling updateApiQueryIdSubquerySubidApartmentAidPut.');
             }
             // verify required parameter 'aid' is not null or undefined
             if (aid === null || aid === undefined) {
-                throw new RequiredError('aid','Required parameter aid was null or undefined when calling updateQueryIdSubquerySubidApartmentAidPut.');
+                throw new RequiredError('aid','Required parameter aid was null or undefined when calling updateApiQueryIdSubquerySubidApartmentAidPut.');
             }
-            const localVarPath = `/query/{id}/subquery/{subid}/apartment/{aid}`
+            const localVarPath = `/api/query/{id}/subquery/{subid}/apartment/{aid}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)))
                 .replace(`{${"subid"}}`, encodeURIComponent(String(subid)))
                 .replace(`{${"aid"}}`, encodeURIComponent(String(aid)));
@@ -393,8 +393,8 @@ export const ApartmentApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createQueryIdSubquerySubidApartmentPost(body: ApartmentCreate, id: string, subid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<ApartmentGet>>> {
-            const localVarAxiosArgs = await ApartmentApiAxiosParamCreator(configuration).createQueryIdSubquerySubidApartmentPost(body, id, subid, options);
+        async createApiQueryIdSubquerySubidApartmentPost(body: ApartmentCreate, id: string, subid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<ApartmentGet>>> {
+            const localVarAxiosArgs = await ApartmentApiAxiosParamCreator(configuration).createApiQueryIdSubquerySubidApartmentPost(body, id, subid, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -409,8 +409,8 @@ export const ApartmentApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteQueryIdSubquerySubidApartmentAidDelete(id: string, subid: string, aid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
-            const localVarAxiosArgs = await ApartmentApiAxiosParamCreator(configuration).deleteQueryIdSubquerySubidApartmentAidDelete(id, subid, aid, options);
+        async deleteApiQueryIdSubquerySubidApartmentAidDelete(id: string, subid: string, aid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
+            const localVarAxiosArgs = await ApartmentApiAxiosParamCreator(configuration).deleteApiQueryIdSubquerySubidApartmentAidDelete(id, subid, aid, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -426,8 +426,8 @@ export const ApartmentApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllQueryIdSubquerySubidApartmentGet(id: string, subid: string, limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Array<ApartmentGet>>>> {
-            const localVarAxiosArgs = await ApartmentApiAxiosParamCreator(configuration).getAllQueryIdSubquerySubidApartmentGet(id, subid, limit, offset, options);
+        async getAllApiQueryIdSubquerySubidApartmentGet(id: string, subid: string, limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Array<ApartmentGet>>>> {
+            const localVarAxiosArgs = await ApartmentApiAxiosParamCreator(configuration).getAllApiQueryIdSubquerySubidApartmentGet(id, subid, limit, offset, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -442,8 +442,8 @@ export const ApartmentApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getQueryIdSubquerySubidApartmentAidGet(id: string, subid: string, aid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<ApartmentGet>>> {
-            const localVarAxiosArgs = await ApartmentApiAxiosParamCreator(configuration).getQueryIdSubquerySubidApartmentAidGet(id, subid, aid, options);
+        async getApiQueryIdSubquerySubidApartmentAidGet(id: string, subid: string, aid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<ApartmentGet>>> {
+            const localVarAxiosArgs = await ApartmentApiAxiosParamCreator(configuration).getApiQueryIdSubquerySubidApartmentAidGet(id, subid, aid, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -459,8 +459,8 @@ export const ApartmentApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async patchQueryIdSubquerySubidApartmentAidPatch(body: ApartmentPatch, id: string, subid: string, aid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<ApartmentGet>>> {
-            const localVarAxiosArgs = await ApartmentApiAxiosParamCreator(configuration).patchQueryIdSubquerySubidApartmentAidPatch(body, id, subid, aid, options);
+        async patchApiQueryIdSubquerySubidApartmentAidPatch(body: ApartmentPatch, id: string, subid: string, aid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<ApartmentGet>>> {
+            const localVarAxiosArgs = await ApartmentApiAxiosParamCreator(configuration).patchApiQueryIdSubquerySubidApartmentAidPatch(body, id, subid, aid, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -476,8 +476,8 @@ export const ApartmentApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateQueryIdSubquerySubidApartmentAidPut(body: ApartmentCreate, id: string, subid: string, aid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<ApartmentGet>>> {
-            const localVarAxiosArgs = await ApartmentApiAxiosParamCreator(configuration).updateQueryIdSubquerySubidApartmentAidPut(body, id, subid, aid, options);
+        async updateApiQueryIdSubquerySubidApartmentAidPut(body: ApartmentCreate, id: string, subid: string, aid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<ApartmentGet>>> {
+            const localVarAxiosArgs = await ApartmentApiAxiosParamCreator(configuration).updateApiQueryIdSubquerySubidApartmentAidPut(body, id, subid, aid, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -501,8 +501,8 @@ export const ApartmentApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createQueryIdSubquerySubidApartmentPost(body: ApartmentCreate, id: string, subid: string, options?: AxiosRequestConfig): Promise<AxiosResponse<ApartmentGet>> {
-            return ApartmentApiFp(configuration).createQueryIdSubquerySubidApartmentPost(body, id, subid, options).then((request) => request(axios, basePath));
+        async createApiQueryIdSubquerySubidApartmentPost(body: ApartmentCreate, id: string, subid: string, options?: AxiosRequestConfig): Promise<AxiosResponse<ApartmentGet>> {
+            return ApartmentApiFp(configuration).createApiQueryIdSubquerySubidApartmentPost(body, id, subid, options).then((request) => request(axios, basePath));
         },
         /**
          * Удалить квартиры по его id
@@ -513,8 +513,8 @@ export const ApartmentApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteQueryIdSubquerySubidApartmentAidDelete(id: string, subid: string, aid: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
-            return ApartmentApiFp(configuration).deleteQueryIdSubquerySubidApartmentAidDelete(id, subid, aid, options).then((request) => request(axios, basePath));
+        async deleteApiQueryIdSubquerySubidApartmentAidDelete(id: string, subid: string, aid: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
+            return ApartmentApiFp(configuration).deleteApiQueryIdSubquerySubidApartmentAidDelete(id, subid, aid, options).then((request) => request(axios, basePath));
         },
         /**
          * Получить список всех квартир
@@ -526,8 +526,8 @@ export const ApartmentApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllQueryIdSubquerySubidApartmentGet(id: string, subid: string, limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<AxiosResponse<Array<ApartmentGet>>> {
-            return ApartmentApiFp(configuration).getAllQueryIdSubquerySubidApartmentGet(id, subid, limit, offset, options).then((request) => request(axios, basePath));
+        async getAllApiQueryIdSubquerySubidApartmentGet(id: string, subid: string, limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<AxiosResponse<Array<ApartmentGet>>> {
+            return ApartmentApiFp(configuration).getAllApiQueryIdSubquerySubidApartmentGet(id, subid, limit, offset, options).then((request) => request(axios, basePath));
         },
         /**
          * Получить квартиры по его id
@@ -538,8 +538,8 @@ export const ApartmentApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getQueryIdSubquerySubidApartmentAidGet(id: string, subid: string, aid: string, options?: AxiosRequestConfig): Promise<AxiosResponse<ApartmentGet>> {
-            return ApartmentApiFp(configuration).getQueryIdSubquerySubidApartmentAidGet(id, subid, aid, options).then((request) => request(axios, basePath));
+        async getApiQueryIdSubquerySubidApartmentAidGet(id: string, subid: string, aid: string, options?: AxiosRequestConfig): Promise<AxiosResponse<ApartmentGet>> {
+            return ApartmentApiFp(configuration).getApiQueryIdSubquerySubidApartmentAidGet(id, subid, aid, options).then((request) => request(axios, basePath));
         },
         /**
          * Изменить квартиру по его id (частисно обновление модели)
@@ -551,8 +551,8 @@ export const ApartmentApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async patchQueryIdSubquerySubidApartmentAidPatch(body: ApartmentPatch, id: string, subid: string, aid: string, options?: AxiosRequestConfig): Promise<AxiosResponse<ApartmentGet>> {
-            return ApartmentApiFp(configuration).patchQueryIdSubquerySubidApartmentAidPatch(body, id, subid, aid, options).then((request) => request(axios, basePath));
+        async patchApiQueryIdSubquerySubidApartmentAidPatch(body: ApartmentPatch, id: string, subid: string, aid: string, options?: AxiosRequestConfig): Promise<AxiosResponse<ApartmentGet>> {
+            return ApartmentApiFp(configuration).patchApiQueryIdSubquerySubidApartmentAidPatch(body, id, subid, aid, options).then((request) => request(axios, basePath));
         },
         /**
          * Изменить квартиры по его id (полное обновление модели)
@@ -564,8 +564,8 @@ export const ApartmentApiFactory = function (configuration?: Configuration, base
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateQueryIdSubquerySubidApartmentAidPut(body: ApartmentCreate, id: string, subid: string, aid: string, options?: AxiosRequestConfig): Promise<AxiosResponse<ApartmentGet>> {
-            return ApartmentApiFp(configuration).updateQueryIdSubquerySubidApartmentAidPut(body, id, subid, aid, options).then((request) => request(axios, basePath));
+        async updateApiQueryIdSubquerySubidApartmentAidPut(body: ApartmentCreate, id: string, subid: string, aid: string, options?: AxiosRequestConfig): Promise<AxiosResponse<ApartmentGet>> {
+            return ApartmentApiFp(configuration).updateApiQueryIdSubquerySubidApartmentAidPut(body, id, subid, aid, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -587,8 +587,8 @@ export class ApartmentApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ApartmentApi
      */
-    public async createQueryIdSubquerySubidApartmentPost(body: ApartmentCreate, id: string, subid: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<ApartmentGet>> {
-        return ApartmentApiFp(this.configuration).createQueryIdSubquerySubidApartmentPost(body, id, subid, options).then((request) => request(this.axios, this.basePath));
+    public async createApiQueryIdSubquerySubidApartmentPost(body: ApartmentCreate, id: string, subid: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<ApartmentGet>> {
+        return ApartmentApiFp(this.configuration).createApiQueryIdSubquerySubidApartmentPost(body, id, subid, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Удалить квартиры по его id
@@ -600,8 +600,8 @@ export class ApartmentApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ApartmentApi
      */
-    public async deleteQueryIdSubquerySubidApartmentAidDelete(id: string, subid: string, aid: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<void>> {
-        return ApartmentApiFp(this.configuration).deleteQueryIdSubquerySubidApartmentAidDelete(id, subid, aid, options).then((request) => request(this.axios, this.basePath));
+    public async deleteApiQueryIdSubquerySubidApartmentAidDelete(id: string, subid: string, aid: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<void>> {
+        return ApartmentApiFp(this.configuration).deleteApiQueryIdSubquerySubidApartmentAidDelete(id, subid, aid, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Получить список всех квартир
@@ -614,8 +614,8 @@ export class ApartmentApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ApartmentApi
      */
-    public async getAllQueryIdSubquerySubidApartmentGet(id: string, subid: string, limit?: number, offset?: number, options?: AxiosRequestConfig) : Promise<AxiosResponse<Array<ApartmentGet>>> {
-        return ApartmentApiFp(this.configuration).getAllQueryIdSubquerySubidApartmentGet(id, subid, limit, offset, options).then((request) => request(this.axios, this.basePath));
+    public async getAllApiQueryIdSubquerySubidApartmentGet(id: string, subid: string, limit?: number, offset?: number, options?: AxiosRequestConfig) : Promise<AxiosResponse<Array<ApartmentGet>>> {
+        return ApartmentApiFp(this.configuration).getAllApiQueryIdSubquerySubidApartmentGet(id, subid, limit, offset, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Получить квартиры по его id
@@ -627,8 +627,8 @@ export class ApartmentApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ApartmentApi
      */
-    public async getQueryIdSubquerySubidApartmentAidGet(id: string, subid: string, aid: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<ApartmentGet>> {
-        return ApartmentApiFp(this.configuration).getQueryIdSubquerySubidApartmentAidGet(id, subid, aid, options).then((request) => request(this.axios, this.basePath));
+    public async getApiQueryIdSubquerySubidApartmentAidGet(id: string, subid: string, aid: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<ApartmentGet>> {
+        return ApartmentApiFp(this.configuration).getApiQueryIdSubquerySubidApartmentAidGet(id, subid, aid, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Изменить квартиру по его id (частисно обновление модели)
@@ -641,8 +641,8 @@ export class ApartmentApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ApartmentApi
      */
-    public async patchQueryIdSubquerySubidApartmentAidPatch(body: ApartmentPatch, id: string, subid: string, aid: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<ApartmentGet>> {
-        return ApartmentApiFp(this.configuration).patchQueryIdSubquerySubidApartmentAidPatch(body, id, subid, aid, options).then((request) => request(this.axios, this.basePath));
+    public async patchApiQueryIdSubquerySubidApartmentAidPatch(body: ApartmentPatch, id: string, subid: string, aid: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<ApartmentGet>> {
+        return ApartmentApiFp(this.configuration).patchApiQueryIdSubquerySubidApartmentAidPatch(body, id, subid, aid, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Изменить квартиры по его id (полное обновление модели)
@@ -655,7 +655,7 @@ export class ApartmentApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof ApartmentApi
      */
-    public async updateQueryIdSubquerySubidApartmentAidPut(body: ApartmentCreate, id: string, subid: string, aid: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<ApartmentGet>> {
-        return ApartmentApiFp(this.configuration).updateQueryIdSubquerySubidApartmentAidPut(body, id, subid, aid, options).then((request) => request(this.axios, this.basePath));
+    public async updateApiQueryIdSubquerySubidApartmentAidPut(body: ApartmentCreate, id: string, subid: string, aid: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<ApartmentGet>> {
+        return ApartmentApiFp(this.configuration).updateApiQueryIdSubquerySubidApartmentAidPut(body, id, subid, aid, options).then((request) => request(this.axios, this.basePath));
     }
 }
