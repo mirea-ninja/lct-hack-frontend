@@ -32,7 +32,7 @@ function PoolTab({ isActive, text, onClick }: PoolTabProps) {
 }
 
 function SubQueryToPoolTableRender(subquery: SubQueryGet): Pool[] {
-  return subquery.analogs!.map((object, i) => {
+  return [subquery.standartObject!, ...subquery.analogs!].map((object, i) => {
     return {
       id: i,
       isBasic: true,
