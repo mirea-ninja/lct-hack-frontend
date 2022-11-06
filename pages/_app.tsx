@@ -78,6 +78,7 @@ const commonTheme = createTheme({
     allVariants: {
       fontFamily: "'Montserrat', sans-serif",
       textTransform: "none",
+      color: "#3E3E41",
     },
     body2: {
       fontSize: "16px",
@@ -121,6 +122,8 @@ const theme = createTheme(
               backgroundColor: commonTheme.palette.primary.main,
               color: commonTheme.text.light,
               fontWeight: "500",
+              fontSize: "18px",
+              lineHeight: "22px",
               "&:hover": {
                 backgroundColor: commonTheme.palette.primary.darker,
               },
@@ -132,6 +135,8 @@ const theme = createTheme(
               backgroundColor: commonTheme.palette.secondary.light,
               color: commonTheme.palette.secondary.dark,
               fontWeight: "500",
+              fontSize: "18px",
+              lineHeight: "22px",
               "&:hover": {
                 backgroundColor: commonTheme.palette.secondary.light,
               },
@@ -143,6 +148,8 @@ const theme = createTheme(
               backgroundColor: commonTheme.palette.accent.light,
               color: commonTheme.palette.accent.color,
               fontWeight: "500",
+              fontSize: "18px",
+              lineHeight: "22px",
             },
           },
         ],

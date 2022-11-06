@@ -8,6 +8,7 @@ import {
     ToggleButtonGroup,
     ToggleButton,
     Grid,
+    Stack,
     GridWrap,
 } from "@mui/material";
 
@@ -18,18 +19,21 @@ const Tag = (text: string) => {
     return (
         <Box
             sx={{
-                padding: "5px",
+                padding: "5px 5px",
+                margin: "3px auto",
                 borderRadius: "10px",
                 background: "#DFE1E3",
+                width: "100%",
+                minWidth: "fit-content",
 
                 display: "flex",
                 justifyContent: "center",
-                alignItems: "center",
+                alignSelf: "center",
             }}
         >
             <Typography
-                fontSize={14}
-                lineHeight={"16px"}
+                fontSize="14px"
+                lineHeight="16px"
                 color={theme.palette.text.primary}
                 fontWeight={400}
             >
@@ -39,11 +43,53 @@ const Tag = (text: string) => {
     );
 }
 
+const FloorTag = (floor: number) => {
+    return Tag(`${floor} этаж`);
+}
 
-export default function ReferenceCard({}) {
+const AreaTag = (area: number) => {
+    return Tag(`S ${area} м²`);
+}
+
+const KitchenAreaTag = (area: number) => {
+    return Tag(`S кухня ${area} м²`);
+}
+
+const HasBalconyTag = (hasBalcony: boolean) => {
+    return Tag(hasBalcony ? "есть балкон" : "нет балкона");
+}
+
+const ToMetroTag = (toMetro: number) => {
+    return Tag(`${toMetro} мин. до метро`);
+}
+
+const RepairTypeTag = (repairType: string) => {
+    return Tag(repairType);
+}
+
+type Props = {
+    isExpanded: boolean;
+
+    address: string;
+    price: number;
+    buildingType: string;
+    floors: number;
+    walls: string;
+
+    floor: number;
+    area: number;
+    kitchenArea: number;
+    hasBalcony: boolean;
+    toMetro: number;
+    repairType: string;
+};
+
+export default function ReferenceCard({
+    isExpanded = true, address, price, buildingType, floors,walls, floor, area, kitchenArea, hasBalcony, toMetro,repairType
+}: Props) {
     const theme = useTheme();
 
-    const [isCollapsed, setIsCollapsed] = React.useState(false);
+    const [isCollapsed, setIsCollapsed] = React.useState(!isExpanded);
 
     return (
         <Box
@@ -53,10 +99,10 @@ export default function ReferenceCard({}) {
                 flexDirection: "column",
                 alignItems: "flex-start",
                 padding: "20px",
-                gap: "20px",
+                gap: "5px",
 
                 position: "absolute",
-                width: "360px",
+                width: "fit-content",
                 minHeight: "135px",
                 right: "30px",
                 top: "127px",
@@ -79,7 +125,6 @@ export default function ReferenceCard({}) {
             >
                 <Typography
                     fontSize={20}
-                    color={theme.palette.text.primary}
                     fontWeight={700}
                     lineHeight={"22px"}
                     marginRight={"20px"}
@@ -96,39 +141,36 @@ export default function ReferenceCard({}) {
             </Box>
             <Collapse in={isCollapsed}>
                 <Box>
-                    <Typography fontSize={16} lineHeight={"18px"} color={theme.palette.text.primary} pb={"10px"}>
-                        ул. Ватутина, 11
+                    <Typography variant="body2" pb={"10px"}>
+                        {address}
                     </Typography>
-                    <Typography fontSize={18} lineHeight={"20px"} color={theme.palette.text.primary} pb={"20px"}>
-                        351 100 ₽ м²
+                    <Typography variant="body2" pb={"10px"}>
+                        {price} ₽ / м²
                     </Typography>
-                    <Typography fontSize={16} lineHeight={"18px"} color={theme.palette.secondary.dark} pb={"10px"}>
-                        Современное жилье, 22 этажа, панель
+                    <Typography variant="body2" color={theme.palette.secondary.dark} pb={"10px"}>
+                        {buildingType},<br/> {floors} этаж{
+                        floors%10==1 && floors%100!=11 ? "" : (floors%10>=2 && floors%10<=4 && (floors%100<10 || floors%100>=20) ? "а" : "ей")
+                        }, {walls}
                     </Typography>
-                    <Grid container sx={{width: "100%"}} spacing={1}>
-
-                        <Grid item xs={4}>
-                            {Tag("2 этаж")}
-                        </Grid>
-                        <Grid item xs={4}>
-                            {Tag("S 40 м²")}
-                        </Grid>
-                        <Grid item xs={4}>
-                            {Tag("S кухня 9 м²")}
-                        </Grid>
-                        <Grid item xs={6}>
-                            {Tag("нет балкона")}
-                        </Grid>
-                        <Grid item xs={6}>
-                            {Tag("11 мин. до метро")}
-                        </Grid>
-                        <Grid item xs={12}>
-                            {Tag("муниципальный ремонт")}
-                        </Grid>
-                    </Grid>
+                    <Stack paddingBottom="10px">
+                        <Stack direction="row" gap="5px">
+                            {FloorTag(floor)}
+                            {AreaTag(area)}
+                            {KitchenAreaTag(kitchenArea)}
+                        </Stack>
+                        <Stack direction="row" gap="5px">
+                            {HasBalconyTag(hasBalcony)}
+                            {ToMetroTag(toMetro)}
+                        </Stack>
+                        {RepairTypeTag(repairType)}
+                    </Stack>
                 </Box>
             </Collapse>
-            <Button variant={"mainActive"} sx={{width: "100%", height: "50px"}}>
+            <Button
+                variant={"mainActive"}
+                href='/calculate_pool'
+                sx={{width: "100%", height: "50px"}}
+            >
                 Рассчитать пул
             </Button>
         </Box>
