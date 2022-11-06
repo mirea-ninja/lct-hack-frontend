@@ -19,6 +19,8 @@ import { useApiClient } from "../../../logic/ApiClientHook";
 import { TemplateProvider } from "../../../components/map/TemplateProvider";
 import { ZoomButton } from "../../../components/map/ZoomButton";
 import { Button } from "@mui/material";
+import { ApartmentBase } from "../../../apiConnection/parser/models/apartment-base";
+import { ApartmentGet } from "../../../apiConnection/gen";
 
 type Props = {};
 
@@ -49,6 +51,25 @@ const getSubqueryByGuid = (guid: string, subqueries: any[]) => {
   return subqueries.find((subquery) => subquery.guid === guid);
 };
 
+const getOnlyValidAnalogs = (analogs: ApartmentBase[] | ApartmentGet[]) => {
+  return analogs.filter((analog) => {
+    return (
+      analog.address !== null &&
+      analog.lat !== null &&
+      analog.lon !== null &&
+      analog.rooms !== null &&
+      analog.segment !== null &&
+      analog.floors !== null &&
+      analog.walls !== null &&
+      analog.floor !== null &&
+      analog.apartmentArea !== null &&
+      analog.kitchenArea !== null &&
+      analog.distanceToMetro !== null &&
+      analog.quality !== null
+    );
+  });
+};
+
 const Maps = observer(({}: Props) => {
   const theme = useTheme();
   const store = useStore();
@@ -73,17 +94,51 @@ const Maps = observer(({}: Props) => {
   const mapRef = React.useRef(null);
 
   const { mutate, isLoading, isError, isSuccess } = useMutation({
-    mutationFn: async (query: any) => {
-      let results: any[] = [];
+    mutationFn: async (query: SearchBase[]) => {
+      const result = [];
+
       for (let i = 0; i < query.length; i++) {
+        // Список всех аналогов для подзапроса
+        let analogsResult = [];
+        // Список выбранных аналогов для подзапроса (по которым будет строиться карта, только валидные)
+        let selectedAnalogsResult = [];
+
         const item = query[i];
+
+        // Парсинг аналогов. В момент парсинга парсер отправляет их на удалённый сервер и сохраняет для указанного подзапроса.
         const res = await apiClient.parser.parseParsePost(item);
-        results.push(res);
+
+        // Получаем аналоги с удалённого сервера
+        const analogsRes =
+          await apiClient.subqueryApi.getAnalogsApiQueryIdSubquerySubidAnalogsGet(
+            item.queryId,
+            item.subqueryId
+          );
+
+        const analogs = analogsRes.data;
+
+        analogsResult.push(analogs);
+        selectedAnalogsResult.push(getOnlyValidAnalogs(analogs));
+
+        if (selectedAnalogsResult.length > 0) {
+          console.log("ANALOGS TO SELECT: ", selectedAnalogsResult);
+          // Выбираем аналоги на удалённом сервере. Выбранные аналоги будут использоваться для рассчётов
+          await apiClient.subqueryApi.setAnalogsApiQueryIdSubquerySubidUserAnalogsPost(
+            item.queryId,
+            item.subqueryId,
+            { guids: selectedAnalogsResult[i].map((analog) => analog.guid) }
+          );
+        }
+
+        result.push({
+          queryGuid: item.queryId,
+          subqueryGuid: item.subqueryId,
+          analogs: analogs,
+          selectedAnalogs: selectedAnalogsResult,
+        });
       }
 
-      return results.map((result, index) => {
-        return { subqueryGuid: query[index].subqueryId, response: result };
-      });
+      return result;
     },
 
     onSuccess: (data) => {
@@ -96,7 +151,8 @@ const Maps = observer(({}: Props) => {
           const subquery = getSubqueryByGuid(item.subqueryGuid, subqueries);
 
           if (subquery) {
-            subquery.analogs = item.response.data;
+            subquery.analogs = item.analogs;
+            subquery.selectedAnalogs = item.selectedAnalogs;
           }
         });
       }
