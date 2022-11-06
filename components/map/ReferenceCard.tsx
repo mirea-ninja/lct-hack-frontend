@@ -143,11 +143,12 @@ export default function ReferenceCard({
           Эталон
         </Typography>
         <IconButton onClick={() => setIsCollapsed(!isCollapsed)}>
-          {isCollapsed ? (
-            <ArrowLeft sx={{ transform: "rotate(90deg)" }} />
-          ) : (
-            <ArrowLeft sx={{ transform: "rotate(-90deg)" }} />
-          )}
+          <ArrowLeft
+            sx={{
+              transform: isCollapsed ? "rotate(90deg)" : "rotate(-90deg)",
+              transition: "transform .3s",
+            }}
+          />
         </IconButton>
       </Box>
       <Collapse in={isCollapsed}>
