@@ -125,17 +125,18 @@ const LoadedPoolBox = observer(({ onActiveChange }: Props) => {
         )}
       </Box>
       <Box display="flex" justifyContent="center" paddingTop="20px">
-        <Button
-          sx={{
-            height: "52px",
-            width: "330px",
-          }}
-          variant={isActive ? "mainActive" : "mainDisabled"}
-          disabled={!isActive}
-          href="/calculate_etalons/map"
-        >
-          Найти аналоги
-        </Button>
+        <Link href="/calculate_etalons/map">
+          <Button
+            sx={{
+              height: "52px",
+              width: "330px",
+            }}
+            variant={isActive ? "mainActive" : "mainDisabled"}
+            disabled={!isActive}
+          >
+            Найти аналоги
+          </Button>
+        </Link>
       </Box>
     </Stack>
   )
