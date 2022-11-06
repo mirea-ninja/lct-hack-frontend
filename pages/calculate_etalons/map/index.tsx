@@ -325,11 +325,13 @@ const Maps = observer(({}: Props) => {
                     1500,
                   ]}
                   options={{
-                    fillColor: "#FF0000",
-                    fillOpacity: 0.1,
-                    strokeColor: "#FF0000",
-                    strokeOpacity: 0.5,
-                    strokeWidth: 1,
+                    fillOpacity: 0,
+                    // rgba(3, 140, 210, 0.2);
+                    strokeColor: "#0385d2",
+                    strokeOpacity: 0.3,
+                    strokeWidth: 3,
+
+                    strokeStyle: "10 10",
                   }}
                 />
               </Map>
