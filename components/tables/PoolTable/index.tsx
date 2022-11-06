@@ -34,14 +34,14 @@ const StyledTableCell = styled(TableCell)({
 });
 
 const StyledTableRow = styled(TableRow)({
-  '&:nth-of-type(1) td': {
-    fontWeight: 700,
-    boxShadow: 'var(--shadow-etalon)',
-    backgroundColor: 'var(--bg-clr-pure-white)',
-  },
-  'td,  th': {
+  'td, th': {
     fontWeight: 500,
     borderBottom: '5px solid var(--bg-clr-pure-white)',
+  },
+  '&:nth-of-type(1) td': {
+    fontWeight: 700,
+    backgroundColor: 'var(--bg-clr-pure-white)',
+    borderBottom: '5px solid #1E1E1E32',
   },
 });
 
@@ -155,16 +155,10 @@ export default function PoolTable() {
           {rows.map(row => (
             <StyledTableRow key={row.id}>
               <StyledTableCell scope='row'>
-                <StyledStack>
-                  {row.pricePerSquareMeter} ₽
-                  <PercentageItem value={4.5} />
-                </StyledStack>
+                <StyledStack>{row.pricePerSquareMeter} ₽</StyledStack>
               </StyledTableCell>
               <StyledTableCell align='right'>
-                <StyledStack>
-                  {row.objectPrice} ₽
-                  <PercentageItem value={-4.5} />
-                </StyledStack>
+                <StyledStack>{row.objectPrice} ₽</StyledStack>
               </StyledTableCell>
               <StyledTableCell align='right'>
                 <StyledStack>
