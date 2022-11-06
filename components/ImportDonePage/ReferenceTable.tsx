@@ -1,6 +1,6 @@
 //@ts-ignore
-import * as React from "react"
-import { DataRow } from "./types"
+import * as React from "react";
+import { DataRow } from "./types";
 import {
   DataGrid,
   GridActionsCellItem,
@@ -9,25 +9,26 @@ import {
   GridColDef,
   GridColumns,
   GridRowId,
-} from "@mui/x-data-grid"
-import DeleteIcon from "@mui/icons-material/Delete"
-import { Radio } from "@mui/material"
-import { CheckBox } from "@mui/icons-material"
-import CheckboxChecked from "../checkboxes/AppCheckbox/CheckboxChecked"
-import CheckboxUnchecked from "../checkboxes/AppCheckbox/CheckboxUnhecked"
-import { useState } from "react"
-import { observer } from "mobx-react"
-import { useApiClient } from "../../logic/ApiClientHook"
-import { useStore } from "../../logic/DataStore"
-import { useMutation } from "@tanstack/react-query"
-import { toJS } from "mobx"
+  ruRU,
+} from "@mui/x-data-grid";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { Radio } from "@mui/material";
+import { CheckBox } from "@mui/icons-material";
+import CheckboxChecked from "../checkboxes/AppCheckbox/CheckboxChecked";
+import CheckboxUnchecked from "../checkboxes/AppCheckbox/CheckboxUnhecked";
+import { useState } from "react";
+import { observer } from "mobx-react";
+import { useApiClient } from "../../logic/ApiClientHook";
+import { useStore } from "../../logic/DataStore";
+import { useMutation } from "@tanstack/react-query";
+import { toJS } from "mobx";
 
 type Props = {
-  data: DataRow[]
-  subqueryId: string
+  data: DataRow[];
+  subqueryId: string;
   // onCellEditCommit?: (params: GridCellEditCommitParams) => void
   // deleteRow: (id: number) => void
-}
+};
 
 export const ReferenceTable = observer(
   ({
@@ -42,20 +43,20 @@ export const ReferenceTable = observer(
     //   },
     //   []
     // )
-    const store = useStore()
-    const api = useApiClient()
+    const store = useStore();
+    const api = useApiClient();
 
     const selectionId = data.find(
       (d) =>
         d.guid ==
         store.queryGetData?.subQueries.find((q) => q.guid == subqueryId)
           ?.standartObject?.guid
-    )?.id
+    )?.id;
 
-    const [upd, setUpdate] = useState(false)
-    console.log("ref table")
-    console.log(toJS(store.queryGetData))
-    console.log(selectionId)
+    const [upd, setUpdate] = useState(false);
+    console.log("ref table");
+    console.log(toJS(store.queryGetData));
+    console.log(selectionId);
 
     const { mutate, isLoading, isError, isSuccess } = useMutation({
       mutationFn: (params: { id1: string; id2: string; id3: string }) => {
@@ -63,18 +64,18 @@ export const ReferenceTable = observer(
           params.id1,
           params.id2,
           { guid: params.id3 }
-        )
+        );
       },
       onSettled(data, error, variables, context) {
-        console.log(data)
-        console.log(error)
+        console.log(data);
+        console.log(error);
       },
       onSuccess: (aptData) => {
         store.queryGetData!.subQueries!.find(
           (q) => q.guid == subqueryId
-        )!.standartObject = aptData.data
+        )!.standartObject = aptData.data;
       },
-    })
+    });
 
     const columns: GridColDef[] = [
       {
@@ -127,22 +128,23 @@ export const ReferenceTable = observer(
         // ],
         flex: 1,
       },
-    ]
+    ];
 
     return (
       <DataGrid
+        localeText={ruRU.components.MuiDataGrid.defaultProps.localeText}
         rows={data}
         // onCellEditCommit={onCellEditCommit}
         columns={columns}
         pageSize={5}
         onStateChange={(state, event, change) => {
-          console.log(state)
-          console.log(event)
-          console.log(change)
+          console.log(state);
+          console.log(event);
+          console.log(change);
         }}
         selectionModel={selectionId}
         onSelectionModelChange={(newSelection) => {
-          console.log(newSelection)
+          console.log(newSelection);
           mutate({
             id1: store.queryGetData!.guid,
             id2: subqueryId,
@@ -157,8 +159,8 @@ export const ReferenceTable = observer(
                       data[(newSelection as GridRowId[])[0] as number].guid
                   )?.guid
             )!.guid!,
-          })
-          setUpdate(!upd)
+          });
+          setUpdate(!upd);
           //setSelectionId((newSelection as GridRowId[])[0] as number)
         }}
         rowsPerPageOptions={[]}
@@ -193,8 +195,8 @@ export const ReferenceTable = observer(
           },
         }}
       />
-    )
+    );
   }
-)
+);
 
-export default ReferenceTable
+export default ReferenceTable;

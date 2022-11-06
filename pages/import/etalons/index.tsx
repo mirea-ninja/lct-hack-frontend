@@ -1,15 +1,15 @@
-import React from "react"
-import Header from "../../../components/main/Header"
-import ReferenceTableExpandable from "../../../components/ImportDonePage/ReferenceTableExpandable"
+import React from "react";
+import Header from "../../../components/main/Header";
+import ReferenceTableExpandable from "../../../components/ImportDonePage/ReferenceTableExpandable";
 import {
   DataRow,
   RepairType,
   SegmentType,
   WallMaterials,
-} from "../../../components/ImportDonePage/types"
-import Button from "@mui/material/Button"
-import TextBox from "../../../components/TextBox/TextBox"
-import { useApiClient } from "../../../logic/ApiClientHook"
+} from "../../../components/ImportDonePage/types";
+import Button from "@mui/material/Button";
+import TextBox from "../../../components/TextBox/TextBox";
+import { useApiClient } from "../../../logic/ApiClientHook";
 import {
   Typography,
   Accordion,
@@ -17,16 +17,16 @@ import {
   AccordionDetails,
   Box,
   Stack,
-} from "@mui/material"
-import { useStore } from "../../../logic/DataStore"
-import { toJS } from "mobx"
+} from "@mui/material";
+import { useStore } from "../../../logic/DataStore";
+import { toJS } from "mobx";
 
 export default function ImportDonePage() {
-  let store = useStore()
-  let api = useApiClient()
+  let store = useStore();
+  let api = useApiClient();
 
-  console.log(toJS(store.queryGetData))
-  const rows = store.queryGetData?.subQueries ?? []
+  console.log(toJS(store.queryGetData));
+  const rows = store.queryGetData?.subQueries ?? [];
 
   return (
     <Box>
@@ -46,7 +46,22 @@ export default function ImportDonePage() {
               </Typography>
             </Stack>
             <Stack direction="row" gap={3} height="80%">
-              <Button variant="contained">Найти аналоги</Button>
+              <Button
+                variant="contained"
+                sx={{
+                  boxShadow: "none",
+
+                  "&:hover": {
+                    boxShadow: "none",
+                  },
+
+                  "&:active": {
+                    boxShadow: "none",
+                  },
+                }}
+              >
+                Найти аналоги
+              </Button>
             </Stack>
           </Stack>
         </Stack>
@@ -78,5 +93,5 @@ export default function ImportDonePage() {
         </Box>
       </Stack>
     </Box>
-  )
+  );
 }

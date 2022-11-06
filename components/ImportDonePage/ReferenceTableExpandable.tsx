@@ -4,24 +4,24 @@ import {
   Typography,
   AccordionDetails,
   Stack,
-} from "@mui/material"
-import React, { useState } from "react"
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore"
-import { useTheme } from "@mui/material"
-import Button from "@mui/material/Button"
-import TextField from "@mui/material/TextField"
-import ReferenceTable from "./ReferenceTable"
-import DoneIcon from "@mui/icons-material/Done"
-import { DataRow } from "./types"
-import { GridCellEditCommitParams } from "@mui/x-data-grid"
-import TextBox from "../TextBox/TextBox"
-import { SubQueryGet } from "../../apiConnection/gen/models/sub-query-get"
-import { useStore } from "../../logic/DataStore"
+} from "@mui/material";
+import React, { useState } from "react";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { useTheme } from "@mui/material";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import ReferenceTable from "./ReferenceTable";
+import DoneIcon from "@mui/icons-material/Done";
+import { DataRow } from "./types";
+import { GridCellEditCommitParams } from "@mui/x-data-grid";
+import TextBox from "../TextBox/TextBox";
+import { SubQueryGet } from "../../apiConnection/gen/models/sub-query-get";
+import { useStore } from "../../logic/DataStore";
 
 type Props = {
-  roomsCount: number
-  data: SubQueryGet
-}
+  roomsCount: number;
+  data: SubQueryGet;
+};
 
 function SubqueryToDataRow(data: SubQueryGet): DataRow[] {
   return data.inputApartments?.map((apartment, i) => {
@@ -33,21 +33,21 @@ function SubqueryToDataRow(data: SubQueryGet): DataRow[] {
       KitchenArea: apartment.kitchenArea,
       HasBalcony: apartment.hasBalcony,
       RepairType: apartment.quality,
-    }
-  }) as DataRow[]
+    };
+  }) as DataRow[];
 }
 
 export default function ReferenceTableExpandable({ roomsCount, data }: Props) {
-  let theme = useTheme()
-  let text = roomsCount != 0 ? `${roomsCount}-комнатные` : "Студии"
+  let theme = useTheme();
+  let text = roomsCount != 0 ? `${roomsCount}-комнатные` : "Студии";
 
-  let store = useStore()
-  let [expanded, setExpanded] = useState(false)
+  let store = useStore();
+  let [expanded, setExpanded] = useState(false);
 
-  let isReferenceSelected = true
+  let isReferenceSelected = true;
 
-  let rowsData = store.queryGetData
-  let rows = SubqueryToDataRow(data)
+  let rowsData = store.queryGetData;
+  let rows = SubqueryToDataRow(data);
 
   let selected = (
     <Typography
@@ -59,15 +59,15 @@ export default function ReferenceTableExpandable({ roomsCount, data }: Props) {
       {" "}
       {isReferenceSelected ? "эталон выбран" : "выберите эталон"}
     </Typography>
-  )
+  );
 
   const onAccordionChange = (isExpanded: boolean) => {
-    setExpanded(isExpanded)
-  }
+    setExpanded(isExpanded);
+  };
 
   const addRow = () => {
     //setRowsData([...rowsData, { id: rowsData[rowsData.length - 1].id + 1 }])
-  }
+  };
 
   // const deleteRow = (id: number) => {
   //   setRowsData(rowsData.filter((row) => row.id != id))
@@ -158,5 +158,5 @@ export default function ReferenceTableExpandable({ roomsCount, data }: Props) {
         </Stack>
       </AccordionDetails>
     </Accordion>
-  )
+  );
 }
