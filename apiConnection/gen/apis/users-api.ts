@@ -33,12 +33,12 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createUserPost: async (body: UserCreate, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createApiUserPost: async (body: UserCreate, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
             if (body === null || body === undefined) {
-                throw new RequiredError('body','Required parameter body was null or undefined when calling createUserPost.');
+                throw new RequiredError('body','Required parameter body was null or undefined when calling createApiUserPost.');
             }
-            const localVarPath = `/user`;
+            const localVarPath = `/api/user`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -78,12 +78,12 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteUserIdDelete: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deleteApiUserIdDelete: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
-                throw new RequiredError('id','Required parameter id was null or undefined when calling deleteUserIdDelete.');
+                throw new RequiredError('id','Required parameter id was null or undefined when calling deleteApiUserIdDelete.');
             }
-            const localVarPath = `/user/{id}`
+            const localVarPath = `/api/user/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -121,8 +121,8 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllUserGet: async (limit?: number, offset?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/user`;
+        getAllApiUserGet: async (limit?: number, offset?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/user`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -166,12 +166,12 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserEmailEmailGet: async (email: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getApiUserEmailEmailGet: async (email: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'email' is not null or undefined
             if (email === null || email === undefined) {
-                throw new RequiredError('email','Required parameter email was null or undefined when calling getUserEmailEmailGet.');
+                throw new RequiredError('email','Required parameter email was null or undefined when calling getApiUserEmailEmailGet.');
             }
-            const localVarPath = `/user/email/{email}`
+            const localVarPath = `/api/user/email/{email}`
                 .replace(`{${"email"}}`, encodeURIComponent(String(email)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -208,12 +208,12 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getUserIdGet: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getApiUserIdGet: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
-                throw new RequiredError('id','Required parameter id was null or undefined when calling getUserIdGet.');
+                throw new RequiredError('id','Required parameter id was null or undefined when calling getApiUserIdGet.');
             }
-            const localVarPath = `/user/{id}`
+            const localVarPath = `/api/user/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -251,16 +251,16 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        patchUserIdPatch: async (body: UserPatch, id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        patchApiUserIdPatch: async (body: UserPatch, id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
             if (body === null || body === undefined) {
-                throw new RequiredError('body','Required parameter body was null or undefined when calling patchUserIdPatch.');
+                throw new RequiredError('body','Required parameter body was null or undefined when calling patchApiUserIdPatch.');
             }
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
-                throw new RequiredError('id','Required parameter id was null or undefined when calling patchUserIdPatch.');
+                throw new RequiredError('id','Required parameter id was null or undefined when calling patchApiUserIdPatch.');
             }
-            const localVarPath = `/user/{id}`
+            const localVarPath = `/api/user/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -302,16 +302,16 @@ export const UsersApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateUserIdPut: async (body: UserCreate, id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateApiUserIdPut: async (body: UserCreate, id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
             if (body === null || body === undefined) {
-                throw new RequiredError('body','Required parameter body was null or undefined when calling updateUserIdPut.');
+                throw new RequiredError('body','Required parameter body was null or undefined when calling updateApiUserIdPut.');
             }
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
-                throw new RequiredError('id','Required parameter id was null or undefined when calling updateUserIdPut.');
+                throw new RequiredError('id','Required parameter id was null or undefined when calling updateApiUserIdPut.');
             }
-            const localVarPath = `/user/{id}`
+            const localVarPath = `/api/user/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -361,8 +361,8 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createUserPost(body: UserCreate, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<UserGet>>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).createUserPost(body, options);
+        async createApiUserPost(body: UserCreate, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<UserGet>>> {
+            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).createApiUserPost(body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -375,8 +375,8 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteUserIdDelete(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).deleteUserIdDelete(id, options);
+        async deleteApiUserIdDelete(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
+            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).deleteApiUserIdDelete(id, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -390,8 +390,8 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllUserGet(limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Array<UserGet>>>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).getAllUserGet(limit, offset, options);
+        async getAllApiUserGet(limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Array<UserGet>>>> {
+            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).getAllApiUserGet(limit, offset, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -404,8 +404,8 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getUserEmailEmailGet(email: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<UserGet>>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).getUserEmailEmailGet(email, options);
+        async getApiUserEmailEmailGet(email: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<UserGet>>> {
+            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).getApiUserEmailEmailGet(email, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -418,8 +418,8 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getUserIdGet(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<UserGet>>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).getUserIdGet(id, options);
+        async getApiUserIdGet(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<UserGet>>> {
+            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).getApiUserIdGet(id, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -433,8 +433,8 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async patchUserIdPatch(body: UserPatch, id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<UserGet>>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).patchUserIdPatch(body, id, options);
+        async patchApiUserIdPatch(body: UserPatch, id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<UserGet>>> {
+            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).patchApiUserIdPatch(body, id, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -448,8 +448,8 @@ export const UsersApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateUserIdPut(body: UserCreate, id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<UserGet>>> {
-            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).updateUserIdPut(body, id, options);
+        async updateApiUserIdPut(body: UserCreate, id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<UserGet>>> {
+            const localVarAxiosArgs = await UsersApiAxiosParamCreator(configuration).updateApiUserIdPut(body, id, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -471,8 +471,8 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createUserPost(body: UserCreate, options?: AxiosRequestConfig): Promise<AxiosResponse<UserGet>> {
-            return UsersApiFp(configuration).createUserPost(body, options).then((request) => request(axios, basePath));
+        async createApiUserPost(body: UserCreate, options?: AxiosRequestConfig): Promise<AxiosResponse<UserGet>> {
+            return UsersApiFp(configuration).createApiUserPost(body, options).then((request) => request(axios, basePath));
         },
         /**
          * Удалить пользователя по его id
@@ -481,8 +481,8 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteUserIdDelete(id: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
-            return UsersApiFp(configuration).deleteUserIdDelete(id, options).then((request) => request(axios, basePath));
+        async deleteApiUserIdDelete(id: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
+            return UsersApiFp(configuration).deleteApiUserIdDelete(id, options).then((request) => request(axios, basePath));
         },
         /**
          * Получить список всех пользователей
@@ -492,8 +492,8 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllUserGet(limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<AxiosResponse<Array<UserGet>>> {
-            return UsersApiFp(configuration).getAllUserGet(limit, offset, options).then((request) => request(axios, basePath));
+        async getAllApiUserGet(limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<AxiosResponse<Array<UserGet>>> {
+            return UsersApiFp(configuration).getAllApiUserGet(limit, offset, options).then((request) => request(axios, basePath));
         },
         /**
          * Получить пользователя по его email
@@ -502,8 +502,8 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getUserEmailEmailGet(email: string, options?: AxiosRequestConfig): Promise<AxiosResponse<UserGet>> {
-            return UsersApiFp(configuration).getUserEmailEmailGet(email, options).then((request) => request(axios, basePath));
+        async getApiUserEmailEmailGet(email: string, options?: AxiosRequestConfig): Promise<AxiosResponse<UserGet>> {
+            return UsersApiFp(configuration).getApiUserEmailEmailGet(email, options).then((request) => request(axios, basePath));
         },
         /**
          * Получить пользователя по его id
@@ -512,8 +512,8 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getUserIdGet(id: string, options?: AxiosRequestConfig): Promise<AxiosResponse<UserGet>> {
-            return UsersApiFp(configuration).getUserIdGet(id, options).then((request) => request(axios, basePath));
+        async getApiUserIdGet(id: string, options?: AxiosRequestConfig): Promise<AxiosResponse<UserGet>> {
+            return UsersApiFp(configuration).getApiUserIdGet(id, options).then((request) => request(axios, basePath));
         },
         /**
          * Изменить пользователя по его id (частисно обновление модели)
@@ -523,8 +523,8 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async patchUserIdPatch(body: UserPatch, id: string, options?: AxiosRequestConfig): Promise<AxiosResponse<UserGet>> {
-            return UsersApiFp(configuration).patchUserIdPatch(body, id, options).then((request) => request(axios, basePath));
+        async patchApiUserIdPatch(body: UserPatch, id: string, options?: AxiosRequestConfig): Promise<AxiosResponse<UserGet>> {
+            return UsersApiFp(configuration).patchApiUserIdPatch(body, id, options).then((request) => request(axios, basePath));
         },
         /**
          * Изменить пользователя по его id (полное обновление модели)
@@ -534,8 +534,8 @@ export const UsersApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateUserIdPut(body: UserCreate, id: string, options?: AxiosRequestConfig): Promise<AxiosResponse<UserGet>> {
-            return UsersApiFp(configuration).updateUserIdPut(body, id, options).then((request) => request(axios, basePath));
+        async updateApiUserIdPut(body: UserCreate, id: string, options?: AxiosRequestConfig): Promise<AxiosResponse<UserGet>> {
+            return UsersApiFp(configuration).updateApiUserIdPut(body, id, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -555,8 +555,8 @@ export class UsersApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public async createUserPost(body: UserCreate, options?: AxiosRequestConfig) : Promise<AxiosResponse<UserGet>> {
-        return UsersApiFp(this.configuration).createUserPost(body, options).then((request) => request(this.axios, this.basePath));
+    public async createApiUserPost(body: UserCreate, options?: AxiosRequestConfig) : Promise<AxiosResponse<UserGet>> {
+        return UsersApiFp(this.configuration).createApiUserPost(body, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Удалить пользователя по его id
@@ -566,8 +566,8 @@ export class UsersApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public async deleteUserIdDelete(id: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<void>> {
-        return UsersApiFp(this.configuration).deleteUserIdDelete(id, options).then((request) => request(this.axios, this.basePath));
+    public async deleteApiUserIdDelete(id: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<void>> {
+        return UsersApiFp(this.configuration).deleteApiUserIdDelete(id, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Получить список всех пользователей
@@ -578,8 +578,8 @@ export class UsersApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public async getAllUserGet(limit?: number, offset?: number, options?: AxiosRequestConfig) : Promise<AxiosResponse<Array<UserGet>>> {
-        return UsersApiFp(this.configuration).getAllUserGet(limit, offset, options).then((request) => request(this.axios, this.basePath));
+    public async getAllApiUserGet(limit?: number, offset?: number, options?: AxiosRequestConfig) : Promise<AxiosResponse<Array<UserGet>>> {
+        return UsersApiFp(this.configuration).getAllApiUserGet(limit, offset, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Получить пользователя по его email
@@ -589,8 +589,8 @@ export class UsersApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public async getUserEmailEmailGet(email: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<UserGet>> {
-        return UsersApiFp(this.configuration).getUserEmailEmailGet(email, options).then((request) => request(this.axios, this.basePath));
+    public async getApiUserEmailEmailGet(email: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<UserGet>> {
+        return UsersApiFp(this.configuration).getApiUserEmailEmailGet(email, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Получить пользователя по его id
@@ -600,8 +600,8 @@ export class UsersApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public async getUserIdGet(id: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<UserGet>> {
-        return UsersApiFp(this.configuration).getUserIdGet(id, options).then((request) => request(this.axios, this.basePath));
+    public async getApiUserIdGet(id: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<UserGet>> {
+        return UsersApiFp(this.configuration).getApiUserIdGet(id, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Изменить пользователя по его id (частисно обновление модели)
@@ -612,8 +612,8 @@ export class UsersApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public async patchUserIdPatch(body: UserPatch, id: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<UserGet>> {
-        return UsersApiFp(this.configuration).patchUserIdPatch(body, id, options).then((request) => request(this.axios, this.basePath));
+    public async patchApiUserIdPatch(body: UserPatch, id: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<UserGet>> {
+        return UsersApiFp(this.configuration).patchApiUserIdPatch(body, id, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Изменить пользователя по его id (полное обновление модели)
@@ -624,7 +624,7 @@ export class UsersApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof UsersApi
      */
-    public async updateUserIdPut(body: UserCreate, id: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<UserGet>> {
-        return UsersApiFp(this.configuration).updateUserIdPut(body, id, options).then((request) => request(this.axios, this.basePath));
+    public async updateApiUserIdPut(body: UserCreate, id: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<UserGet>> {
+        return UsersApiFp(this.configuration).updateApiUserIdPut(body, id, options).then((request) => request(this.axios, this.basePath));
     }
 }

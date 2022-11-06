@@ -22,7 +22,7 @@ export interface AdjustmentGet {
      * @type {number}
      * @memberof AdjustmentGet
      */
-    trade?: number;
+    trade: number;
     /**
      * Корректировка на этаж
      * @type {number}
@@ -66,6 +66,12 @@ export interface AdjustmentGet {
      */
     priceTrade: number;
     /**
+     * Цена после корректировки на торг
+     * @type {number}
+     * @memberof AdjustmentGet
+     */
+    priceFloor: number;
+    /**
      * Цена после корректировки на площадь
      * @type {number}
      * @memberof AdjustmentGet
@@ -76,7 +82,7 @@ export interface AdjustmentGet {
      * @type {number}
      * @memberof AdjustmentGet
      */
-    priceKitchenArea: number;
+    priceKitchen: number;
     /**
      * Цена после корректировки на наличие балкона
      * @type {number}

@@ -23,6 +23,7 @@ class ApiClient {
   queryApi: QueryApi
   subqueryApi: SubqueryApi
   usersApi: UsersApi
+
   parser: ParserApi
 
   constructor() {
