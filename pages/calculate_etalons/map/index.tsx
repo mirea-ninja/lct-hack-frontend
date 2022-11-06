@@ -53,10 +53,21 @@ const Maps = observer(({}: Props) => {
   const store = useStore();
   const apiClient = useApiClient();
 
-  const [analogs, setAnalogs] = React.useState<any[]>([]);
-  const [selectedSubQuery, setSelectedSubQuery] = React.useState<string>(null);
+  const [selectedSubQuery, setSelectedSubQuery] = React.useState<string | null>(
+    null
+  );
+
+  // Настройки карты
+  const [showEtalon, setShowEtalon] = React.useState(true);
+  const [showAnalogs, setShowAnalogs] = React.useState(true);
+  const [showSearchArea, setShowSearchArea] = React.useState(true);
+  const [showHiddenAnalogs, setShowHiddenAnalogs] = React.useState(true);
+
+  const [hiddenAnalogs, setHiddenAnalogs] = React.useState<any[]>([]);
 
   console.log("MAPS LOADED WITH STATE:", toJS(store.queryGetData));
+
+  const mapRef = React.useRef(null);
 
   // Запрос в парсер (parser в api)
   const { mutate, isLoading, isError, isSuccess } = useMutation({
@@ -79,8 +90,6 @@ const Maps = observer(({}: Props) => {
       }
     },
   });
-
-  const mapRef = React.useRef(null);
 
   React.useEffect(() => {
     console.log("STORE: ", store);
@@ -111,15 +120,6 @@ const Maps = observer(({}: Props) => {
           mutate(data);
         }
       }
-    }
-  }, [store.queryGetData]);
-
-  React.useEffect(() => {
-    if (store.queryGetData?.subQueries) {
-      const analogs = store.queryGetData.subQueries
-        .map((subQuery) => subQuery.analogs)
-        .flat();
-      setAnalogs(analogs);
     }
   }, [store.queryGetData]);
 
@@ -219,7 +219,12 @@ const Maps = observer(({}: Props) => {
         />
       </Box>
 
-      <MapFilter />
+      <MapFilter
+        setShowEtalon={setShowEtalon}
+        setShowAnalogs={setShowAnalogs}
+        setShowSearchArea={setShowSearchArea}
+        setShowHiddenAnalogs={setShowHiddenAnalogs}
+      />
 
       {/* Map */}
       <Box
@@ -232,10 +237,13 @@ const Maps = observer(({}: Props) => {
       >
         <YMaps>
           <ConnectedTemplateProvider>
-            {({ template }) => (
+            {({ template, iconTemplate, iconShape }) => (
               <Map
                 instanceRef={mapRef}
-                defaultState={{ center: [55.75, 37.57], zoom: 9 }}
+                defaultState={{
+                  center: [55.75, 37.57],
+                  zoom: 11,
+                }}
                 width="100%"
                 height="100vh"
                 options={{
@@ -244,6 +252,7 @@ const Maps = observer(({}: Props) => {
                 }}
               >
                 {isSuccess &&
+                  showAnalogs &&
                   getSubqueryByGuid(
                     selectedSubQuery,
                     store.queryGetData!.subQueries
@@ -293,30 +302,37 @@ const Maps = observer(({}: Props) => {
                   )}
 
                 {isSuccess &&
+                  showEtalon &&
                   store.queryGetData!.subQueries.map(
                     (subQuery) =>
                       subQuery.guid === selectedSubQuery && (
                         <Placemark
                           geometry={[
-                            subQuery.standartObject.lat,
-                            subQuery.standartObject.lon,
+                            subQuery.standartObject!.lat,
+                            subQuery.standartObject!.lon,
                           ]}
                           properties={{
                             content: getTagsTemplate({
-                              title: subQuery.standartObject.address,
+                              title: subQuery.standartObject!.address,
                               subtitle: "",
                               tags: [
-                                `${subQuery.standartObject.floor} этаж`,
-                                `S ${subQuery.standartObject.apartmentArea} м²`,
-                                `S кухня ${subQuery.standartObject.kitchenArea} м²`,
-                                subQuery.standartObject.hasBalcony
+                                `${subQuery.standartObject!.floor} этаж`,
+                                `S ${
+                                  subQuery.standartObject!.apartmentArea
+                                } м²`,
+                                `S кухня ${
+                                  subQuery.standartObject!.kitchenArea
+                                } м²`,
+                                subQuery.standartObject!.hasBalcony
                                   ? "есть балкон"
                                   : "нет балкона",
-                                `${subQuery.standartObject.distanceToMetro} мин. до метро`,
-                                subQuery.standartObject.quality,
+                                `${
+                                  subQuery.standartObject!.distanceToMetro
+                                } мин. до метро`,
+                                subQuery.standartObject!.quality,
                               ],
                             }),
-                            title: subQuery.standartObject.address,
+                            title: subQuery.standartObject!.address,
                           }}
                           options={{
                             // Применяем шаблон
@@ -334,30 +350,97 @@ const Maps = observer(({}: Props) => {
                       )
                   )}
 
-                <Circle
-                  geometry={[
-                    [
-                      getSubqueryByGuid(
-                        selectedSubQuery,
-                        store.queryGetData!.subQueries
-                      ).standartObject.lat,
-                      getSubqueryByGuid(
-                        selectedSubQuery,
-                        store.queryGetData!.subQueries
-                      ).standartObject.lon,
-                    ],
-                    1500,
-                  ]}
-                  options={{
-                    fillOpacity: 0,
-                    // rgba(3, 140, 210, 0.2);
-                    strokeColor: "#0385d2",
-                    strokeOpacity: 0.3,
-                    strokeWidth: 3,
+                {/* Отрисовка маркера после подсчёта формы */}
+                {iconShape && iconShape.length && (
+                  <Placemark
+                    geometry={[55.8, 37.6]}
+                    properties={{
+                      content: getTagsTemplate({
+                        title: "Адрес",
+                        subtitle: "",
+                        tags: [
+                          ` этаж`,
+                          `S м²`,
+                          `S кухня м²`,
+                          "есть балкон",
+                          "нет балкона",
+                          `мин. до метро`,
+                          "qweqwe",
+                        ],
+                      }),
+                      title: "Адрес",
+                    }}
+                    options={{
+                      // Применяем шаблон
+                      balloonContentLayout: template,
+                      balloonPanelMaxMapArea: 0,
 
-                    strokeStyle: "10 10",
-                  }}
-                />
+                      iconLayout: iconTemplate,
+                      iconShape: {
+                        type: "Rectangle",
+                        coordinates: iconShape,
+                      },
+                    }}
+                    modules={["geoObject.addon.balloon"]}
+                  />
+                )}
+
+                {!iconShape && (
+                  <Placemark
+                    geometry={[55.8, 37.6]}
+                    properties={{
+                      content: getTagsTemplate({
+                        title: "Адрес",
+                        subtitle: "",
+                        tags: [
+                          ` этаж`,
+                          `S м²`,
+                          `S кухня м²`,
+                          "есть балкон",
+                          "нет балкона",
+                          `мин. до метро`,
+                          "qweqwe",
+                        ],
+                      }),
+                      title: "Адрес",
+                    }}
+                    options={{
+                      // Применяем шаблон
+                      balloonContentLayout: template,
+                      balloonPanelMaxMapArea: 0,
+
+                      iconLayout: iconTemplate,
+                    }}
+                    modules={["geoObject.addon.balloon"]}
+                  />
+                )}
+
+                {isSuccess && showSearchArea && (
+                  <Circle
+                    geometry={[
+                      [
+                        getSubqueryByGuid(
+                          selectedSubQuery,
+                          store.queryGetData!.subQueries
+                        ).standartObject.lat,
+                        getSubqueryByGuid(
+                          selectedSubQuery,
+                          store.queryGetData!.subQueries
+                        ).standartObject.lon,
+                      ],
+                      1500,
+                    ]}
+                    options={{
+                      fillOpacity: 0,
+                      // rgba(3, 140, 210, 0.2);
+                      strokeColor: "#0385d2",
+                      strokeOpacity: 0.3,
+                      strokeWidth: 3,
+
+                      strokeStyle: "10 10",
+                    }}
+                  />
+                )}
               </Map>
             )}
           </ConnectedTemplateProvider>
