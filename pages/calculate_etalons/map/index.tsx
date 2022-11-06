@@ -18,6 +18,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { useApiClient } from "../../../logic/ApiClientHook";
 import { TemplateProvider } from "../../../components/map/TemplateProvider";
 import { ZoomButton } from "../../../components/map/ZoomButton";
+import { Button } from "@mui/material";
 
 type Props = {};
 
@@ -63,6 +64,8 @@ const Maps = observer(({}: Props) => {
   const [showSearchArea, setShowSearchArea] = React.useState(true);
   const [showHiddenAnalogs, setShowHiddenAnalogs] = React.useState(true);
 
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+
   const [hiddenAnalogs, setHiddenAnalogs] = React.useState<any[]>([]);
 
   console.log("MAPS LOADED WITH STATE:", toJS(store.queryGetData));
@@ -102,6 +105,7 @@ const Maps = observer(({}: Props) => {
     },
     onError: (error) => {
       console.log("ERROR", error);
+      setErrorMessage(error.response.data.errors);
     },
   });
 
@@ -176,6 +180,63 @@ const Maps = observer(({}: Props) => {
             Ищем аналоги по вашему запросу. Это может занять какое-то время.
             Пожалуйста, подождите.
           </Typography>
+        </Box>
+      </Modal>
+
+      {/* Всплывающее окно для отображения ошибок */}
+      <Modal
+        open={errorMessage != null}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+        onClose={() => {
+          setErrorMessage(null);
+        }}
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 400,
+
+            background: "#FFFFFF",
+
+            boxShadow: "0px 0px 23px rgba(5, 4, 39, 0.05)",
+            borderRadius: "10px",
+            padding: "20px",
+          }}
+        >
+          <Typography variant="h6" id="modal-modal-title" component="div">
+            {errorMessage}
+          </Typography>
+
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              padding: "20px",
+            }}
+          >
+            <Button
+              variant="contained"
+              onClick={() => {
+                setErrorMessage(null);
+              }}
+              sx={{
+                boxShadow: "none",
+
+                "&:hover": {
+                  boxShadow: "none",
+                },
+                "&:active": {
+                  boxShadow: "none",
+                },
+              }}
+            >
+              Закрыть
+            </Button>
+          </Box>
         </Box>
       </Modal>
 
