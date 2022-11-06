@@ -40,10 +40,13 @@ export default function ImportDonePage() {
           <Stack direction="row" justifyContent="space-between">
             <Stack gap={1}>
               <Typography variant="h6" color="#3E3E41">
-                "Название запроса"
+                {store.queryGetData?.name ?? store.fileName}
               </Typography>
               <Typography variant="body1" color="#3E3E41">
-                "Ватутина, 11, современное жилье, 22 этажа, панель"
+                {
+                  store!.queryGetData!.subQueries[0]!.inputApartments[0]!
+                    .address
+                }
               </Typography>
             </Stack>
             <Stack direction="row" gap={3} height="80%">

@@ -46,11 +46,11 @@ export class Store {
 
     if (typeof window !== "undefined") {
       console.log("Make persistable")
-      makePersistable(this, {
-        name: "Store",
-        properties: ["queryGetData"],
-        storage: window.localStorage,
-      })
+      // makePersistable(this, {
+      //   name: "Store",
+      //   properties: ["queryGetData", "fileName", "isLoadedWithFile"],
+      //   storage: window.localStorage,
+      // })
     }
   }
 

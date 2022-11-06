@@ -17,6 +17,9 @@ import { useStore } from "../../../logic/DataStore"
 import { QueryGet } from "../../../apiConnection/gen/models/query-get"
 import { toJS } from "mobx"
 import { SubQueryGet } from "../../../apiConnection/gen/models/sub-query-get"
+import { ApartmentGet } from "../../../apiConnection/gen"
+import { useApiClient } from "../../../logic/ApiClientHook"
+import { useMutation } from "@tanstack/react-query"
 
 type Props = {
   onActiveChange: (active: boolean) => void
@@ -27,6 +30,7 @@ const LoadedPoolBox = observer(({
 }: Props) => {
   let theme = useTheme()
   let data = useStore()
+  let api = useApiClient()
 
   console.log(toJS(data.queryGetData))
 
@@ -144,6 +148,10 @@ type SkeletonProps = {
   text?: string
 }
 
+function getRandomEtalon(queryGet: SubQueryGet): ApartmentGet {
+  return queryGet.inputApartments![0]
+}
+
 const SkeletonBox = ({ text }: SkeletonProps) => {
   let theme = useTheme()
   return (
@@ -157,11 +165,6 @@ const SkeletonBox = ({ text }: SkeletonProps) => {
       {text != null ? <Typography>{text}</Typography> : null}
     </Box>
   )
-}
-
-type PoolDataProps = {
-  data: SubQueryGet
-  id: number
 }
 
 function IdToName(id: number): string {
@@ -182,8 +185,47 @@ function IdToName(id: number): string {
   return "Неизвестно"
 }
 
-function PoolData({ data, id }: PoolDataProps) {
+type PoolDataProps = {
+  data: SubQueryGet
+  id: number
+}
+
+const PoolData = observer(({ data, id }: PoolDataProps) => {
   let theme = useTheme()
+  let api = useApiClient()
+  let store = useStore()
+
+  const isEtalonSelected = data.standartObject == null
+  console.log("POOL DATA")
+
+  const { mutate, isLoading, isError, isSuccess } = useMutation({
+    mutationFn: (params: { id1: string; id2: string }) => {
+      return api.subqueryApi.setBaseQueryIdSubquerySubidBaseApartmentPost(
+        params.id1,
+        params.id2,
+        { guid: params.id2 }
+      )
+    },
+    onSuccess: (aptData) => {
+      store.queryGetData!.subQueries!.find(
+        (q) => q.guid == aptData.data.guid
+      )!.standartObject = aptData.data
+    },
+  })
+
+  if (isEtalonSelected) {
+    let etalon = getRandomEtalon(data)
+    data.standartObject = etalon
+    mutate({ id1: data.guid, id2: etalon.guid })
+  }
+
+  if (isLoading) {
+    return (
+      <div>
+        <SkeletonBox text="Загрузка" />
+      </div>
+    )
+  }
 
   return (
     <Stack
@@ -265,7 +307,7 @@ function PoolData({ data, id }: PoolDataProps) {
       </Box>
     </Stack>
   )
-}
+})
 
 function PoolPreview() {
   let theme = useTheme()

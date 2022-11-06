@@ -28,6 +28,11 @@ function SubqueryToDataRow(data: SubQueryGet): DataRow[] {
   return data.inputApartments?.map((apartment, i) => {
     return {
       id: i,
+      AptArea: apartment.apartmentArea,
+      Floor: apartment.floor,
+      KitchenArea: apartment.kitchenArea,
+      HasBalcony: apartment.hasBalcony,
+      RepairType: apartment.quality,
     }
   }) as DataRow[]
 }
@@ -102,7 +107,7 @@ export default function ReferenceTableExpandable({
       >
         <Stack direction="row" alignItems="center" gap="10px">
           <TextBox
-            text={rowsData?.inputApartments?.length ?? ""}
+            text={rows?.length ?? 0}
             textColor={expanded ? theme.palette.primary.main : ""}
             backgroundColor={expanded ? theme.palette.accent.main : ""}
           />
