@@ -24,7 +24,7 @@ type Props = {
   isArchive?: boolean;
 };
 
-export default function Header({ hasStepProgress = true, stepProgress = 0 , isArchive = true}: Props) {
+export default function Header({ hasStepProgress = true, stepProgress = 0 , isArchive = false}: Props) {
   let theme = useTheme();
 
   return (

@@ -211,7 +211,8 @@ function PoolData({ data, id }: PoolDataProps) {
           color: theme.palette.text.secondary,
         }}
       >
-        {data.inputApartments!.length} объекта(ов)
+        {data.inputApartments!.length} объект{
+        data.inputApartments!.length % 10 == 1 && data.inputApartments!.length % 100 != 11 ? "" : data.inputApartments!.length % 10 >= 2 && data.inputApartments!.length % 10 <= 4 && (data.inputApartments!.length % 100 < 10 || data.inputApartments!.length % 100 >= 20) ? "а" : "ов"}
       </Typography>
       <Box height={"15px"} />
       <Grid container spacing={1}>

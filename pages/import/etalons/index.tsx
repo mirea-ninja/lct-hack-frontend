@@ -31,7 +31,7 @@ export default function ImportDonePage() {
 
   return (
     <Box>
-      <Header />
+      <Header stepProgress={2}/>
       <Stack padding={5} gap={3}>
         <Stack gap={2}>
           <Typography variant="h5" fontWeight="bold" color="#3E3E41">

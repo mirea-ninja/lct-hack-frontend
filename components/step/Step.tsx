@@ -56,7 +56,7 @@ export default function Step({
                 ? theme.palette.primary.main
                 : theme.palette.secondary.dark
             }`,
-            outline: `3px solid ${theme.palette.accent.light}`,
+            outline: `3px solid #EEF2F5`,
           }}
         >
           {isProgressed ? (
@@ -74,8 +74,8 @@ export default function Step({
               sx={{
                 width: "100%",
                 height: "100%",
-                stroke: theme.palette.accent.light,
-                color: theme.palette.accent.light,
+                stroke: "#EEF2F5",
+                color: "#EEF2F5",
                 strokeWidth: 4,
               }}
             />

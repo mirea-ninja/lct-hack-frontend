@@ -38,7 +38,7 @@ export default function ArchivePage({}: Props) {
 
   return (
     <Box>
-      <Header hasStepProgress={false} />
+      <Header isArchive={true}/>
       <Box sx={{ padding: '30px' }}>
         <Typography
           variant='h4'

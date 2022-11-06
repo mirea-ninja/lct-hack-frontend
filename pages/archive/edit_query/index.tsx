@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Header from '../../../components/main/Header';
-import { Box, Typography } from '@mui/material';
+import { Box, Button, Typography } from '@mui/material';
 import { Stack } from '@mui/system';
 import AppButton from '../../../components/buttons/AppButton';
 import IconButton from '@mui/material/IconButton';
@@ -14,7 +14,7 @@ type Props = {};
 export default function EditQueryPage({}: Props) {
   return (
     <Box>
-      <Header />
+      <Header isArchive={true}/>
       <Box sx={{ padding: '30px' }}>
         <Stack sx={{ mb: '30px', gap: '20px' }}>
           <Stack
@@ -31,9 +31,9 @@ export default function EditQueryPage({}: Props) {
               }}>
               Расчет цен для пула объектов
             </Typography>
-            <IconButton>
+            {/* <IconButton>
               <CloseIcon />
-            </IconButton>
+            </IconButton> */}
           </Stack>
 
           <Stack
@@ -85,7 +85,7 @@ export default function EditQueryPage({}: Props) {
                   color: '#3E3E41',
                 }}
               />
-              <AppButton size='small'>Экспортировать пул</AppButton>
+              <Button variant="mainActive">Экспортировать пул</Button>
             </Stack>
           </Stack>
         </Stack>
