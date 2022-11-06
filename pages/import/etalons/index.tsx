@@ -1,15 +1,15 @@
-import React from "react"
-import Header from "../../../components/main/Header"
-import ReferenceTableExpandable from "../../../components/ImportDonePage/ReferenceTableExpandable"
+import React from "react";
+import Header from "../../../components/main/Header";
+import ReferenceTableExpandable from "../../../components/ImportDonePage/ReferenceTableExpandable";
 import {
   DataRow,
   RepairType,
   SegmentType,
   WallMaterials,
-} from "../../../components/ImportDonePage/types"
-import Button from "@mui/material/Button"
-import TextBox from "../../../components/TextBox/TextBox"
-import { useApiClient } from "../../../logic/ApiClientHook"
+} from "../../../components/ImportDonePage/types";
+import Button from "@mui/material/Button";
+import TextBox from "../../../components/TextBox/TextBox";
+import { useApiClient } from "../../../logic/ApiClientHook";
 import {
   Typography,
   Accordion,
@@ -17,17 +17,17 @@ import {
   AccordionDetails,
   Box,
   Stack,
-} from "@mui/material"
-import { useStore } from "../../../logic/DataStore"
-import { toJS } from "mobx"
-import Link from "next/link"
+} from "@mui/material";
+import { useStore } from "../../../logic/DataStore";
+import { toJS } from "mobx";
+import Link from "next/link";
 
 export default function ImportDonePage() {
-  let store = useStore()
-  let api = useApiClient()
+  let store = useStore();
+  let api = useApiClient();
 
-  console.log(toJS(store.queryGetData))
-  const rows = store.queryGetData?.subQueries ?? []
+  console.log(toJS(store.queryGetData));
+  const rows = store.queryGetData?.subQueries ?? [];
 
   return (
     <Box>
@@ -75,11 +75,12 @@ export default function ImportDonePage() {
             },
           }}
         >
-          {rows.map((row, i) => (
-            <ReferenceTableExpandable key={i} data={row} roomsCount={i} />
-          ))}
+          {rows.map((row, i) => {
+            const rooms = row.standartObject?.rooms;
+            return <ReferenceTableExpandable key={i} data={row} roomsCount={rooms ?? -1} />;
+          })}
         </Box>
       </Stack>
     </Box>
-  )
+  );
 }

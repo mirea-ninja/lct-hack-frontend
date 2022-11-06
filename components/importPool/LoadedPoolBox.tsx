@@ -210,8 +210,14 @@ const SkeletonBox = ({ text }: SkeletonProps) => {
   )
 }
 
-function IdToName(id: number): string {
-  switch (id) {
+function roomsToName(data: SubQueryGet): string {
+  if (data.inputApartments?.length == 0) {
+    return "Неизвестно";
+  }
+
+  const rooms = data.inputApartments![0].rooms;
+
+  switch (rooms) {
     case 0:
       return "Студии"
     case 1:
@@ -225,7 +231,6 @@ function IdToName(id: number): string {
     case 5:
       return "5-комнатные"
   }
-  return "Неизвестно"
 }
 
 type PoolDataProps = {
@@ -294,7 +299,7 @@ const PoolData = observer(({ data, id }: PoolDataProps) => {
           color: theme.text.primary,
         }}
       >
-        {IdToName(id)}
+        {roomsToName(data)}
       </Typography>
       <Typography
         variant="body2"
