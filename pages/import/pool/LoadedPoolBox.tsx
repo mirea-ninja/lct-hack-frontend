@@ -19,8 +19,9 @@ import { toJS } from "mobx"
 import { SubQueryGet } from "../../../apiConnection/gen/models/sub-query-get"
 import { ApartmentGet } from "../../../apiConnection/gen"
 import { useApiClient } from "../../../logic/ApiClientHook"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
 import { RepairType } from "../../../components/ImportDonePage/types"
+import { ApartmentGet } from "../../../apiConnection/gen/models/apartment-get"
 
 type Props = {
   onActiveChange: (active: boolean) => void
@@ -35,6 +36,9 @@ const LoadedPoolBox = observer(({ onActiveChange }: Props) => {
 
   const isActive = data.queryGetData !== null
   onActiveChange(isActive)
+
+  if (isActive) {
+  }
 
   return (
     <Stack
@@ -125,17 +129,18 @@ const LoadedPoolBox = observer(({ onActiveChange }: Props) => {
         )}
       </Box>
       <Box display="flex" justifyContent="center" paddingTop="20px">
-        <Button
-          sx={{
-            height: "52px",
-            width: "330px",
-          }}
-          variant={isActive ? "mainActive" : "mainDisabled"}
-          disabled={!isActive}
-          href="/calculate_etalons/map"
-        >
-          Найти аналоги
-        </Button>
+        <Link href="/calculate_etalons/map">
+          <Button
+            sx={{
+              height: "52px",
+              width: "330px",
+            }}
+            variant={isActive ? "mainActive" : "mainDisabled"}
+            disabled={!isActive}
+          >
+            Найти аналоги
+          </Button>
+        </Link>
       </Box>
     </Stack>
   )
@@ -210,24 +215,51 @@ const PoolData = observer(({ data, id }: PoolDataProps) => {
   console.log("POOL DATA")
 
   const { mutate, isLoading, isError, isSuccess } = useMutation({
-    mutationFn: (params: { id1: string; id2: string }) => {
+    mutationFn: (params: { id1: string; id2: string; id3: string }) => {
       return api.subqueryApi.setBaseQueryIdSubquerySubidBaseApartmentPost(
         params.id1,
         params.id2,
-        { guid: params.id2 }
+        { guid: params.id3 }
       )
     },
     onSuccess: (aptData) => {
+      console.log(toJS(store.queryGetData))
       store.queryGetData!.subQueries!.find(
-        (q) => q.guid == aptData.data.guid
+        (q) => q.guid == data.guid!
       )!.standartObject = aptData.data
+    },
+  })
+
+  const set = useMutation({
+    mutationFn: async (params: {
+      apt: ApartmentGet
+      queryId: string
+      subqueryId: string
+    }) => {
+      let data = await api.parser.parseParsePost({
+        address: params.apt.address,
+        floors: params.apt.floors,
+        rooms: params.apt.rooms,
+        segment: params.apt.segment!.toString().toLowerCase(),
+        walls: params.apt.walls!.toString().toLowerCase(),
+        radius: 1500,
+        queryId: params.queryId,
+        subqueryId: params.subqueryId,
+      })
+
+      console.log(data.data)
     },
   })
 
   if (isEtalonSelected) {
     let etalon = getRandomEtalon(data)
     data.standartObject = etalon
-    mutate({ id1: data.guid, id2: etalon.guid })
+    mutate({ id1: store.queryGetData!.guid, id2: data.guid, id3: etalon.guid })
+    set.mutate({
+      apt: etalon,
+      queryId: store.queryGetData!.guid,
+      subqueryId: data.guid,
+    })
   }
 
   if (isLoading) {

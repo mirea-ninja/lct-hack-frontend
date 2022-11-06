@@ -14,6 +14,7 @@ import {
 } from "../apiConnection/gen/api"
 import globalAxios, { AxiosResponse, AxiosInstance } from "axios"
 import applyCaseMiddleware from "axios-case-converter"
+import { ParserApi } from "../apiConnection/parser/apis/parser-api"
 
 class ApiClient {
   apartmentApi: ApartmentApi
@@ -22,10 +23,23 @@ class ApiClient {
   queryApi: QueryApi
   subqueryApi: SubqueryApi
   usersApi: UsersApi
+  parser: ParserApi
 
   constructor() {
     let config = new Configuration({
       basePath: "http://37.230.196.151:8080",
+      //accessToken: "Bearer " + window.sessionStorage.getItem("user"),
+      baseOptions: {
+        headers: {
+          Authorization:
+            "Bearer " +
+            "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE2Njg4MDY0OTksImlhdCI6MTY2NzU5Njg5OSwianRpIjoiOWRhMGEyNTItYmFlYy00YmQzLTg4MDEtNTI3MzE3ZjdkZWU1Iiwic3ViIjoiOTdmNmJmYzAtY2I2MC00NTI0LTlmN2ItYjhmOTZmZmIxNzQxIiwiZW1haWwiOiJ1c2VyQGV4YW1wbGUuY29tIiwiZmlyc3RfbmFtZSI6InN0cmluZyIsImxhc3RfbmFtZSI6InN0cmluZyIsIm1pZGRsZV9uYW1lIjoic3RyaW5nIn0.XLGRwGZ1KbhBQMQ3_lpv6yD4vtJiEVkpr11R0sBLWP8",
+        },
+      },
+    })
+
+    let parserConfig = new Configuration({
+      basePath: "https://parser.lct.mirea.ninja",
       //accessToken: "Bearer " + window.sessionStorage.getItem("user"),
       baseOptions: {
         headers: {
@@ -44,6 +58,7 @@ class ApiClient {
     this.queryApi = new QueryApi(config, config.basePath, http)
     this.subqueryApi = new SubqueryApi(config, config.basePath, http)
     this.usersApi = new UsersApi(config, config.basePath, http)
+    this.parser = new ParserApi(parserConfig, parserConfig.basePath, http)
   }
 }
 

@@ -39,7 +39,7 @@ export default function ImportDonePage() {
           <Stack direction="row" justifyContent="space-between">
             <Stack gap={1}>
               <Typography variant="h6" color="#3E3E41">
-                {store.queryGetData?.name ?? store.file.name}
+                {store.queryGetData?.name ?? store.file?.name ?? ""}
               </Typography>
               <Typography variant="body1" color="#3E3E41">
                 {store!.queryGetData!.subQueries[0]!.standartObject!.address}
