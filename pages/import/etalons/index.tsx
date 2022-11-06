@@ -20,6 +20,7 @@ import {
 } from "@mui/material"
 import { useStore } from "../../../logic/DataStore"
 import { toJS } from "mobx"
+import Link from "next/link"
 
 export default function ImportDonePage() {
   let store = useStore()
@@ -46,7 +47,9 @@ export default function ImportDonePage() {
               </Typography>
             </Stack>
             <Stack direction="row" gap={3} height="80%">
-              <Button variant="contained">Найти аналоги</Button>
+              <Link href="/calculate_etalons/map">
+                <Button variant="contained">Найти аналоги</Button>
+              </Link>
             </Stack>
           </Stack>
         </Stack>
