@@ -1,4 +1,5 @@
 export * from './adjustment-get';
+export * from './adjustment-patch';
 export * from './analog';
 export * from './analogs';
 export * from './apartment-base';
