@@ -9,6 +9,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import AppCheckbox from "../checkboxes/AppCheckbox";
 import ArrowLeft from "@mui/icons-material/ChevronLeft";
 
+
 type Props = {
   setShowEtalon: (value: boolean) => void;
   setShowAnalogs: (value: boolean) => void;
