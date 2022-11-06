@@ -26,6 +26,7 @@ export enum RepairType {
 
 export type DataRow = {
   id: number
+  guid: string
 } & RequiredData &
   CorrectableData
 

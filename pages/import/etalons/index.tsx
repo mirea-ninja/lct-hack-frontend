@@ -9,6 +9,7 @@ import {
 } from "../../../components/ImportDonePage/types"
 import Button from "@mui/material/Button"
 import TextBox from "../../../components/TextBox/TextBox"
+import { useApiClient } from "../../../logic/ApiClientHook"
 import {
   Typography,
   Accordion,
@@ -17,48 +18,19 @@ import {
   Box,
   Stack,
 } from "@mui/material"
+import { useStore } from "../../../logic/DataStore"
+import { toJS } from "mobx"
 
+export default function ImportDonePage() {
+  let store = useStore()
+  let api = useApiClient()
 
-const rows: DataRow[] = [
-  {
-    id: 1,
-    Location: "Дворец путина",
-    Rooms: 99,
-    Segment: SegmentType.New,
-    FloorsCount: 389,
-    WallMaterials: WallMaterials.Brick,
-    Floor: 0,
-    AptArea: 30000,
-    KitchenArea: 5000,
-    HasBalcony: true,
-    ToMetro: 600,
-    RepairType: RepairType.ModernRepair,
-  },
-  {
-    id: 2,
-    Location: "Мирэа",
-    Rooms: 1,
-    Segment: SegmentType.Old,
-    FloorsCount: 5,
-    WallMaterials: WallMaterials.Monolith,
-    Floor: 0,
-    AptArea: 10,
-    KitchenArea: 10,
-    HasBalcony: false,
-    ToMetro: 5,
-    RepairType: RepairType.WithoutRepair,
-  },
-]
+  console.log(toJS(store.queryGetData))
+  const rows = store.queryGetData?.subQueries ?? []
 
-type Props = {
-  metadata?: string
-}
-
-
-export default function ImportDonePage({ metadata }: Props) {
   return (
     <Box>
-      <Header />
+      <Header stepProgress={2} />
       <Stack padding={5} gap={3}>
         <Stack gap={2}>
           <Typography variant="h5" fontWeight="bold" color="#3E3E41">
@@ -67,10 +39,10 @@ export default function ImportDonePage({ metadata }: Props) {
           <Stack direction="row" justifyContent="space-between">
             <Stack gap={1}>
               <Typography variant="h6" color="#3E3E41">
-                {metadata ?? "Название запроса"}
+                {store.queryGetData?.name ?? store.file.name}
               </Typography>
               <Typography variant="body1" color="#3E3E41">
-                {metadata ?? "Ватутина, 11, современное жилье, 22 этажа, панель"}
+                {store!.queryGetData!.subQueries[0]!.standartObject!.address}
               </Typography>
             </Stack>
             <Stack direction="row" gap={3} height="80%">
@@ -100,31 +72,9 @@ export default function ImportDonePage({ metadata }: Props) {
             },
           }}
         >
-        <ReferenceTableExpandable
-          isReferenceSelected={false}
-          roomsCount={0}
-          data={rows}
-        />
-        <ReferenceTableExpandable
-          isReferenceSelected={true}
-          roomsCount={1}
-          data={rows}
-        />
-        <ReferenceTableExpandable
-          isReferenceSelected={true}
-          roomsCount={2}
-          data={rows}
-        />
-        <ReferenceTableExpandable
-          isReferenceSelected={true}
-          roomsCount={3}
-          data={[]}
-        />
-        <ReferenceTableExpandable
-          isReferenceSelected={true}
-          roomsCount={4}
-          data={[]}
-        />
+          {rows.map((row, i) => (
+            <ReferenceTableExpandable key={i} data={row} roomsCount={i} />
+          ))}
         </Box>
       </Stack>
     </Box>

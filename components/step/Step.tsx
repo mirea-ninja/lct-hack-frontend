@@ -1,11 +1,9 @@
 import React from "react"
 import { Box, Stack, Typography, useTheme } from "@mui/material"
 import DoneIcon from "@mui/icons-material/Done"
-import StepProgress from "./StepProgress"
 import StepSeparator from "./StepSeparator"
 
 type Props = {
-  number: number
   stepName: string
   isProgressed?: boolean
   isActive?: boolean
@@ -13,7 +11,6 @@ type Props = {
 }
 
 export default function Step({
-  number,
   isProgressed,
   isActive,
   havePath,
@@ -23,6 +20,7 @@ export default function Step({
 
   return (
     <Stack>
+
       <Typography
         variant="body2"
         sx={{
@@ -35,6 +33,7 @@ export default function Step({
       >
         {stepName}
       </Typography>
+
       <Stack direction="row" alignItems="center">
         <Box
           justifyContent="center"
@@ -45,9 +44,11 @@ export default function Step({
           height="14px"
           zIndex={1}
           bgcolor={
-            isProgressed || isActive
+            isProgressed
               ? theme.palette.primary.main
-              : theme.palette.accent.light
+              : isActive
+              ? theme.palette.accent.light
+              : ""
           }
           sx={{
             border: `2px solid ${
@@ -55,7 +56,7 @@ export default function Step({
                 ? theme.palette.primary.main
                 : theme.palette.secondary.dark
             }`,
-            outline: `3px solid ${theme.palette.accent.light}`,
+            outline: `3px solid #EEF2F5`,
           }}
         >
           {isProgressed ? (
@@ -73,14 +74,14 @@ export default function Step({
               sx={{
                 width: "100%",
                 height: "100%",
-                stroke: theme.palette.accent.light,
-                color: theme.palette.accent.light,
+                stroke: "#EEF2F5",
+                color: "#EEF2F5",
                 strokeWidth: 4,
               }}
             />
           )}
         </Box>
-        {havePath && <StepSeparator isActive={isActive} />}
+        {havePath && <StepSeparator isActive={isProgressed} />}
       </Stack>
     </Stack>
   )

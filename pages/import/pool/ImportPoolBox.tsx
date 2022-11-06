@@ -5,6 +5,7 @@ import {
   Stack,
   Button,
   useTheme,
+  CircularProgress,
 } from "@mui/material"
 import React, { useState } from "react"
 import Dropzone from "react-dropzone"
@@ -18,25 +19,27 @@ import StepProgress from "../../../components/step/StepProgress"
 import DeleteIcon from "../../../components/icons/DeleteIcon/DeleteIcon"
 import NewFileIcon from "../../../components/icons/NewFileIcon/NewFileIcon"
 import { useStore } from "../../../logic/DataStore"
+import { observer } from "mobx-react"
 
 type Props = {}
 
-export default function ImportPoolBox({}: Props) {
-  let isActive = true // Поменять на логику с query в бэк
+export const ImportPoolBox = observer(({}: Props) => {
   let theme = useTheme()
   const [poolName, setPoolName] = useState("")
   const client = useApiClient()
-
-  const [file, setFile] = useState<File | null>(null)
-  const [newName, setNewName] = useState<string | null>(null)
-  const isLoadedWithFile = file != null
-
   const store = useStore()
-  console.log(store.queryGetData)
+
+  const isLoadedWithFile = store.file != null
+  const isActive = store.queryGetData == null
 
   const handleDrop = (acceptedFiles: File[]) => {
     console.log(acceptedFiles)
-    setFile(acceptedFiles[0])
+    store.file = acceptedFiles[0]
+  }
+
+  const discardFile = () => {
+    store.queryGetData = null
+    store.file = null
   }
 
   const onButtonClick = () => {
@@ -44,26 +47,19 @@ export default function ImportPoolBox({}: Props) {
       return
     }
 
-    mutate({ name: newName ?? "", file: file as Blob })
+    mutate({ name: store.poolName ?? "", file: store.file as Blob })
   }
 
   const { mutate, isLoading, isError, isSuccess } = useMutation({
     mutationFn: (params: { name: string; file: Blob }) => {
       return client.poolApi.createPoolPostForm(params.file, params.name)
     },
-    onSettled(data, error, variables, context) {
-      console.log(data)
-      console.log(error)
-      console.log(variables)
-      console.log(context)
-    },
+    onSettled(data, error, variables, context) {},
     onSuccess(data) {
-      console.log("SUCCESS")
-      store.updGetQueryData(data.data)
+      console.log("MUTATED")
+      store.queryGetData = data.data
     },
   })
-
-  if (isLoading) return <div>Loading...</div>
 
   return (
     <Stack
@@ -96,129 +92,134 @@ export default function ImportPoolBox({}: Props) {
           value={poolName}
           onChange={(ev) => setPoolName(ev.target.value)}
         />
-        <Typography variant="body2" sx={{color: theme.text.secondary}}>
+        <Typography variant="body2" sx={{ color: theme.text.secondary }}>
           Можете оставить это поле пустым, тогда в названии автоматически будет
           название загруженного файла
         </Typography>
       </Stack>
       <Box>
-        <Dropzone
-          onDrop={(accepted, rejected, event) => handleDrop(accepted)}
-          minSize={1024}
-          maxSize={3072000}
-          maxFiles={1}
-          accept={{
-            ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]:
-              [".xlsx", ".xlsb", ".xlsm", ".xls", ".xml", ".csv"],
-          }}
-        >
-          {({
-            getRootProps,
-            getInputProps,
-            isDragActive,
-            isDragAccept,
-            isDragReject,
-          }) => {
-            const additionalClass = isDragAccept
-              ? styles.accept
-              : isDragReject
-              ? styles.reject
-              : isLoadedWithFile
-              ? styles.file_loaded
-              : ""
-            return (
-              <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                sx={{
-                  minHeight: "150px",
-                }}
-                {...getRootProps({
-                  className: `dropzone ${styles.dropzone} ${additionalClass}`,
-                  onClick: (event) => {
-                    if (isLoadedWithFile)
-                      event.stopPropagation()
-                    }
-                })}
-              >
-                {isLoadedWithFile ? (
-                  <>
-                  <Stack gap={1}>
-                    <input {...getInputProps()} />
-                    <Typography paddingBottom="20px">
-                      Перетащите файл сюда <br/> или {" "}
-                      <strong>выберите файл для загрузки</strong>
-                    </Typography>
-                    <Box>
-                      <Stack
-                          direction="row"
-                          alignItems="center"
-                          sx={{
-                            padding: "10px",
-                            borderRadius: "10px",
-                            backgroundColor: theme.palette.accent.light,
-                          }}
-                        >
-                          <NewFileIcon />
-                          <Typography noWrap
-                            textOverflow="ellipsis"
+        {isLoading ? (
+          <CircularProgress />
+        ) : (
+          <Dropzone
+            onDrop={(accepted, rejected, event) => handleDrop(accepted)}
+            minSize={1024}
+            maxSize={3072000}
+            maxFiles={1}
+            accept={{
+              ["application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"]:
+                [".xlsx", ".xlsb", ".xlsm", ".xls", ".xml", ".csv"],
+            }}
+          >
+            {({
+              getRootProps,
+              getInputProps,
+              isDragActive,
+              isDragAccept,
+              isDragReject,
+            }) => {
+              const additionalClass = isDragAccept
+                ? styles.accept
+                : isDragReject
+                ? styles.reject
+                : isLoadedWithFile
+                ? styles.file_loaded
+                : ""
+              return (
+                <Box
+                  display="flex"
+                  justifyContent="center"
+                  alignItems="center"
+                  sx={{
+                    minHeight: "150px",
+                  }}
+                  {...getRootProps({
+                    className: `dropzone ${styles.dropzone} ${additionalClass}`,
+                    onClick: (event) => {
+                      if (isLoadedWithFile) event.stopPropagation()
+                    },
+                  })}
+                >
+                  {isLoadedWithFile ? (
+                    <>
+                      <Stack gap={1}>
+                        <input {...getInputProps()} />
+                        <Typography paddingBottom="20px">
+                          Перетащите файл сюда <br /> или{" "}
+                          <strong>выберите файл для загрузки</strong>
+                        </Typography>
+                        <Box>
+                          <Stack
+                            direction="row"
+                            alignItems="center"
                             sx={{
-                              paddingLeft: "10px",
-                              paddingRight: "10px",
-                              color: theme.palette.accent.color,
-                              width: "330px",
+                              padding: "10px",
+                              borderRadius: "10px",
+                              backgroundColor: theme.palette.accent.light,
                             }}
                           >
-                           {file.name}
+                            <NewFileIcon />
+                            <Typography
+                              noWrap
+                              textOverflow="ellipsis"
+                              sx={{
+                                paddingLeft: "10px",
+                                paddingRight: "10px",
+                                color: theme.palette.accent.color,
+                                width: "330px",
+                              }}
+                            >
+                              {store.file.name}
+                            </Typography>
+
+                            <Button
+                              onClick={() => discardFile()}
+                              sx={{
+                                padding: "0px",
+                                minWidth: "0px",
+                                width: "24px",
+                                height: "24px",
+                              }}
+                            >
+                              <DeleteIcon />
+                            </Button>
+                          </Stack>
+                        </Box>
+                        <Stack>
+                          <Typography paddingTop="20px">
+                            Формат XLSX, XLS, CSV
                           </Typography>
-
-                          <Button
-                            onClick={() => setFile(null)}
-                            sx={{
-                              padding: "0px",
-                              minWidth: "0px",
-                              width: "24px",
-                              height: "24px",
-                            }}
-                          >
-                            <DeleteIcon />
-                          </Button>
+                          <Typography>
+                            Максимальный размер файла 60 мб
+                          </Typography>
+                        </Stack>
                       </Stack>
-                    </Box>
-                    <Stack>
-                      <Typography paddingTop="20px">
-                        Формат XLSX, XLS, CSV
+                    </>
+                  ) : (
+                    <Stack gap={1}>
+                      <input {...getInputProps()} />
+                      <Typography paddingBottom="42px">
+                        Перетащите файл сюда <br /> или{" "}
+                        <strong>выберите файл для загрузки</strong>
                       </Typography>
-                      <Typography>Максимальный размер файла 60 мб</Typography>
+                      <Box></Box>
+                      <Stack>
+                        <Typography paddingTop="42px">
+                          Формат XLSX, XLS, CSV
+                        </Typography>
+                        <Typography>Максимальный размер файла 60 мб</Typography>
+                      </Stack>
                     </Stack>
-                  </Stack>
-
-                  </>
-                ) : (
-                  <Stack gap={1}>
-                    <input {...getInputProps()} />
-                    <Typography paddingBottom="42px">
-                      Перетащите файл сюда <br/> или {" "}
-                      <strong>выберите файл для загрузки</strong>
-                    </Typography>
-                    <Box></Box>
-                    <Stack>
-                      <Typography paddingTop="42px">
-                        Формат XLSX, XLS, CSV
-                      </Typography>
-                      <Typography>Максимальный размер файла 60 мб</Typography>
-                    </Stack>
-                  </Stack>
-                )}
-              </Box>
-            )
-          }}
-        </Dropzone>
+                  )}
+                </Box>
+              )
+            }}
+          </Dropzone>
+        )}
       </Box>
       <Box display="flex" justifyContent="center" marginTop="50px">
         <Button
-          variant={isLoadedWithFile ? "mainActive" :"mainDisabled"}
+          variant={isLoadedWithFile ? "mainActive" : "mainDisabled"}
           sx={{
             height: "52px",
             width: "329px",
@@ -232,4 +233,6 @@ export default function ImportPoolBox({}: Props) {
       </Box>
     </Stack>
   )
-}
+})
+
+export default ImportPoolBox

@@ -15,25 +15,39 @@ import DoneIcon from "@mui/icons-material/Done"
 import { DataRow } from "./types"
 import { GridCellEditCommitParams } from "@mui/x-data-grid"
 import TextBox from "../TextBox/TextBox"
+import { SubQueryGet } from "../../apiConnection/gen/models/sub-query-get"
+import { useStore } from "../../logic/DataStore"
 
 type Props = {
-  isReferenceSelected: boolean
   roomsCount: number
-  data: DataRow[]
+  data: SubQueryGet
 }
 
-export default function ReferenceTableExpandable({
-  roomsCount,
-  isReferenceSelected,
-  data,
-}: Props) {
+function SubqueryToDataRow(data: SubQueryGet): DataRow[] {
+  return data.inputApartments?.map((apartment, i) => {
+    return {
+      id: i,
+      guid: apartment.guid,
+      AptArea: apartment.apartmentArea,
+      Floor: apartment.floor,
+      KitchenArea: apartment.kitchenArea,
+      HasBalcony: apartment.hasBalcony,
+      RepairType: apartment.quality,
+    }
+  }) as DataRow[]
+}
+
+export default function ReferenceTableExpandable({ roomsCount, data }: Props) {
   let theme = useTheme()
   let text = roomsCount != 0 ? `${roomsCount}-комнатные` : "Студии"
 
+  let store = useStore()
   let [expanded, setExpanded] = useState(false)
-  let [rowsData, setRowsData] = useState(data)
 
-  console.log(rowsData)
+  let isReferenceSelected = true
+
+  let rowsData = store.queryGetData
+  let rows = SubqueryToDataRow(data)
 
   let selected = (
     <Typography
@@ -41,7 +55,9 @@ export default function ReferenceTableExpandable({
       lineHeight="22px"
       color={theme.text.secondary}
       fontWeight={700}
-    > {isReferenceSelected ? "эталон выбран" : "выберите эталон"}
+    >
+      {" "}
+      {isReferenceSelected ? "эталон выбран" : "выберите эталон"}
     </Typography>
   )
 
@@ -50,10 +66,7 @@ export default function ReferenceTableExpandable({
   }
 
   const addRow = () => {
-    setRowsData([
-      ...rowsData,
-      { id: rowsData[rowsData.length - 1].id + 1 },
-    ])
+    //setRowsData([...rowsData, { id: rowsData[rowsData.length - 1].id + 1 }])
   }
 
   // const deleteRow = (id: number) => {
@@ -80,7 +93,6 @@ export default function ReferenceTableExpandable({
         overflowX: "hidden",
         overflowY: "hidden",
         minHeight: "54px",
-
       }}
     >
       <AccordionSummary
@@ -93,7 +105,7 @@ export default function ReferenceTableExpandable({
       >
         <Stack direction="row" alignItems="center" gap="10px">
           <TextBox
-            text={rowsData.length}
+            text={rows?.length ?? 0}
             textColor={expanded ? theme.palette.primary.main : ""}
             backgroundColor={expanded ? theme.palette.accent.main : ""}
           />
@@ -138,7 +150,7 @@ export default function ReferenceTableExpandable({
             <TextField placeholder="Поиск по таблице" size="small" /> */}
           </Stack>
           <ReferenceTable
-            data={rowsData}
+            data={rows}
             // onCellEditCommit={onCellEdit}
             // deleteRow={deleteRow}
           />

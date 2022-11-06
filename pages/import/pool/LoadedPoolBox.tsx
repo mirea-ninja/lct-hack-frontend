@@ -3,37 +3,38 @@ import {
   Box,
   Button,
   Grid,
-  Link,
   Paper,
   Stack,
   TextField,
   Typography,
   useTheme,
 } from "@mui/material"
+import Link from "next/link"
 import { truncateSync } from "fs"
 import { sizing } from "@mui/system"
 import { observer } from "mobx-react"
 import { useStore } from "../../../logic/DataStore"
+import { QueryGet } from "../../../apiConnection/gen/models/query-get"
+import { toJS } from "mobx"
+import { SubQueryGet } from "../../../apiConnection/gen/models/sub-query-get"
+import { ApartmentGet } from "../../../apiConnection/gen"
+import { useApiClient } from "../../../logic/ApiClientHook"
+import { useMutation } from "@tanstack/react-query"
+import { RepairType } from "../../../components/ImportDonePage/types"
 
-type Props = {}
+type Props = {
+  onActiveChange: (active: boolean) => void
+}
 
-const LoadedPoolBox = observer((props: Props) => {
-  console.log("OBSERVERD")
-  let data = useStore()
-  console.log(data.queryGetData)
-
-  return <LoadedPoolBoxIn {...props} />
-})
-
-export default LoadedPoolBox
-
-function LoadedPoolBoxIn({}: Props) {
-  let isActive = false // Поменять на логику с query в бэк
+const LoadedPoolBox = observer(({ onActiveChange }: Props) => {
   let theme = useTheme()
   let data = useStore()
+  let api = useApiClient()
 
-  console.log("AMOGUS FUCK YES")
-  console.log(data.queryGetData)
+  console.log(toJS(data.queryGetData))
+
+  const isActive = data.queryGetData !== null
+  onActiveChange(isActive)
 
   return (
     <Stack
@@ -55,7 +56,9 @@ function LoadedPoolBoxIn({}: Props) {
           opacity: isActive ? 1 : 0.7,
         }}
       >
-        Название запроса
+        {data.queryGetData?.name == ""
+          ? data.file?.name
+          : data.queryGetData?.name}
       </Typography>
       <Typography
         variant="body2"
@@ -65,9 +68,7 @@ function LoadedPoolBoxIn({}: Props) {
           color: theme.text.secondary,
           opacity: isActive ? 1 : 0.7,
         }}
-      >
-        Сегмент, этажность, материал стен
-      </Typography>
+      ></Typography>
       <Box
         sx={{
           marginTop: "20px",
@@ -75,7 +76,7 @@ function LoadedPoolBoxIn({}: Props) {
           width: "750px",
           overflow: "auto",
           scrollBehavior: "smooth",
-          overflowY: "scroll",
+          overflowY: "auto",
           overflowX: "hidden",
           scrollbarWidth: "thin",
           scrollbarColor: `${theme.palette.secondary.light} ${theme.palette.secondary.main}`,
@@ -92,28 +93,36 @@ function LoadedPoolBoxIn({}: Props) {
           },
         }}
       >
-        <Grid container item rowSpacing={2} columnSpacing={1}>
-          {" "}
-          {/* Поменять на логику c бэка */}
-          <Grid item xs={6}>
-            <PoolPreview />
+        {!isActive ? (
+          <Grid container item rowSpacing={2} columnSpacing={1}>
+            <Grid item xs={6}>
+              <PoolPreview />
+            </Grid>
+            <Grid item xs={6}>
+              <PoolPreview />
+            </Grid>
+            {/* <Grid item xs={6}>
+              <PoolPreview />
+            </Grid>
+            <Grid item xs={6}>
+              <PoolPreview />
+            </Grid>
+            <Grid item xs={6}>
+              <PoolPreview />
+            </Grid>
+            <Grid item xs={6}>
+              <PoolPreview />
+            </Grid> */}
           </Grid>
-          <Grid item xs={6}>
-            <PoolPreview />
+        ) : (
+          <Grid container item rowSpacing={2} columnSpacing={1}>
+            {data.queryGetData?.subQueries?.map((subQuery, i) => (
+              <Grid item xs={6}>
+                <PoolData key={i} id={i} data={subQuery} />
+              </Grid>
+            ))}
           </Grid>
-          <Grid item xs={6}>
-            <PoolPreview />
-          </Grid>
-          <Grid item xs={6}>
-            <PoolPreview />
-          </Grid>
-          <Grid item xs={6}>
-            <PoolPreview />
-          </Grid>
-          <Grid item xs={6}>
-            <PoolPreview />
-          </Grid>
-        </Grid>
+        )}
       </Box>
       <Box display="flex" justifyContent="center" paddingTop="20px">
         <Button
@@ -122,17 +131,28 @@ function LoadedPoolBoxIn({}: Props) {
             width: "330px",
           }}
           variant={isActive ? "mainActive" : "mainDisabled"}
+          disabled={!isActive}
+          href="/calculate_etalons/map"
         >
           Найти аналоги
         </Button>
       </Box>
     </Stack>
   )
+})
+
+export default LoadedPoolBox
+
+type SkeletonProps = {
+  text?: string
 }
 
-const SkeletonBox = () => {
-  let theme = useTheme()
+function getRandomEtalon(queryGet: SubQueryGet): ApartmentGet {
+  return queryGet.inputApartments![0]
+}
 
+const SkeletonBox = ({ text }: SkeletonProps) => {
+  let theme = useTheme()
   return (
     <Box
       sx={{
@@ -140,9 +160,181 @@ const SkeletonBox = () => {
         height: "25px",
         backgroundColor: theme.text.light,
       }}
-    ></Box>
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+    >
+      {text != null ? (
+        <Typography
+          variant="body2"
+          sx={{
+            fontSize: "70%",
+          }}
+        >
+          {text}
+        </Typography>
+      ) : null}
+    </Box>
   )
 }
+
+function IdToName(id: number): string {
+  switch (id) {
+    case 0:
+      return "Студии"
+    case 1:
+      return "1-комнатные"
+    case 2:
+      return "2-комнатные"
+    case 3:
+      return "3-комнатные"
+    case 4:
+      return "4-комнатные"
+    case 5:
+      return "5-комнатные"
+  }
+  return "Неизвестно"
+}
+
+type PoolDataProps = {
+  data: SubQueryGet
+  id: number
+}
+
+const PoolData = observer(({ data, id }: PoolDataProps) => {
+  let theme = useTheme()
+  let api = useApiClient()
+  let store = useStore()
+
+  const isEtalonSelected = data.standartObject == null
+  console.log("POOL DATA")
+
+  const { mutate, isLoading, isError, isSuccess } = useMutation({
+    mutationFn: (params: { id1: string; id2: string }) => {
+      return api.subqueryApi.setBaseQueryIdSubquerySubidBaseApartmentPost(
+        params.id1,
+        params.id2,
+        { guid: params.id2 }
+      )
+    },
+    onSuccess: (aptData) => {
+      store.queryGetData!.subQueries!.find(
+        (q) => q.guid == aptData.data.guid
+      )!.standartObject = aptData.data
+    },
+  })
+
+  if (isEtalonSelected) {
+    let etalon = getRandomEtalon(data)
+    data.standartObject = etalon
+    mutate({ id1: data.guid, id2: etalon.guid })
+  }
+
+  if (isLoading) {
+    return (
+      <div>
+        <SkeletonBox text="Загрузка" />
+      </div>
+    )
+  }
+
+  return (
+    <Stack
+      sx={{
+        backgroundColor: theme.palette.accent.light,
+      }}
+      borderRadius={3}
+      padding={2}
+      gap={1}
+      width="360px"
+      height="220px"
+    >
+      <Typography
+        variant="h6"
+        fontWeight="bold"
+        sx={{
+          color: theme.text.primary,
+        }}
+      >
+        {IdToName(id)}
+      </Typography>
+      <Typography
+        variant="body2"
+        sx={{
+          color: theme.palette.text.secondary,
+        }}
+      >
+        {data.inputApartments!.length} объект
+        {data.inputApartments!.length % 10 == 1 &&
+        data.inputApartments!.length % 100 != 11
+          ? ""
+          : data.inputApartments!.length % 10 >= 2 &&
+            data.inputApartments!.length % 10 <= 4 &&
+            (data.inputApartments!.length % 100 < 10 ||
+              data.inputApartments!.length % 100 >= 20)
+          ? "а"
+          : "ов"}
+      </Typography>
+      <Box height={"15px"} />
+      <Grid container spacing={1}>
+        <Grid item xs={6}>
+          <Typography
+            variant="body2"
+            sx={{
+              color: theme.text.primary,
+            }}
+          >
+            Эталон
+          </Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <Link href="/import/etalons">
+            <Typography
+              variant="body2"
+              sx={{
+                textAlign: "right",
+                color: theme.palette.accent.color,
+              }}
+            >
+              сменить
+            </Typography>
+          </Link>
+        </Grid>
+      </Grid>
+      <Box>
+        <Grid container spacing={1}>
+          <Grid container item spacing={1}>
+            <Grid item xs={5}>
+              <SkeletonBox
+                text={`Площадь ${data.standartObject?.apartmentArea} м^2` ?? ""}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <SkeletonBox
+                text={`Кухня ${data.standartObject?.kitchenArea} м^2` ?? ""}
+              />
+            </Grid>
+            <Grid item xs={3}>
+              <SkeletonBox
+                text={
+                  data.standartObject?.hasBalcony ? "Балкон" : "Без балкона"
+                }
+              />
+            </Grid>
+          </Grid>
+          <Grid container item spacing={1}>
+            <Grid item xs={8}>
+              <SkeletonBox text={data.standartObject?.quality} />
+            </Grid>
+            <Grid item xs={3}>
+              <SkeletonBox text={"этаж " + data.standartObject?.floor} />
+            </Grid>
+          </Grid>
+        </Grid>
+      </Box>
+    </Stack>
+  )
+})
 
 function PoolPreview() {
   let theme = useTheme()
@@ -189,22 +381,17 @@ function PoolPreview() {
           </Typography>
         </Grid>
         <Grid item xs={6}>
-          <Link
-            href="/"
+          {/* <Link href="/"> */}
+          <Typography
+            variant="body2"
             sx={{
-              textDecoration: "none",
+              textAlign: "right",
+              color: theme.palette.accent.color,
             }}
           >
-            <Typography
-              variant="body2"
-              sx={{
-                textAlign: "right",
-                color: theme.palette.accent.color,
-              }}
-            >
-              сменить
-            </Typography>
-          </Link>
+            сменить
+          </Typography>
+          {/* </Link> */}
         </Grid>
       </Grid>
       <Box>

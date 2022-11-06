@@ -4,10 +4,13 @@ import { Box, Stack } from "@mui/material"
 import StepProgress from "../../../components/step/StepProgress"
 import ImportPoolBox from "./ImportPoolBox"
 import LoadedPoolBox from "./LoadedPoolBox"
+import { useStore } from "../../../logic/DataStore"
 
 type Props = {}
 
 export default function ImportPoolPage({}: Props) {
+  let data = useStore()
+  const [active, setActive] = React.useState(false)
   return (
     <Stack
       gap={1}
@@ -15,7 +18,7 @@ export default function ImportPoolPage({}: Props) {
         height: "100%",
       }}
     >
-      <Header />
+      <Header stepProgress={active ? 2 : 1}/>
       <Stack
         direction="row"
         marginTop="30px"
@@ -30,7 +33,7 @@ export default function ImportPoolPage({}: Props) {
         }}
       >
         <ImportPoolBox />
-        <LoadedPoolBox />
+        <LoadedPoolBox onActiveChange={setActive} />
       </Stack>
     </Stack>
   )

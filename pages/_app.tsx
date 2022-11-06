@@ -6,14 +6,36 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query"
 import { ApiClientContextProvider } from "../logic/ApiClientHook"
 import { NextPage } from "next"
 import Head from "next/head"
-import { StoreContextProvider } from "../logic/DataStore"
+import {
+  initializeStore,
+  StoreContextProvider,
+  Store,
+} from "../logic/DataStore"
+import NonSSRWrapper from "../logic/NonSSRWrapper"
+import { useEffect, useState } from "react"
 
 export default function App({ Component, pageProps }: AppProps) {
-  const queryClient = new QueryClient()
+  const [store, setStore] = useState<Store | null>(null)
+
+  useEffect(() => {
+    async function init() {
+      const s = await initializeStore()
+      setStore(s)
+    }
+    init()
+  }, [])
+
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      },
+    },
+  })
 
   return (
     <ThemeProvider theme={theme}>
-      <StoreContextProvider>
+      <StoreContextProvider value={store}>
         <QueryClientProvider client={queryClient}>
           <ApiClientContextProvider>
             <Component {...pageProps} />
@@ -29,7 +51,7 @@ const commonTheme = createTheme({
     danger: orange[500],
   },
   background: {
-    primary: "#F7F8FA",
+    primary: "#EEF2F5",
   },
   text: {
     primary: "#3E3E41",
@@ -56,7 +78,13 @@ const commonTheme = createTheme({
     allVariants: {
       fontFamily: "'Montserrat', sans-serif",
       textTransform: "none",
-  },
+      color: "#3E3E41",
+    },
+    body2: {
+      fontSize: "16px",
+      lineHeight: "18px",
+      fontWeight: 500,
+    },
   },
   components: {
     MuiButton: {
@@ -94,6 +122,8 @@ const theme = createTheme(
               backgroundColor: commonTheme.palette.primary.main,
               color: commonTheme.text.light,
               fontWeight: "500",
+              fontSize: "18px",
+              lineHeight: "22px",
               "&:hover": {
                 backgroundColor: commonTheme.palette.primary.darker,
               },
@@ -105,6 +135,8 @@ const theme = createTheme(
               backgroundColor: commonTheme.palette.secondary.light,
               color: commonTheme.palette.secondary.dark,
               fontWeight: "500",
+              fontSize: "18px",
+              lineHeight: "22px",
               "&:hover": {
                 backgroundColor: commonTheme.palette.secondary.light,
               },
@@ -116,6 +148,8 @@ const theme = createTheme(
               backgroundColor: commonTheme.palette.accent.light,
               color: commonTheme.palette.accent.color,
               fontWeight: "500",
+              fontSize: "18px",
+              lineHeight: "22px",
             },
           },
         ],
