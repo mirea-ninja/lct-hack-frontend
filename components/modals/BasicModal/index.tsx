@@ -20,7 +20,7 @@ type Props = {
   children?: React.ReactNode;
 };
 
-export default function BasicModal({ open = true, onClose, children }: Props) {
+export default function BasicModal({ open = false, onClose, children }: Props) {
   return (
     <Modal
       open={open}
