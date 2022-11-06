@@ -17,6 +17,7 @@ import { Configuration } from '../configuration';
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
 import { HTTPValidationError } from '../models';
+import { QueryExport } from '../models';
 import { QueryGet } from '../models';
 /**
  * PoolApi - axios parameter creator
@@ -166,7 +167,7 @@ export const PoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async exportApiExportGet(id: string, includeAdjustments?: boolean, splitByLists?: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
+        async exportApiExportGet(id: string, includeAdjustments?: boolean, splitByLists?: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<QueryExport>>> {
             const localVarAxiosArgs = await PoolApiAxiosParamCreator(configuration).exportApiExportGet(id, includeAdjustments, splitByLists, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
@@ -202,7 +203,7 @@ export const PoolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async exportApiExportGet(id: string, includeAdjustments?: boolean, splitByLists?: boolean, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
+        async exportApiExportGet(id: string, includeAdjustments?: boolean, splitByLists?: boolean, options?: AxiosRequestConfig): Promise<AxiosResponse<QueryExport>> {
             return PoolApiFp(configuration).exportApiExportGet(id, includeAdjustments, splitByLists, options).then((request) => request(axios, basePath));
         },
     };
@@ -237,7 +238,7 @@ export class PoolApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PoolApi
      */
-    public async exportApiExportGet(id: string, includeAdjustments?: boolean, splitByLists?: boolean, options?: AxiosRequestConfig) : Promise<AxiosResponse<void>> {
+    public async exportApiExportGet(id: string, includeAdjustments?: boolean, splitByLists?: boolean, options?: AxiosRequestConfig) : Promise<AxiosResponse<QueryExport>> {
         return PoolApiFp(this.configuration).exportApiExportGet(id, includeAdjustments, splitByLists, options).then((request) => request(this.axios, this.basePath));
     }
 }

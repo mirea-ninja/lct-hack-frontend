@@ -10,6 +10,7 @@ export * from './httpvalidation-error';
 export * from './query-create';
 export * from './query-create-base-apartment';
 export * from './query-create-user-apartments';
+export * from './query-export';
 export * from './query-get';
 export * from './query-patch';
 export * from './sub-query-create';
