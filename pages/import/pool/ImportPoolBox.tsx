@@ -46,7 +46,6 @@ export const ImportPoolBox = observer(({}: Props) => {
     if (!isLoadedWithFile) {
       return
     }
-
     mutate({ name: store.poolName ?? "", file: store.file as Blob })
   }
 
@@ -57,6 +56,7 @@ export const ImportPoolBox = observer(({}: Props) => {
     onSettled(data, error, variables, context) {},
     onSuccess(data) {
       console.log("MUTATED")
+      console.log(data.data)
       store.queryGetData = data.data
     },
   })
@@ -169,7 +169,7 @@ export const ImportPoolBox = observer(({}: Props) => {
                                 width: "330px",
                               }}
                             >
-                              {store.file.name}
+                              {store.file!.name}
                             </Typography>
 
                             <Button

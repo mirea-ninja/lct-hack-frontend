@@ -151,6 +151,7 @@ export default function ReferenceTableExpandable({ roomsCount, data }: Props) {
           </Stack>
           <ReferenceTable
             data={rows}
+            subqueryId={data.guid}
             // onCellEditCommit={onCellEdit}
             // deleteRow={deleteRow}
           />

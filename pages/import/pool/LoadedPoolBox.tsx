@@ -210,16 +210,17 @@ const PoolData = observer(({ data, id }: PoolDataProps) => {
   console.log("POOL DATA")
 
   const { mutate, isLoading, isError, isSuccess } = useMutation({
-    mutationFn: (params: { id1: string; id2: string }) => {
+    mutationFn: (params: { id1: string; id2: string; id3: string }) => {
       return api.subqueryApi.setBaseQueryIdSubquerySubidBaseApartmentPost(
         params.id1,
         params.id2,
-        { guid: params.id2 }
+        { guid: params.id3 }
       )
     },
     onSuccess: (aptData) => {
+      console.log(toJS(store.queryGetData))
       store.queryGetData!.subQueries!.find(
-        (q) => q.guid == aptData.data.guid
+        (q) => q.guid == data.guid!
       )!.standartObject = aptData.data
     },
   })
@@ -227,7 +228,7 @@ const PoolData = observer(({ data, id }: PoolDataProps) => {
   if (isEtalonSelected) {
     let etalon = getRandomEtalon(data)
     data.standartObject = etalon
-    mutate({ id1: data.guid, id2: etalon.guid })
+    mutate({ id1: store.queryGetData!.guid, id2: data.guid, id3: etalon.guid })
   }
 
   if (isLoading) {
