@@ -13,19 +13,20 @@ type Props = {
 export default function SuccessModal({ open = false, onClose }: Props) {
   return (
     <BasicModal open={open} onClose={onClose}>
-      <Typography
-        sx={{
-          fontWeight: 700,
-          fontSize: '24px',
-          lineHeight: '26px',
-          color: 'var(--positive-clr)',
-          mb: '20px',
-        }}>
-        <Stack direction='row' alignItems='center' sx={{ gap: '10px' }}>
-          <TickIcon />
+      <Stack
+        direction='row'
+        alignItems='center'
+        sx={{ gap: '10px', mb: '20px', color: 'var(--positive-clr)' }}>
+        <TickIcon />
+        <Typography
+          sx={{
+            fontWeight: 700,
+            fontSize: '24px',
+            lineHeight: '26px',
+          }}>
           Пул успешно экспортирован
-        </Stack>
-      </Typography>
+        </Typography>
+      </Stack>
       <Typography
         sx={{
           fontWeight: 500,
