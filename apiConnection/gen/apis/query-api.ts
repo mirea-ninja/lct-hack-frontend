@@ -33,12 +33,12 @@ export const QueryApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        deleteQueryIdDelete: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        deleteApiQueryIdDelete: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
-                throw new RequiredError('id','Required parameter id was null or undefined when calling deleteQueryIdDelete.');
+                throw new RequiredError('id','Required parameter id was null or undefined when calling deleteApiQueryIdDelete.');
             }
-            const localVarPath = `/query/{id}`
+            const localVarPath = `/api/query/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -76,8 +76,8 @@ export const QueryApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllQueryGet: async (limit?: number, offset?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
-            const localVarPath = `/query`;
+        getAllApiQueryGet: async (limit?: number, offset?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            const localVarPath = `/api/query`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -121,12 +121,12 @@ export const QueryApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getQueryIdGet: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getApiQueryIdGet: async (id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
-                throw new RequiredError('id','Required parameter id was null or undefined when calling getQueryIdGet.');
+                throw new RequiredError('id','Required parameter id was null or undefined when calling getApiQueryIdGet.');
             }
-            const localVarPath = `/query/{id}`
+            const localVarPath = `/api/query/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -164,16 +164,16 @@ export const QueryApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        patchQueryIdPatch: async (body: QueryPatch, id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        patchApiQueryIdPatch: async (body: QueryPatch, id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
             if (body === null || body === undefined) {
-                throw new RequiredError('body','Required parameter body was null or undefined when calling patchQueryIdPatch.');
+                throw new RequiredError('body','Required parameter body was null or undefined when calling patchApiQueryIdPatch.');
             }
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
-                throw new RequiredError('id','Required parameter id was null or undefined when calling patchQueryIdPatch.');
+                throw new RequiredError('id','Required parameter id was null or undefined when calling patchApiQueryIdPatch.');
             }
-            const localVarPath = `/query/{id}`
+            const localVarPath = `/api/query/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -215,16 +215,16 @@ export const QueryApiAxiosParamCreator = function (configuration?: Configuration
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        updateQueryIdPut: async (body: QueryCreate, id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        updateApiQueryIdPut: async (body: QueryCreate, id: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
             if (body === null || body === undefined) {
-                throw new RequiredError('body','Required parameter body was null or undefined when calling updateQueryIdPut.');
+                throw new RequiredError('body','Required parameter body was null or undefined when calling updateApiQueryIdPut.');
             }
             // verify required parameter 'id' is not null or undefined
             if (id === null || id === undefined) {
-                throw new RequiredError('id','Required parameter id was null or undefined when calling updateQueryIdPut.');
+                throw new RequiredError('id','Required parameter id was null or undefined when calling updateApiQueryIdPut.');
             }
-            const localVarPath = `/query/{id}`
+            const localVarPath = `/api/query/{id}`
                 .replace(`{${"id"}}`, encodeURIComponent(String(id)));
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -274,8 +274,8 @@ export const QueryApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteQueryIdDelete(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
-            const localVarAxiosArgs = await QueryApiAxiosParamCreator(configuration).deleteQueryIdDelete(id, options);
+        async deleteApiQueryIdDelete(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
+            const localVarAxiosArgs = await QueryApiAxiosParamCreator(configuration).deleteApiQueryIdDelete(id, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -289,8 +289,8 @@ export const QueryApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllQueryGet(limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Array<QueryGet>>>> {
-            const localVarAxiosArgs = await QueryApiAxiosParamCreator(configuration).getAllQueryGet(limit, offset, options);
+        async getAllApiQueryGet(limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Array<QueryGet>>>> {
+            const localVarAxiosArgs = await QueryApiAxiosParamCreator(configuration).getAllApiQueryGet(limit, offset, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -303,8 +303,8 @@ export const QueryApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getQueryIdGet(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<QueryGet>>> {
-            const localVarAxiosArgs = await QueryApiAxiosParamCreator(configuration).getQueryIdGet(id, options);
+        async getApiQueryIdGet(id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<QueryGet>>> {
+            const localVarAxiosArgs = await QueryApiAxiosParamCreator(configuration).getApiQueryIdGet(id, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -318,8 +318,8 @@ export const QueryApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async patchQueryIdPatch(body: QueryPatch, id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<QueryGet>>> {
-            const localVarAxiosArgs = await QueryApiAxiosParamCreator(configuration).patchQueryIdPatch(body, id, options);
+        async patchApiQueryIdPatch(body: QueryPatch, id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<QueryGet>>> {
+            const localVarAxiosArgs = await QueryApiAxiosParamCreator(configuration).patchApiQueryIdPatch(body, id, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -333,8 +333,8 @@ export const QueryApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateQueryIdPut(body: QueryCreate, id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<QueryGet>>> {
-            const localVarAxiosArgs = await QueryApiAxiosParamCreator(configuration).updateQueryIdPut(body, id, options);
+        async updateApiQueryIdPut(body: QueryCreate, id: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<QueryGet>>> {
+            const localVarAxiosArgs = await QueryApiAxiosParamCreator(configuration).updateApiQueryIdPut(body, id, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -356,8 +356,8 @@ export const QueryApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async deleteQueryIdDelete(id: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
-            return QueryApiFp(configuration).deleteQueryIdDelete(id, options).then((request) => request(axios, basePath));
+        async deleteApiQueryIdDelete(id: string, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
+            return QueryApiFp(configuration).deleteApiQueryIdDelete(id, options).then((request) => request(axios, basePath));
         },
         /**
          * Получить список всех запросов
@@ -367,8 +367,8 @@ export const QueryApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllQueryGet(limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<AxiosResponse<Array<QueryGet>>> {
-            return QueryApiFp(configuration).getAllQueryGet(limit, offset, options).then((request) => request(axios, basePath));
+        async getAllApiQueryGet(limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<AxiosResponse<Array<QueryGet>>> {
+            return QueryApiFp(configuration).getAllApiQueryGet(limit, offset, options).then((request) => request(axios, basePath));
         },
         /**
          * Получить запрос по его id
@@ -377,8 +377,8 @@ export const QueryApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getQueryIdGet(id: string, options?: AxiosRequestConfig): Promise<AxiosResponse<QueryGet>> {
-            return QueryApiFp(configuration).getQueryIdGet(id, options).then((request) => request(axios, basePath));
+        async getApiQueryIdGet(id: string, options?: AxiosRequestConfig): Promise<AxiosResponse<QueryGet>> {
+            return QueryApiFp(configuration).getApiQueryIdGet(id, options).then((request) => request(axios, basePath));
         },
         /**
          * Изменить запрос по его id (частичное обновление модели)
@@ -388,8 +388,8 @@ export const QueryApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async patchQueryIdPatch(body: QueryPatch, id: string, options?: AxiosRequestConfig): Promise<AxiosResponse<QueryGet>> {
-            return QueryApiFp(configuration).patchQueryIdPatch(body, id, options).then((request) => request(axios, basePath));
+        async patchApiQueryIdPatch(body: QueryPatch, id: string, options?: AxiosRequestConfig): Promise<AxiosResponse<QueryGet>> {
+            return QueryApiFp(configuration).patchApiQueryIdPatch(body, id, options).then((request) => request(axios, basePath));
         },
         /**
          * Изменить запрос по его id (полное обновление модели)
@@ -399,8 +399,8 @@ export const QueryApiFactory = function (configuration?: Configuration, basePath
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async updateQueryIdPut(body: QueryCreate, id: string, options?: AxiosRequestConfig): Promise<AxiosResponse<QueryGet>> {
-            return QueryApiFp(configuration).updateQueryIdPut(body, id, options).then((request) => request(axios, basePath));
+        async updateApiQueryIdPut(body: QueryCreate, id: string, options?: AxiosRequestConfig): Promise<AxiosResponse<QueryGet>> {
+            return QueryApiFp(configuration).updateApiQueryIdPut(body, id, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -420,8 +420,8 @@ export class QueryApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof QueryApi
      */
-    public async deleteQueryIdDelete(id: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<void>> {
-        return QueryApiFp(this.configuration).deleteQueryIdDelete(id, options).then((request) => request(this.axios, this.basePath));
+    public async deleteApiQueryIdDelete(id: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<void>> {
+        return QueryApiFp(this.configuration).deleteApiQueryIdDelete(id, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Получить список всех запросов
@@ -432,8 +432,8 @@ export class QueryApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof QueryApi
      */
-    public async getAllQueryGet(limit?: number, offset?: number, options?: AxiosRequestConfig) : Promise<AxiosResponse<Array<QueryGet>>> {
-        return QueryApiFp(this.configuration).getAllQueryGet(limit, offset, options).then((request) => request(this.axios, this.basePath));
+    public async getAllApiQueryGet(limit?: number, offset?: number, options?: AxiosRequestConfig) : Promise<AxiosResponse<Array<QueryGet>>> {
+        return QueryApiFp(this.configuration).getAllApiQueryGet(limit, offset, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Получить запрос по его id
@@ -443,8 +443,8 @@ export class QueryApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof QueryApi
      */
-    public async getQueryIdGet(id: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<QueryGet>> {
-        return QueryApiFp(this.configuration).getQueryIdGet(id, options).then((request) => request(this.axios, this.basePath));
+    public async getApiQueryIdGet(id: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<QueryGet>> {
+        return QueryApiFp(this.configuration).getApiQueryIdGet(id, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Изменить запрос по его id (частичное обновление модели)
@@ -455,8 +455,8 @@ export class QueryApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof QueryApi
      */
-    public async patchQueryIdPatch(body: QueryPatch, id: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<QueryGet>> {
-        return QueryApiFp(this.configuration).patchQueryIdPatch(body, id, options).then((request) => request(this.axios, this.basePath));
+    public async patchApiQueryIdPatch(body: QueryPatch, id: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<QueryGet>> {
+        return QueryApiFp(this.configuration).patchApiQueryIdPatch(body, id, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Изменить запрос по его id (полное обновление модели)
@@ -467,7 +467,7 @@ export class QueryApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof QueryApi
      */
-    public async updateQueryIdPut(body: QueryCreate, id: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<QueryGet>> {
-        return QueryApiFp(this.configuration).updateQueryIdPut(body, id, options).then((request) => request(this.axios, this.basePath));
+    public async updateApiQueryIdPut(body: QueryCreate, id: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<QueryGet>> {
+        return QueryApiFp(this.configuration).updateApiQueryIdPut(body, id, options).then((request) => request(this.axios, this.basePath));
     }
 }

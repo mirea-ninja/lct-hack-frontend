@@ -32,12 +32,12 @@ export const PoolApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        createPoolPostForm: async (file: Blob, name?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        createApiPoolPostForm: async (file: Blob, name?: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'file' is not null or undefined
             if (file === null || file === undefined) {
-                throw new RequiredError('file','Required parameter file was null or undefined when calling createPoolPostForm.');
+                throw new RequiredError('file','Required parameter file was null or undefined when calling createApiPoolPostForm.');
             }
-            const localVarPath = `/pool`;
+            const localVarPath = `/api/pool`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -78,6 +78,61 @@ export const PoolApiAxiosParamCreator = function (configuration?: Configuration)
                 options: localVarRequestOptions,
             };
         },
+        /**
+         * Экспортировать пул в файл
+         * @summary Экспорт пула
+         * @param {string} id Id запроса
+         * @param {boolean} [includeAdjustments] Включить корректировки
+         * @param {boolean} [splitByLists] Разбить данные по листам
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        exportApiExportGet: async (id: string, includeAdjustments?: boolean, splitByLists?: boolean, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling exportApiExportGet.');
+            }
+            const localVarPath = `/api/export`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions :AxiosRequestConfig = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication HTTPBearer required
+
+            if (id !== undefined) {
+                localVarQueryParameter['id'] = id;
+            }
+
+            if (includeAdjustments !== undefined) {
+                localVarQueryParameter['includeAdjustments'] = includeAdjustments;
+            }
+
+            if (splitByLists !== undefined) {
+                localVarQueryParameter['splitByLists'] = splitByLists;
+            }
+
+            const query = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                query.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.params) {
+                query.set(key, options.params[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
     }
 };
 
@@ -95,8 +150,24 @@ export const PoolApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createPoolPostForm(file: Blob, name?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<QueryGet>>> {
-            const localVarAxiosArgs = await PoolApiAxiosParamCreator(configuration).createPoolPostForm(file, name, options);
+        async createApiPoolPostForm(file: Blob, name?: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<QueryGet>>> {
+            const localVarAxiosArgs = await PoolApiAxiosParamCreator(configuration).createApiPoolPostForm(file, name, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
+         * Экспортировать пул в файл
+         * @summary Экспорт пула
+         * @param {string} id Id запроса
+         * @param {boolean} [includeAdjustments] Включить корректировки
+         * @param {boolean} [splitByLists] Разбить данные по листам
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async exportApiExportGet(id: string, includeAdjustments?: boolean, splitByLists?: boolean, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<void>>> {
+            const localVarAxiosArgs = await PoolApiAxiosParamCreator(configuration).exportApiExportGet(id, includeAdjustments, splitByLists, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -119,8 +190,20 @@ export const PoolApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async createPoolPostForm(file: Blob, name?: string, options?: AxiosRequestConfig): Promise<AxiosResponse<QueryGet>> {
-            return PoolApiFp(configuration).createPoolPostForm(file, name, options).then((request) => request(axios, basePath));
+        async createApiPoolPostForm(file: Blob, name?: string, options?: AxiosRequestConfig): Promise<AxiosResponse<QueryGet>> {
+            return PoolApiFp(configuration).createApiPoolPostForm(file, name, options).then((request) => request(axios, basePath));
+        },
+        /**
+         * Экспортировать пул в файл
+         * @summary Экспорт пула
+         * @param {string} id Id запроса
+         * @param {boolean} [includeAdjustments] Включить корректировки
+         * @param {boolean} [splitByLists] Разбить данные по листам
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async exportApiExportGet(id: string, includeAdjustments?: boolean, splitByLists?: boolean, options?: AxiosRequestConfig): Promise<AxiosResponse<void>> {
+            return PoolApiFp(configuration).exportApiExportGet(id, includeAdjustments, splitByLists, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -141,7 +224,20 @@ export class PoolApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof PoolApi
      */
-    public async createPoolPostForm(file: Blob, name?: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<QueryGet>> {
-        return PoolApiFp(this.configuration).createPoolPostForm(file, name, options).then((request) => request(this.axios, this.basePath));
+    public async createApiPoolPostForm(file: Blob, name?: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<QueryGet>> {
+        return PoolApiFp(this.configuration).createApiPoolPostForm(file, name, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     * Экспортировать пул в файл
+     * @summary Экспорт пула
+     * @param {string} id Id запроса
+     * @param {boolean} [includeAdjustments] Включить корректировки
+     * @param {boolean} [splitByLists] Разбить данные по листам
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof PoolApi
+     */
+    public async exportApiExportGet(id: string, includeAdjustments?: boolean, splitByLists?: boolean, options?: AxiosRequestConfig) : Promise<AxiosResponse<void>> {
+        return PoolApiFp(this.configuration).exportApiExportGet(id, includeAdjustments, splitByLists, options).then((request) => request(this.axios, this.basePath));
     }
 }

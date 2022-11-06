@@ -5,7 +5,7 @@ export * from './apartment-base';
 export * from './apartment-create';
 export * from './apartment-get';
 export * from './apartment-patch';
-export * from './body-create-pool-post';
+export * from './body-create-api-pool-post';
 export * from './httpvalidation-error';
 export * from './query-create';
 export * from './query-create-base-apartment';

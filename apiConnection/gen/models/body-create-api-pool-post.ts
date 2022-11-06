@@ -14,13 +14,13 @@
 /**
  * 
  * @export
- * @interface BodyCreatePoolPost
+ * @interface BodyCreateApiPoolPost
  */
-export interface BodyCreatePoolPost {
+export interface BodyCreateApiPoolPost {
     /**
      * Excel таблица с пулом
      * @type {Blob}
-     * @memberof BodyCreatePoolPost
+     * @memberof BodyCreateApiPoolPost
      */
     file: Blob;
 }

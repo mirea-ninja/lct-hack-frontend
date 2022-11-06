@@ -33,12 +33,12 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        signinSigninPost: async (body: UserAuth, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        signinApiSigninPost: async (body: UserAuth, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
             if (body === null || body === undefined) {
-                throw new RequiredError('body','Required parameter body was null or undefined when calling signinSigninPost.');
+                throw new RequiredError('body','Required parameter body was null or undefined when calling signinApiSigninPost.');
             }
-            const localVarPath = `/signin`;
+            const localVarPath = `/api/signin`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -76,12 +76,12 @@ export const AuthApiAxiosParamCreator = function (configuration?: Configuration)
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        signupSignupPost: async (body: UserCreate, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        signupApiSignupPost: async (body: UserCreate, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             // verify required parameter 'body' is not null or undefined
             if (body === null || body === undefined) {
-                throw new RequiredError('body','Required parameter body was null or undefined when calling signupSignupPost.');
+                throw new RequiredError('body','Required parameter body was null or undefined when calling signupApiSignupPost.');
             }
-            const localVarPath = `/signup`;
+            const localVarPath = `/api/signup`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
             let baseOptions;
@@ -128,8 +128,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async signinSigninPost(body: UserAuth, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Token>>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).signinSigninPost(body, options);
+        async signinApiSigninPost(body: UserAuth, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Token>>> {
+            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).signinApiSigninPost(body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -142,8 +142,8 @@ export const AuthApiFp = function(configuration?: Configuration) {
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async signupSignupPost(body: UserCreate, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Token>>> {
-            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).signupSignupPost(body, options);
+        async signupApiSignupPost(body: UserCreate, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Token>>> {
+            const localVarAxiosArgs = await AuthApiAxiosParamCreator(configuration).signupApiSignupPost(body, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -165,8 +165,8 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async signinSigninPost(body: UserAuth, options?: AxiosRequestConfig): Promise<AxiosResponse<Token>> {
-            return AuthApiFp(configuration).signinSigninPost(body, options).then((request) => request(axios, basePath));
+        async signinApiSigninPost(body: UserAuth, options?: AxiosRequestConfig): Promise<AxiosResponse<Token>> {
+            return AuthApiFp(configuration).signinApiSigninPost(body, options).then((request) => request(axios, basePath));
         },
         /**
          * Зарегистирироваться в сервисе и получить токен
@@ -175,8 +175,8 @@ export const AuthApiFactory = function (configuration?: Configuration, basePath?
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async signupSignupPost(body: UserCreate, options?: AxiosRequestConfig): Promise<AxiosResponse<Token>> {
-            return AuthApiFp(configuration).signupSignupPost(body, options).then((request) => request(axios, basePath));
+        async signupApiSignupPost(body: UserCreate, options?: AxiosRequestConfig): Promise<AxiosResponse<Token>> {
+            return AuthApiFp(configuration).signupApiSignupPost(body, options).then((request) => request(axios, basePath));
         },
     };
 };
@@ -196,8 +196,8 @@ export class AuthApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public async signinSigninPost(body: UserAuth, options?: AxiosRequestConfig) : Promise<AxiosResponse<Token>> {
-        return AuthApiFp(this.configuration).signinSigninPost(body, options).then((request) => request(this.axios, this.basePath));
+    public async signinApiSigninPost(body: UserAuth, options?: AxiosRequestConfig) : Promise<AxiosResponse<Token>> {
+        return AuthApiFp(this.configuration).signinApiSigninPost(body, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Зарегистирироваться в сервисе и получить токен
@@ -207,7 +207,7 @@ export class AuthApi extends BaseAPI {
      * @throws {RequiredError}
      * @memberof AuthApi
      */
-    public async signupSignupPost(body: UserCreate, options?: AxiosRequestConfig) : Promise<AxiosResponse<Token>> {
-        return AuthApiFp(this.configuration).signupSignupPost(body, options).then((request) => request(this.axios, this.basePath));
+    public async signupApiSignupPost(body: UserCreate, options?: AxiosRequestConfig) : Promise<AxiosResponse<Token>> {
+        return AuthApiFp(this.configuration).signupApiSignupPost(body, options).then((request) => request(this.axios, this.basePath));
     }
 }
