@@ -37,6 +37,8 @@ type Props = {
   children: React.ReactElement<any, any>;
   min?: number;
   max?: number;
+  initialValue?: number;
+  price?: number;
   marks?: MarkType[];
   offset?: number;
   negative?: boolean;
@@ -48,6 +50,8 @@ export default function SliderTooltip({
   children,
   min,
   max,
+  initialValue = 0,
+  price,
   marks,
   negative = false,
   offset,
@@ -55,8 +59,19 @@ export default function SliderTooltip({
   ...props
 }: Props) {
   const [open, setOpen] = React.useState(true);
-  const [difference, setDifference] = React.useState(1534);
-  const [total, setTotal] = React.useState(230250);
+  const [difference, setDifference] = React.useState(0);
+  const [total, setTotal] = React.useState(price);
+
+  const [sliderValue, setSliderValue] = React.useState<
+    number | string | Array<number | string>
+  >(initialValue);
+
+  const handleSliderChange = (event: Event, newValue: number | number[]) => {
+    setSliderValue(newValue);
+
+    setDifference(+(price! * (Number(sliderValue) / 100)).toFixed(1));
+    setTotal(Number(price) + difference);
+  };
 
   return (
     <HtmlTooltip
@@ -68,17 +83,19 @@ export default function SliderTooltip({
           <Stack sx={{ gap: '5px' }}>
             <Stack sx={{ padding: '0 18px' }}>
               <Slider
-                defaultValue={0}
+                value={typeof sliderValue === 'number' ? sliderValue : 0}
+                onChange={handleSliderChange}
                 getAriaValueText={valuetext}
                 step={0.1}
-                valueLabelDisplay='auto'
                 marks={marks}
                 min={min}
                 max={max}
                 sx={{
-                  color: !negative
-                    ? 'var(--positive-clr)'
-                    : 'var(--negative-clr)',
+                  color:
+                    sliderValue > 0
+                      ? 'var(--positive-clr)'
+                      : 'var(--negative-clr)',
+
                   '& .MuiSlider-markLabel': {
                     fontSize: 14,
                     lineHeight: '143%',
@@ -99,7 +116,7 @@ export default function SliderTooltip({
                     fontSize: 14,
                     lineHeight: '16px',
                   }}>
-                  {difference > 0 ? `+${difference}` : `-${difference}`} ₽
+                  {difference >= 0 ? `+${difference}` : `${difference}`} ₽
                 </Typography>
                 <Typography
                   sx={{
@@ -111,7 +128,7 @@ export default function SliderTooltip({
                   {total} ₽
                 </Typography>
               </Stack>
-              <Percentage value={-1.5} />
+              <Percentage value={Number(sliderValue)} />
             </Stack>
           </Stack>
         </>

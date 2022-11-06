@@ -31,7 +31,12 @@ const TestPage = () => {
       <PriceTooltip>
         <Button sx={{ mt: '10em' }}>Hover me to see PriceTooltip</Button>
       </PriceTooltip>
-      <SliderTooltip min={-5.5} max={3} marks={marks} negative>
+      <SliderTooltip
+        min={-5.5}
+        max={3}
+        marks={marks}
+        initialValue={0}
+        price={100}>
         <Button sx={{ mt: '10em' }}>Hover me to see SliderTooltip</Button>
       </SliderTooltip>
       {/* <DisconnectModal open={open} onClose={handleClose} /> */}
