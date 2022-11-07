@@ -47,7 +47,7 @@ export default function ImportDonePage() {
               </Typography>
             </Stack>
             <Stack direction="row" gap={3} height="80%">
-            <Link href="/import/etalons">
+            <Link href="/import/pool">
                 <Button variant="accentActive">
                   Вернуться к загрузке
                 </Button>

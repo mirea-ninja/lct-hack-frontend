@@ -18,6 +18,45 @@ import { OpenIcon } from "../icons/OpenIcon";
 import HiddenAnalogsModal from "./HiddenAnalogsModal";
 import { EditorModalType, EditorModal } from "./EditorModal";
 
+import { QueryGet } from "../../apiConnection/gen/models/query-get";
+
+
+// НЕ РАБОТАЕТ
+// function SubqueryToButton(data: QueryGet): JSX.Element {
+//   return data.subQueries.map((subQuery, i) => {
+//     return (
+//       <ToggleButton
+//         value={i}
+//         sx={{
+//           padding: "10px 0",
+
+//           borderRadius: 0,
+//           border: "none",
+//           color: theme.palette.text.primary,
+//           backgroundColor: "transparent",
+//           "&.Mui-selected": {
+//             color: theme.palette.primary.main,
+//             backgroundColor: "transparent",
+
+//             "&:hover": {
+//               backgroundColor: "transparent",
+//             },
+//           },
+//           "&:hover": {
+//             backgroundColor: "transparent",
+//           },
+//         }}
+//       >
+//         <Typography fontSize={16} fontWeight={500} lineHeight={"18px"}>
+//           {subQuery.}
+//         </Typography>
+//       </ToggleButton>
+//     );
+//   });
+
+// }
+
+
 const Plus = () => (
   <svg
     width="19"
