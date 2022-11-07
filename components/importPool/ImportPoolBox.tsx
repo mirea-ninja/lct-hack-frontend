@@ -39,13 +39,6 @@ export const ImportPoolBox = observer(({}: Props) => {
     store.file = null
   }
 
-  const onButtonClick = () => {
-    if (!isLoadedWithFile) {
-      return
-    }
-    mutate({ name: store.poolName ?? "", file: store.file as Blob })
-  }
-
   const { mutate, isLoading, isError, isSuccess } = useMutation({
     mutationFn: (params: { name: string; file: Blob }) => {
       return client.poolApi.createApiPoolPostForm(params.file, params.name)
@@ -57,6 +50,15 @@ export const ImportPoolBox = observer(({}: Props) => {
       store.queryGetData = data.data
     },
   })
+
+  const onButtonClick = () => {
+    if (!isLoadedWithFile) {
+      return
+    }
+    mutate({ name: store.poolName ? store.poolName : store.file!.name, file: store.file as Blob })
+  }
+
+
 
   return (
     <Stack
@@ -87,7 +89,11 @@ export const ImportPoolBox = observer(({}: Props) => {
           id="outlined-read-only-input"
           placeholder="Название запроса"
           value={poolName}
-          onChange={(ev) => setPoolName(ev.target.value)}
+          onChange={
+            (e) => {
+              setPoolName(e.target.value)
+              store.poolName = e.target.value
+            }}
         />
         <Typography variant="body2" sx={{ color: theme.text.secondary }}>
           Можете оставить это поле пустым, тогда в названии автоматически будет
