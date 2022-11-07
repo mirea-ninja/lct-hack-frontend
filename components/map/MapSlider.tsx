@@ -162,7 +162,7 @@ export default function MapSlider() {
             }}
           >
             {subqueries.map((subQuery, i) => {
-                const text = subQuery.standartObject?.rooms != 0 ? `${subQuery.standartObject?.rooms}-комн.` : "Студии";
+                const text = subQuery.standartObject?.rooms != 0 ? `${subQuery.standartObject?.rooms}-комн.` : "cтудии";
                 return (
                   <ToggleButton
                     value={i}
@@ -186,7 +186,7 @@ export default function MapSlider() {
                       },
                     }}
                   >
-                    <Typography fontSize={16} fontWeight={500} lineHeight={"18px"}>
+                    <Typography fontSize={16} fontWeight={500} lineHeight={"18px"} color={subquery === i ? theme.palette.primary.main : theme.palette.text.primary}>
                       {text}
                     </Typography>
                   </ToggleButton>

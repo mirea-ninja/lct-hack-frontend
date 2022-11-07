@@ -20,7 +20,7 @@ import { TemplateProvider } from "../../../components/map/TemplateProvider";
 import { ZoomButton } from "../../../components/map/ZoomButton";
 import { Button } from "@mui/material";
 import { ApartmentBase } from "../../../apiConnection/parser/models/apartment-base";
-import { ApartmentGet } from "../../../apiConnection/gen";
+import { ApartmentGet, SubQueryGet } from "../../../apiConnection/gen";
 import { CustomPlacemarkType } from "../../../components/map/CustomPlacemark";
 import CustomPlacemark from "../../../components/map/CustomPlacemark";
 
@@ -49,7 +49,7 @@ const getTagsTemplate = (data: any) => {
             </div>`;
 };
 
-const getSubqueryByGuid = (guid: string, subqueries: any[]) => {
+const getSubqueryByGuid = (guid: string, subqueries: SubQueryGet[]) => {
   return subqueries.find((subquery) => subquery.guid === guid);
 };
 
@@ -71,6 +71,7 @@ const getOnlyValidAnalogs = (analogs: ApartmentBase[] | ApartmentGet[]) => {
     );
   });
 };
+
 
 const Maps = observer(({}: Props) => {
   const theme = useTheme();
@@ -306,20 +307,24 @@ const Maps = observer(({}: Props) => {
         // }}
         />
       )}
+      {isSuccess &&
+        store.queryGetData!.subQueries.map(
+                    (subQuery) =>
+                      subQuery.guid === selectedSubQuery && (
       <ReferenceCard
         isExpanded={true}
-        address={store.queryGetData?.subQueries[0]?.standartObject?.address}
-        price={store.queryGetData?.subQueries[0]?.standartObject?.m2price}
-        buildingType={store.queryGetData?.subQueries[0]?.standartObject?.segment}
-        floors={store.queryGetData?.subQueries[0]?.standartObject?.floors}
-        walls={store.queryGetData?.subQueries[0]?.standartObject?.walls}
-        floor={store.queryGetData?.subQueries[0]?.standartObject?.floor}
-        area={store.queryGetData?.subQueries[0]?.standartObject?.apartmentArea}
-        kitchenArea={store.queryGetData?.subQueries[0]?.standartObject?.kitchenArea}
-        hasBalcony={store.queryGetData?.subQueries[0]?.standartObject?.hasBalcony}
-        toMetro={store.queryGetData?.subQueries[0]?.standartObject?.distanceToMetro}
-        repairType={store.queryGetData?.subQueries[0]?.standartObject?.quality}
-      />
+        address={subQuery.standartObject?.address}
+        price={subQuery.standartObject?.m2price}
+        buildingType={subQuery.standartObject?.segment}
+        floors={subQuery.standartObject?.floors}
+        walls={subQuery.standartObject?.walls}
+        floor={subQuery.standartObject?.floor}
+        area={subQuery.standartObject?.apartmentArea}
+        kitchenArea={subQuery.standartObject?.kitchenArea}
+        hasBalcony={subQuery.standartObject?.hasBalcony}
+        toMetro={subQuery.standartObject?.distanceToMetro}
+        repairType={subQuery.standartObject?.quality}
+      />))}
 
       {/* Кнопки зума (+/-) справа экрана */}
       <Box

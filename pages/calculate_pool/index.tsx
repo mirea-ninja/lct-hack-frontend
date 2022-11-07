@@ -96,7 +96,7 @@ export default function CalculatePoolPage({}: Props) {
                 }}
               >
                 {standart?.address ?? "Адрес"},{" "}
-                {standart?.quality ?? "качество жилья"},{" "}
+                {/* {standart?.quality ?? "качество жилья"},{" "} */}
                 {standart?.floors ?? "N"} этажей,{" "}
                 {standart?.walls ?? "тип стены"}
               </Typography>

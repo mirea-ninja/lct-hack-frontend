@@ -66,23 +66,6 @@ function SubQueryToPoolTableRender(subquery: SubQueryGet): Pool[] {
   })
 }
 
-function idToRooms(id: number): string {
-  switch (id) {
-    case 1:
-      return "1-комнатные"
-    case 2:
-      return "2-комнатные"
-    case 3:
-      return "3-комнатные"
-    case 4:
-      return "4-комнатные"
-    case 5:
-      return "5-комнатные"
-    default:
-      return "Студии"
-  }
-}
-
 export default function PoolTabs({
   subqueries,
   hasMetroAttribute = false,
@@ -108,7 +91,7 @@ export default function PoolTabs({
             <PoolTab
               key={index}
               isActive={activeTab == index}
-              text={idToRooms(index)}
+              text={subqueries.standartObject?.rooms != 0 ? `${subqueries.standartObject?.rooms}-комн.` : "cтудии"}
               onClick={() => {
                 setActiveTab(index)
               }}
