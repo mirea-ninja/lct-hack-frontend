@@ -35,6 +35,7 @@ export default function CalculatePoolPage({}: Props) {
   })
 
   useEffect(() => {
+    console.log("CALC POOL USE EFFECT")
     for (let i = 0; i < store.queryGetData!.subQueries.length; i++) {
       let subQuery = store.queryGetData?.subQueries[i]
       mutate({ queryId: store.queryGetData!.guid, subqueryId: subQuery!.guid })
