@@ -10,6 +10,7 @@ import Paper from "@mui/material/Paper"
 import { Pool } from "./types"
 import PercentageItem from "../../items/PercentageItem"
 import { Stack } from "@mui/system"
+import { toJS } from "mobx"
 
 const StyledStack = styled(Stack)({
   display: "flex",
@@ -48,75 +49,13 @@ const StyledTableRow = styled(TableRow)({
   },
 })
 
-const fakeRows: Pool[] = [
-  {
-    id: Math.random(),
-    isBasic: true,
-    pricePerSquareMeter: { value: 357100 },
-    objectPrice: 39673490,
-    floor: { value: 1 },
-    flatSquare: { value: 6 },
-    kitchenSquare: { value: 24 },
-    hasBalcony: { value: false },
-    state: { value: "Муниципальный ремонт" },
-    metro: { value: 5 },
-  },
-  {
-    id: Math.random(),
-    isBasic: false,
-    pricePerSquareMeter: { value: 357100, change: 4.5 },
-    objectPrice: 39673490,
-    floor: { value: 1, change: -4.5 },
-    flatSquare: { value: 6, change: 4.5 },
-    kitchenSquare: { value: 24, change: -4.5 },
-    hasBalcony: { value: false, change: 4.5 },
-    state: { value: "Муниципальный ремонт", change: 4.5 },
-    metro: { value: 43, change: -4.5 },
-  },
-  {
-    id: Math.random(),
-    isBasic: false,
-    pricePerSquareMeter: { value: 357100, change: 4.5 },
-    objectPrice: 39673490,
-    floor: { value: 1, change: 4.5 },
-    flatSquare: { value: 6, change: 4.5 },
-    kitchenSquare: { value: 24, change: -4.5 },
-    hasBalcony: { value: false, change: 4.5 },
-    state: { value: "Муниципальный ремонт", change: 4.5 },
-    metro: { value: 43, change: 4.5 },
-  },
-  {
-    id: Math.random(),
-    isBasic: false,
-    pricePerSquareMeter: { value: 357100, change: -4.5 },
-    objectPrice: 39673490,
-    floor: { value: 1, change: 4.5 },
-    flatSquare: { value: 6, change: 4.5 },
-    kitchenSquare: { value: 24, change: -4.5 },
-    hasBalcony: { value: false, change: 4.5 },
-    state: { value: "Муниципальный ремонт", change: 4.5 },
-    metro: { value: 43, change: 4.5 },
-  },
-  {
-    id: Math.random(),
-    isBasic: false,
-    pricePerSquareMeter: { value: 357100, change: 4.5 },
-    objectPrice: 39673490,
-    floor: { value: 1, change: -4.5 },
-    flatSquare: { value: 6, change: 4.5 },
-    kitchenSquare: { value: 24, change: -4.5 },
-    hasBalcony: { value: false, change: 4.5 },
-    state: { value: "Муниципальный ремонт", change: 4.5 },
-    metro: { value: 43, change: -4.5 },
-  },
-]
-
 type Props = {
   hasMetroAttribute?: boolean
   rows: Pool[]
 }
 
 export default function PoolTable({ rows, hasMetroAttribute = false }: Props) {
+  console.log(toJS(rows))
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} stickyHeader>
@@ -156,6 +95,8 @@ type TableRowProps = {
 }
 
 const ResultTableRow = ({ row, hasMetroAttribute }: TableRowProps) => {
+  console.log(toJS(row))
+
   return (
     <StyledTableRow key={row.id}>
       <StyledTableCell scope="row">

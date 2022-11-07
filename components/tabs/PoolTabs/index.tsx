@@ -5,6 +5,7 @@ import { Stack } from "@mui/system"
 import PoolTable from "../../tables/PoolTable"
 import { SubQueryGet } from "../../../apiConnection/gen/models/sub-query-get"
 import { Pool } from "../../tables/PoolTable/types"
+import { toJS } from "mobx"
 
 type Props = {
   hasMetroAttribute?: boolean
@@ -32,38 +33,54 @@ function PoolTab({ isActive, text, onClick }: PoolTabProps) {
 }
 
 function SubQueryToPoolTableRender(subquery: SubQueryGet): Pool[] {
-  return [subquery.standartObject!, ...subquery.analogs!].map((object, i) => {
-    return {
-      id: i,
-      isBasic: true,
-      pricePerSquareMeter: {
-        value: object.m2price!,
-        change: object.adjustment?.priceArea,
-      },
-      objectPrice: object.price!,
-      floor: { value: object.floor!, change: object.adjustment?.floor },
-      flatSquare: {
-        value: object.apartmentArea!,
-        change: object.adjustment?.aptArea,
-      },
-      kitchenSquare: {
-        value: object.kitchenArea!,
-        change: object.adjustment?.kitchenArea,
-      },
-      hasBalcony: {
-        value: object.hasBalcony!,
-        change: object.adjustment?.hasBalcony,
-      },
-      metro: {
-        value: object.distanceToMetro!,
-        change: object.adjustment?.quality,
-      },
-      state: {
-        value: object.quality!,
-        change: object.adjustment?.quality
-      },
+  return [subquery.standartObject!, ...subquery.selectedAnalogs!].map(
+    (object, i) => {
+      return {
+        id: i,
+        isBasic: true,
+        pricePerSquareMeter: {
+          value: object.m2price ?? 0,
+          change: object.adjustment?.priceArea,
+        },
+        objectPrice: object.price!,
+        floor: { value: object.floor!, change: object.adjustment?.floor },
+        flatSquare: {
+          value: object.apartmentArea!,
+          change: object.adjustment?.aptArea,
+        },
+        kitchenSquare: {
+          value: object.kitchenArea!,
+          change: object.adjustment?.kitchenArea,
+        },
+        hasBalcony: {
+          value: object.hasBalcony!,
+          change: object.adjustment?.hasBalcony,
+        },
+        state: { value: object.quality!, change: object.adjustment?.quality },
+        metro: {
+          value: object.distanceToMetro!,
+          change: object.adjustment?.quality,
+        },
+      }
     }
-  })
+  )
+}
+
+function idToRooms(id: number): string {
+  switch (id) {
+    case 1:
+      return "1-комнатные"
+    case 2:
+      return "2-комнатные"
+    case 3:
+      return "3-комнатные"
+    case 4:
+      return "4-комнатные"
+    case 5:
+      return "5-комнатные"
+    default:
+      return "Студии"
+  }
 }
 
 export default function PoolTabs({
@@ -72,6 +89,7 @@ export default function PoolTabs({
 }: Props) {
   const [activeTab, setActiveTab] = React.useState(0)
   const data = SubQueryToPoolTableRender(subqueries[activeTab])
+  console.log(toJS(subqueries))
 
   return (
     <Paper
@@ -91,7 +109,7 @@ export default function PoolTabs({
             <PoolTab
               key={index}
               isActive={activeTab == index}
-              text={subqueries.standartObject?.rooms != 0 ? `${subqueries.standartObject?.rooms}-комн.` : "cтудии"}
+              text={idToRooms(index)}
               onClick={() => {
                 setActiveTab(index)
               }}

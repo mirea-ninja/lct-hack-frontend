@@ -1,25 +1,26 @@
-import React from "react";
-import { useTheme } from "@mui/material";
+import React from "react"
+import { useTheme } from "@mui/material"
 import {
   Box,
   Typography,
   IconButton,
   ToggleButtonGroup,
   ToggleButton,
-} from "@mui/material";
+} from "@mui/material"
 
-import CollapsableAnalogInfo from "./CollapsableAnalogInfo";
+import CollapsableAnalogInfo from "./CollapsableAnalogInfo"
 
-import styles from "./MapSlider.module.scss";
-import { ArrowRight } from "../icons/ArrowRightIcon";
-import { ArrowLeft } from "../icons/ArrowLeftIcon";
-import { ClosedEyeIcon } from "../icons/ClosedEyeIcon";
-import { OpenIcon } from "../icons/OpenIcon";
-import HiddenAnalogsModal from "./HiddenAnalogsModal";
-import { EditorModalType, EditorModal } from "./EditorModal";
+import styles from "./MapSlider.module.scss"
+import { ArrowRight } from "../icons/ArrowRightIcon"
+import { ArrowLeft } from "../icons/ArrowLeftIcon"
+import { ClosedEyeIcon } from "../icons/ClosedEyeIcon"
+import { OpenIcon } from "../icons/OpenIcon"
+import HiddenAnalogsModal from "./HiddenAnalogsModal"
+import { EditorModalType, EditorModal } from "./EditorModal"
 
-import { QueryGet } from "../../apiConnection/gen/models/query-get";
-import { useStore } from "../../logic/DataStore";
+import { QueryGet } from "../../apiConnection/gen/models/query-get"
+import { useStore } from "../../logic/DataStore"
+import Link from "next/link"
 
 const Plus = () => (
   <svg
@@ -34,10 +35,10 @@ const Plus = () => (
       fill="#038CD2"
     />
   </svg>
-);
+)
 
 const Hr = () => {
-  const theme = useTheme();
+  const theme = useTheme()
   return (
     <Box
       sx={{
@@ -47,25 +48,25 @@ const Hr = () => {
         marginBottom: "10px",
       }}
     />
-  );
-};
+  )
+}
 
 type Props = {
-  onSelectedSubQueryChange: (guid: string) => void;
-};
+  onSelectedSubQueryChange: (guid: string) => void
+}
 
 export default function MapSlider({ onSelectedSubQueryChange }: Props) {
-  const [open, setOpen] = React.useState(true);
-  const [subquery, setSubquery] = React.useState(0);
-  const [hiddenAnalogsShow, setHiddenAnalogsShow] = React.useState(false);
-  const [editorCreateOpen, setEditorCreateOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true)
+  const [subquery, setSubquery] = React.useState(0)
+  const [hiddenAnalogsShow, setHiddenAnalogsShow] = React.useState(false)
+  const [editorCreateOpen, setEditorCreateOpen] = React.useState(false)
 
-  const theme = useTheme();
-  let store = useStore();
+  const theme = useTheme()
+  let store = useStore()
 
-  console.log(subquery);
+  console.log(subquery)
 
-  const subqueries = store.queryGetData?.subQueries ?? [];
+  const subqueries = store.queryGetData?.subQueries ?? []
 
   return (
     <>
@@ -136,7 +137,7 @@ export default function MapSlider({ onSelectedSubQueryChange }: Props) {
               <IconButton
                 className={styles.button}
                 onClick={() => {
-                  setEditorCreateOpen(true);
+                  setEditorCreateOpen(true)
                 }}
               >
                 <Plus />
@@ -147,20 +148,19 @@ export default function MapSlider({ onSelectedSubQueryChange }: Props) {
               >
                 <ClosedEyeIcon />
               </IconButton>
-              <IconButton
-                className={styles.button}
-                href="/calculate_etalons/table"
-              >
-                <OpenIcon />
-              </IconButton>
+              <Link href="/calculate_etalons/table">
+                <IconButton className={styles.button}>
+                  <OpenIcon />
+                </IconButton>
+              </Link>
             </Box>
           </Box>
 
           <ToggleButtonGroup
             exclusive
             onChange={(event, newSubqueryIndex) => {
-              setSubquery(newSubqueryIndex);
-              onSelectedSubQueryChange(subqueries[newSubqueryIndex].guid);
+              setSubquery(newSubqueryIndex)
+              onSelectedSubQueryChange(subqueries[newSubqueryIndex].guid)
             }}
             sx={{
               marginTop: "14px",
@@ -173,7 +173,7 @@ export default function MapSlider({ onSelectedSubQueryChange }: Props) {
               const text =
                 subQuery.standartObject?.rooms != 0
                   ? `${subQuery.standartObject?.rooms}-комн.`
-                  : "cтудии";
+                  : "cтудии"
               return (
                 <ToggleButton
                   value={i}
@@ -210,7 +210,7 @@ export default function MapSlider({ onSelectedSubQueryChange }: Props) {
                     {text}
                   </Typography>
                 </ToggleButton>
-              );
+              )
             })}
           </ToggleButtonGroup>
 
@@ -225,5 +225,5 @@ export default function MapSlider({ onSelectedSubQueryChange }: Props) {
         </Box>
       </Box>
     </>
-  );
+  )
 }

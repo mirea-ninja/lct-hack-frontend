@@ -165,6 +165,10 @@ const Maps = observer(({}: Props) => {
           getSubqueryByGuid(item.subqueryId, queryGet.data.subQueries)
             ?.analogs || analogs
 
+        selectedAnalogsResult =
+          getSubqueryByGuid(item.subqueryId, queryGet.data.subQueries)
+            ?.selectedAnalogs || selectedAnalogsResult
+
         result.push({
           queryGuid: item.queryId,
           subqueryGuid: item.subqueryId,
