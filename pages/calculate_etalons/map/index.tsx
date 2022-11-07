@@ -306,17 +306,17 @@ const Maps = observer(({}: Props) => {
       )}
       <ReferenceCard
         isExpanded={true}
-        address="ул. Ленина, 1"
-        price={1000000}
-        buildingType="Современное жилье"
-        floors={22}
-        walls="панель"
-        floor={1}
-        area={100}
-        kitchenArea={10}
-        hasBalcony={true}
-        toMetro={10}
-        repairType="муниципальный ремонт"
+        address={store.queryGetData?.subQueries[0]?.standartObject?.address}
+        price={store.queryGetData?.subQueries[0]?.standartObject?.m2price}
+        buildingType={store.queryGetData?.subQueries[0]?.standartObject?.segment}
+        floors={store.queryGetData?.subQueries[0]?.standartObject?.floors}
+        walls={store.queryGetData?.subQueries[0]?.standartObject?.walls}
+        floor={store.queryGetData?.subQueries[0]?.standartObject?.floor}
+        area={store.queryGetData?.subQueries[0]?.standartObject?.apartmentArea}
+        kitchenArea={store.queryGetData?.subQueries[0]?.standartObject?.kitchenArea}
+        hasBalcony={store.queryGetData?.subQueries[0]?.standartObject?.hasBalcony}
+        toMetro={store.queryGetData?.subQueries[0]?.standartObject?.distanceToMetro}
+        repairType={store.queryGetData?.subQueries[0]?.standartObject?.quality}
       />
 
       {/* Кнопки зума (+/-) справа экрана */}
@@ -373,8 +373,10 @@ const Maps = observer(({}: Props) => {
               <Map
                 instanceRef={mapRef}
                 defaultState={{
-                  center: [55.75, 37.57],
-                  zoom: 11,
+                  center: [
+                    store.queryGetData?.subQueries[0]?.standartObject!.lat,
+                    store.queryGetData?.subQueries[0]?.standartObject!.lon],
+                  zoom: 14
                 }}
                 width="100%"
                 height="100vh"
