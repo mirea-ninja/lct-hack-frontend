@@ -28,5 +28,4 @@ jobs:
         USERNAME: ${{ secrets.USERNAME }}
         PORT: ${{ secrets.PORT }}
         KEY: ${{ secrets.SSHKEY }}
-        script: docker compose up -d --build
-        
+        script: cd lct-hack && docker compose up -d --build
