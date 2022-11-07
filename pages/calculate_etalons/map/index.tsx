@@ -564,7 +564,7 @@ const Maps = observer(({}: Props) => {
                 )}
 
                 {isSuccess && showSearchArea && (
-                  <Circle
+                  <><Circle
                     geometry={[
                       [
                         getSubqueryByGuid(
@@ -576,7 +576,7 @@ const Maps = observer(({}: Props) => {
                           store.queryGetData!.subQueries
                         ).standartObject.lon,
                       ],
-                      1500,
+                      1000,
                     ]}
                     options={{
                       fillOpacity: 0,
@@ -586,8 +586,29 @@ const Maps = observer(({}: Props) => {
                       strokeWidth: 3,
 
                       strokeStyle: "10 10",
-                    }}
-                  />
+                    }} /><Circle
+                      geometry={[
+                        [
+                          getSubqueryByGuid(
+                            selectedSubQuery,
+                            store.queryGetData!.subQueries
+                          ).standartObject.lat,
+                          getSubqueryByGuid(
+                            selectedSubQuery,
+                            store.queryGetData!.subQueries
+                          ).standartObject.lon,
+                        ],
+                        1500,
+                      ]}
+                      options={{
+                        fillOpacity: 0,
+                        // rgba(3, 140, 210, 0.2);
+                        strokeColor: "#FF4F4F",
+                        strokeOpacity: 0.3,
+                        strokeWidth: 3,
+
+                        strokeStyle: "10 10",
+                      }} /></>
                 )}
               </Map>
             )}

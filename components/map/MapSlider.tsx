@@ -93,7 +93,7 @@ export default function MapSlider() {
             left: open ? 30 : -330,
 
             scrollBehavior: "smooth",
-            overflowY: "scroll",
+            overflowY: "auto",
             overflowX: "hidden",
             scrollbarWidth: "thin",
             scrollbarColor: `${theme.palette.secondary.light} ${theme.palette.secondary.main}`,

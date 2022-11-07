@@ -54,10 +54,13 @@ function SubQueryToPoolTableRender(subquery: SubQueryGet): Pool[] {
         value: object.hasBalcony!,
         change: object.adjustment?.hasBalcony,
       },
-      state: { value: object.quality!, change: object.adjustment?.quality },
       metro: {
         value: object.distanceToMetro!,
         change: object.adjustment?.quality,
+      },
+      state: {
+        value: object.quality!,
+        change: object.adjustment?.quality
       },
     }
   })

@@ -18,7 +18,7 @@ type Props = {
 };
 
 export default function MapFilter(props: Props) {
-  const [isExpanded, setIsExpanded] = React.useState(false);
+  const [isExpanded, setIsExpanded] = React.useState(true);
 
   const [etalon, setEtalon] = React.useState(true);
   const [analogs, setAnalogs] = React.useState(true);

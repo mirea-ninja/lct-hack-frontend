@@ -45,7 +45,13 @@ export default function PercentageItem({ value, sx, ...props }: Props) {
           fontWeight: 500,
           fontSize: 18,
           lineHeight: '20px',
-          color: value! > 0 ? 'var(--positive-clr)' : 'var(--negative-clr)',
+          color:
+            value! > 0
+            ? 'var(--positive-clr)'
+            : (value! === 0
+              ? "#A6A8B5"
+              : 'var(--negative-clr)'
+              ),
           backgroundColor: '#F3F7FA',
           p: '5px',
           borderRadius: 'var(--border-radius-1)',
@@ -54,7 +60,21 @@ export default function PercentageItem({ value, sx, ...props }: Props) {
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
       {...props}>
-      {value! > 0 ? `+${value}%` : `${value}%`}
+      {
+        value! > 0
+        ? (value! < 1
+          ? `+${value}%`
+          : `+${value}₽`
+          )
+        : (value! === 0
+          ? `0%`
+          : (value! > -1
+            ? `$-{value}%`
+            : `$-{value}₽`
+            )
+          )
+      }
+
     </Typography>
   );
 
