@@ -18,6 +18,10 @@ import { OpenIcon } from "../icons/OpenIcon";
 import HiddenAnalogsModal from "./HiddenAnalogsModal";
 import { EditorModalType, EditorModal } from "./EditorModal";
 
+import { QueryGet } from "../../apiConnection/gen/models/query-get";
+import { useStore } from "../../logic/DataStore";
+
+
 const Plus = () => (
   <svg
     width="19"
@@ -54,7 +58,11 @@ export default function MapSlider() {
   const [editorCreateOpen, setEditorCreateOpen] = React.useState(false);
 
   const theme = useTheme();
+  let store = useStore();
 
+  console.log(subquery);
+
+  const subqueries = store.queryGetData?.subQueries ?? [];
   return (
     <>
       {" "}
@@ -142,7 +150,6 @@ export default function MapSlider() {
           </Box>
 
           <ToggleButtonGroup
-            value={subquery}
             exclusive
             onChange={(event, newSubquery) => {
               setSubquery(newSubquery);
@@ -154,57 +161,37 @@ export default function MapSlider() {
               },
             }}
           >
-            <ToggleButton
-              value={0}
-              sx={{
-                padding: "10px 0",
+            {subqueries.map((subQuery, i) => {
+                const text = subQuery.standartObject?.rooms != 0 ? `${subQuery.standartObject?.rooms}-комн.` : "Студии";
+                return (
+                  <ToggleButton
+                    value={i}
+                    sx={{
+                      padding: "10px 0",
 
-                borderRadius: 0,
-                border: "none",
-                color: theme.palette.text.primary,
-                backgroundColor: "transparent",
-                "&.Mui-selected": {
-                  color: theme.palette.primary.main,
-                  backgroundColor: "transparent",
+                      borderRadius: "10px",
+                      border: "none",
+                      color: theme.palette.text.primary,
+                      backgroundColor: "tranparent",
+                      "&.Mui-selected": {
+                        color: theme.palette.primary.main,
+                        backgroundColor: "transparent",
 
-                  "&:hover": {
-                    backgroundColor: "transparent",
-                  },
-                },
-                "&:hover": {
-                  backgroundColor: "transparent",
-                },
-              }}
-            >
-              <Typography fontSize={16} fontWeight={500} lineHeight={"18px"}>
-                1 комн.
-              </Typography>
-            </ToggleButton>
-            <ToggleButton
-              value={1}
-              sx={{
-                padding: "10px 0",
-
-                borderRadius: 0,
-                border: "none",
-                color: theme.palette.text.primary,
-                backgroundColor: "transparent",
-                "&.Mui-selected": {
-                  color: theme.palette.primary.main,
-                  backgroundColor: "transparent",
-                  "&:hover": {
-                    backgroundColor: "transparent",
-                  },
-                },
-                "&:hover": {
-                  backgroundColor: "transparent",
-                },
-              }}
-            >
-              <Typography fontSize={16} fontWeight={500} lineHeight={"18px"}>
-                2 комн.
-              </Typography>
-            </ToggleButton>
+                        "&:hover": {
+                          backgroundColor: "transparent",
+                        },
+                      },
+                      "&:hover": {
+                        backgroundColor: "transparent",
+                      },
+                    }}
+                  >
+                    <Typography fontSize={16} fontWeight={500} lineHeight={"18px"}>
+                      {text}
+                    </Typography>
+                  </ToggleButton>
+                );
+              })}
           </ToggleButtonGroup>
 
           {/* Контейнер с инфой раскрывающейся */}
