@@ -167,6 +167,10 @@ const Maps = observer(({}: Props) => {
   });
 
   React.useEffect(() => {
+    if (selectedSubQuery !== null) {
+      return;
+    }
+
     if (store.queryGetData?.subQueries) {
       const subqieries = store.queryGetData.subQueries;
 
@@ -301,10 +305,9 @@ const Maps = observer(({}: Props) => {
 
       {isSuccess && (
         <MapSlider
-        // data={store.queryGetData}
-        // onSliderChange={(value) => {
-        //   store.setQueryGetData(value);
-        // }}
+          onSelectedSubQueryChange={(guid) => {
+            setSelectedSubQuery(guid);
+          }}
         />
       )}
       {isSuccess &&

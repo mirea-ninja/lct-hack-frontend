@@ -21,7 +21,6 @@ import { EditorModalType, EditorModal } from "./EditorModal";
 import { QueryGet } from "../../apiConnection/gen/models/query-get";
 import { useStore } from "../../logic/DataStore";
 
-
 const Plus = () => (
   <svg
     width="19"
@@ -51,7 +50,11 @@ const Hr = () => {
   );
 };
 
-export default function MapSlider() {
+type Props = {
+  onSelectedSubQueryChange: (guid: string) => void;
+};
+
+export default function MapSlider({ onSelectedSubQueryChange }: Props) {
   const [open, setOpen] = React.useState(true);
   const [subquery, setSubquery] = React.useState(0);
   const [hiddenAnalogsShow, setHiddenAnalogsShow] = React.useState(false);
@@ -63,6 +66,7 @@ export default function MapSlider() {
   console.log(subquery);
 
   const subqueries = store.queryGetData?.subQueries ?? [];
+
   return (
     <>
       {" "}
@@ -143,7 +147,10 @@ export default function MapSlider() {
               >
                 <ClosedEyeIcon />
               </IconButton>
-              <IconButton className={styles.button} href="/calculate_etalons/table">
+              <IconButton
+                className={styles.button}
+                href="/calculate_etalons/table"
+              >
                 <OpenIcon />
               </IconButton>
             </Box>
@@ -151,8 +158,9 @@ export default function MapSlider() {
 
           <ToggleButtonGroup
             exclusive
-            onChange={(event, newSubquery) => {
-              setSubquery(newSubquery);
+            onChange={(event, newSubqueryIndex) => {
+              setSubquery(newSubqueryIndex);
+              onSelectedSubQueryChange(subqueries[newSubqueryIndex].guid);
             }}
             sx={{
               marginTop: "14px",
@@ -162,36 +170,48 @@ export default function MapSlider() {
             }}
           >
             {subqueries.map((subQuery, i) => {
-                const text = subQuery.standartObject?.rooms != 0 ? `${subQuery.standartObject?.rooms}-комн.` : "cтудии";
-                return (
-                  <ToggleButton
-                    value={i}
-                    sx={{
-                      padding: "10px 0",
+              const text =
+                subQuery.standartObject?.rooms != 0
+                  ? `${subQuery.standartObject?.rooms}-комн.`
+                  : "cтудии";
+              return (
+                <ToggleButton
+                  value={i}
+                  sx={{
+                    padding: "10px 0",
 
-                      borderRadius: "10px",
-                      border: "none",
-                      color: theme.palette.text.primary,
-                      backgroundColor: "tranparent",
-                      "&.Mui-selected": {
-                        color: theme.palette.primary.main,
-                        backgroundColor: "transparent",
+                    borderRadius: "10px",
+                    border: "none",
+                    color: theme.palette.text.primary,
+                    backgroundColor: "tranparent",
+                    "&.Mui-selected": {
+                      color: theme.palette.primary.main,
+                      backgroundColor: "transparent",
 
-                        "&:hover": {
-                          backgroundColor: "transparent",
-                        },
-                      },
                       "&:hover": {
                         backgroundColor: "transparent",
                       },
-                    }}
+                    },
+                    "&:hover": {
+                      backgroundColor: "transparent",
+                    },
+                  }}
+                >
+                  <Typography
+                    fontSize={16}
+                    fontWeight={500}
+                    lineHeight={"18px"}
+                    color={
+                      subquery === i
+                        ? theme.palette.primary.main
+                        : theme.palette.text.primary
+                    }
                   >
-                    <Typography fontSize={16} fontWeight={500} lineHeight={"18px"} color={subquery === i ? theme.palette.primary.main : theme.palette.text.primary}>
-                      {text}
-                    </Typography>
-                  </ToggleButton>
-                );
-              })}
+                    {text}
+                  </Typography>
+                </ToggleButton>
+              );
+            })}
           </ToggleButtonGroup>
 
           {/* Контейнер с инфой раскрывающейся */}
