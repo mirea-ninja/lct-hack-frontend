@@ -21,6 +21,8 @@ import { ZoomButton } from "../../../components/map/ZoomButton";
 import { Button } from "@mui/material";
 import { ApartmentBase } from "../../../apiConnection/parser/models/apartment-base";
 import { ApartmentGet } from "../../../apiConnection/gen";
+import { CustomPlacemarkType } from "../../../components/map/CustomPlacemark";
+import CustomPlacemark from "../../../components/map/CustomPlacemark";
 
 type Props = {};
 
@@ -401,34 +403,22 @@ const Maps = observer(({}: Props) => {
                       distanceToMetro: any;
                       quality: any;
                     }) => (
-                      <Placemark
-                        geometry={[analog.lat, analog.lon]}
-                        properties={{
-                          content: getTagsTemplate({
-                            title: analog.address,
-                            subtitle: `${analog.price} ₽`,
-                            tags: [
-                              `${analog.floor} этаж`,
-                              `S ${analog.apartmentArea} м²`,
-                              `S кухня ${analog.kitchenArea} м²`,
-                              analog.hasBalcony ? "есть балкон" : "нет балкона",
-                              `${analog.distanceToMetro} мин. до метро`,
-                              analog.quality,
-                            ],
-                          }),
-                          title: analog.address,
-                        }}
-                        options={{
-                          // Применяем шаблон
-                          balloonContentLayout: template,
-                          balloonPanelMaxMapArea: 0,
-
-                          iconLayout: "default#image",
-                          iconImageHref: "/placemark.svg",
-                          iconImageSize: [18, 22],
-                          iconImageOffset: [-9, -22],
-                        }}
-                        modules={["geoObject.addon.balloon"]}
+                      <CustomPlacemark
+                        coords={[analog.lat, analog.lon]}
+                        type={CustomPlacemarkType.HIDDEN}
+                        title={analog.address}
+                        subtitle={`${analog.price} ₽`}
+                        tags={[
+                          `${analog.floor} этаж`,
+                          `S ${analog.apartmentArea} м²`,
+                          `S кухня ${analog.kitchenArea} м²`,
+                          analog.hasBalcony ? "есть балкон" : "нет балкона",
+                          `${analog.distanceToMetro} мин. до метро`,
+                          analog.quality,
+                        ]}
+                        template={template}
+                        iconTemplate={iconTemplate}
+                        iconShape={iconShape}
                       />
                     )
                   )}
@@ -438,114 +428,34 @@ const Maps = observer(({}: Props) => {
                   store.queryGetData!.subQueries.map(
                     (subQuery) =>
                       subQuery.guid === selectedSubQuery && (
-                        <Placemark
-                          geometry={[
+                        <CustomPlacemark
+                          coords={[
                             subQuery.standartObject!.lat,
                             subQuery.standartObject!.lon,
                           ]}
-                          properties={{
-                            content: getTagsTemplate({
-                              title: subQuery.standartObject!.address,
-                              subtitle: "",
-                              tags: [
-                                `${subQuery.standartObject!.floor} этаж`,
-                                `S ${
-                                  subQuery.standartObject!.apartmentArea
-                                } м²`,
-                                `S кухня ${
-                                  subQuery.standartObject!.kitchenArea
-                                } м²`,
-                                subQuery.standartObject!.hasBalcony
-                                  ? "есть балкон"
-                                  : "нет балкона",
-                                `${
-                                  subQuery.standartObject!.distanceToMetro
-                                } мин. до метро`,
-                                subQuery.standartObject!.quality,
-                              ],
-                            }),
-                            title: subQuery.standartObject!.address,
-                          }}
-                          options={{
-                            // Применяем шаблон
-                            balloonContentLayout: template,
-                            balloonPanelMaxMapArea: 0,
-
-                            iconLayout: "default#image",
-                            iconImageHref: "/etalon-placemark.svg",
-
-                            iconImageSize: [18, 22],
-                            iconImageOffset: [-9, -22],
-                          }}
-                          modules={["geoObject.addon.balloon"]}
+                          type={CustomPlacemarkType.ETALON}
+                          title={subQuery.standartObject!.address}
+                          subtitle=""
+                          tags={[
+                            `${subQuery.standartObject!.floor} этаж`,
+                            `S ${subQuery.standartObject!.apartmentArea} м²`,
+                            `S кухня ${
+                              subQuery.standartObject!.kitchenArea
+                            } м²`,
+                            subQuery.standartObject!.hasBalcony
+                              ? "есть балкон"
+                              : "нет балкона",
+                            `${
+                              subQuery.standartObject!.distanceToMetro
+                            } мин. до метро`,
+                            subQuery.standartObject!.quality,
+                          ]}
+                          template={template}
+                          iconTemplate={iconTemplate}
+                          iconShape={iconShape}
                         />
                       )
                   )}
-
-                {/* Отрисовка маркера после подсчёта формы */}
-                {iconShape && iconShape.length && (
-                  <Placemark
-                    geometry={[55.8, 37.6]}
-                    properties={{
-                      content: getTagsTemplate({
-                        title: "Адрес",
-                        subtitle: "",
-                        tags: [
-                          ` этаж`,
-                          `S м²`,
-                          `S кухня м²`,
-                          "есть балкон",
-                          "нет балкона",
-                          `мин. до метро`,
-                          "qweqwe",
-                        ],
-                      }),
-                      title: "Адрес",
-                    }}
-                    options={{
-                      // Применяем шаблон
-                      balloonContentLayout: template,
-                      balloonPanelMaxMapArea: 0,
-
-                      iconLayout: iconTemplate,
-                      iconShape: {
-                        type: "Rectangle",
-                        coordinates: iconShape,
-                      },
-                    }}
-                    modules={["geoObject.addon.balloon"]}
-                  />
-                )}
-
-                {!iconShape && (
-                  <Placemark
-                    geometry={[55.8, 37.6]}
-                    properties={{
-                      content: getTagsTemplate({
-                        title: "Адрес",
-                        subtitle: "",
-                        tags: [
-                          ` этаж`,
-                          `S м²`,
-                          `S кухня м²`,
-                          "есть балкон",
-                          "нет балкона",
-                          `мин. до метро`,
-                          "qweqwe",
-                        ],
-                      }),
-                      title: "Адрес",
-                    }}
-                    options={{
-                      // Применяем шаблон
-                      balloonContentLayout: template,
-                      balloonPanelMaxMapArea: 0,
-
-                      iconLayout: iconTemplate,
-                    }}
-                    modules={["geoObject.addon.balloon"]}
-                  />
-                )}
 
                 {isSuccess && showSearchArea && (
                   <Circle
