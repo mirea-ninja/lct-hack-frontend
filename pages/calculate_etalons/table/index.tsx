@@ -13,8 +13,44 @@ import Link from "next/link"
 import { useApiClient } from "../../../logic/ApiClientHook"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { toJS } from "mobx"
+import { SubQueryGet } from "../../../apiConnection/gen"
+import { Pool } from "../../../components/tables/PoolTable/types"
 
 type Props = {}
+
+function SubQueryToPoolTableRender(subquery: SubQueryGet): Pool[] {
+  return [subquery.standartObject!, ...subquery.selectedAnalogs!].map(
+    (object, i) => {
+      return {
+        id: i,
+        isBasic: true,
+        pricePerSquareMeter: {
+          value: object.m2price ?? 0,
+          change: object.adjustment?.priceArea,
+        },
+        objectPrice: object.price!,
+        floor: { value: object.floor!, change: object.adjustment?.floor },
+        flatSquare: {
+          value: object.apartmentArea!,
+          change: object.adjustment?.aptArea,
+        },
+        kitchenSquare: {
+          value: object.kitchenArea!,
+          change: object.adjustment?.kitchenArea,
+        },
+        hasBalcony: {
+          value: object.hasBalcony!,
+          change: object.adjustment?.hasBalcony,
+        },
+        state: { value: object.quality!, change: object.adjustment?.quality },
+        metro: {
+          value: object.distanceToMetro!,
+          change: object.adjustment?.quality,
+        },
+      }
+    }
+  )
+}
 
 export default function CalculateEtalonsPage({}: Props) {
   const store = useStore()
@@ -120,6 +156,7 @@ export default function CalculateEtalonsPage({}: Props) {
           </Stack>
         </Stack>
         <PoolTabs
+          subQueryToPoolTableRender={SubQueryToPoolTableRender}
           subqueries={
             store.queryGetData?.subQueries ?? [
               {

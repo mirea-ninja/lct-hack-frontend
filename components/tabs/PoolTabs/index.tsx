@@ -10,6 +10,7 @@ import { toJS } from "mobx"
 type Props = {
   hasMetroAttribute?: boolean
   subqueries: SubQueryGet[]
+  subQueryToPoolTableRender(subquery: SubQueryGet): Pool[]
 }
 
 type PoolTabProps = {
@@ -86,9 +87,10 @@ function idToRooms(id: number): string {
 export default function PoolTabs({
   subqueries,
   hasMetroAttribute = false,
+  subQueryToPoolTableRender,
 }: Props) {
   const [activeTab, setActiveTab] = React.useState(0)
-  const data = SubQueryToPoolTableRender(subqueries[activeTab])
+  const data = subQueryToPoolTableRender(subqueries[activeTab])
   console.log(toJS(subqueries))
 
   return (
