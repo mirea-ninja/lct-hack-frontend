@@ -65,7 +65,6 @@ const getSubqueryByGuid = (guid: string, subqueries: SubQueryGet[]) => {
 const getOnlyValidAnalogs = (analogs: ApartmentBase[] | ApartmentGet[]) => {
   return analogs.filter((analog) => {
     return (
-      analog.address !== null &&
       analog.lat !== null &&
       analog.lon !== null &&
       analog.rooms !== null &&
@@ -79,6 +78,62 @@ const getOnlyValidAnalogs = (analogs: ApartmentBase[] | ApartmentGet[]) => {
       analog.quality !== null
     )
   })
+}
+
+const getDistance = (
+  a: { lat: number; lon: number },
+  b: { lat: number; lon: number }
+) => {
+  const R = 6372795 // радиус Земли в метрах
+  const lat1 = a.lat
+  const lat2 = b.lat
+  const lon1 = a.lon
+  const lon2 = b.lon
+  const cl1 = Math.cos((lat1 * Math.PI) / 180)
+  const cl2 = Math.cos((lat2 * Math.PI) / 180)
+  const sl1 = Math.sin((lat1 * Math.PI) / 180)
+  const sl2 = Math.sin((lat2 * Math.PI) / 180)
+  const delta = lon2 - lon1
+  const cdelta = Math.cos((delta * Math.PI) / 180)
+  const sdelta = Math.sin((delta * Math.PI) / 180)
+
+  const y = Math.sqrt(
+    Math.pow(cl2 * sdelta, 2) + Math.pow(cl1 * sl2 - sl1 * cl2 * cdelta, 2)
+  )
+  const x = sl1 * sl2 + cl1 * cl2 * cdelta
+  const ad = Math.atan2(y, x)
+  const dist = ad * R // Расстояние между двумя координатами в метрах
+  return Math.abs(dist)
+}
+
+function getAnalogsBySubquery(
+  subquery: SubQueryGet,
+  isSelected: boolean
+): ApartmentGet[] {
+  const analogs = isSelected
+    ? subquery.selectedAnalogs
+    : subquery.analogs!.filter(
+        (analog) => !subquery.selectedAnalogs!.includes(analog)
+      )
+
+  const analogsJs = toJS(analogs)!
+
+  if (isSelected) {
+    return [analogsJs[0]]
+  } else {
+    return analogs
+  }
+}
+
+const getApartmentTags = (analog: ApartmentBase | ApartmentGet) => {
+  return [
+    `${analog.floor} этаж`,
+    `S ${analog.apartmentArea} м²`,
+    `S кухня ${analog.kitchenArea} м²`,
+    analog.hasBalcony ? "есть балкон" : "нет балкона",
+    `${analog.distanceToMetro} мин. до метро`,
+    analog.quality,
+  ]
 }
 
 const Maps = observer(({}: Props) => {
@@ -139,7 +194,21 @@ const Maps = observer(({}: Props) => {
           )
 
         let analogs = analogsRes.data
-        const validAnalogs = getOnlyValidAnalogs(analogs)
+
+        const filteredAnalogs = getOnlyValidAnalogs(analogs)
+
+        const validAnalogs = filteredAnalogs.filter((analog) => {
+          const standartObject = store.queryGetData?.subQueries.find(
+            (subquery) => subquery.guid === item.subqueryId
+          )?.standartObject
+
+          const distance = getDistance(
+            { lat: analog.lat, lon: analog.lon },
+            { lat: standartObject.lat, lon: standartObject.lon }
+          )
+
+          return distance <= 1000
+        })
 
         analogsResult.push(analogs)
         selectedAnalogsResult.push(validAnalogs)
@@ -162,6 +231,10 @@ const Maps = observer(({}: Props) => {
         analogs =
           getSubqueryByGuid(item.subqueryId, queryGet.data.subQueries)
             ?.analogs || analogs
+
+        selectedAnalogsResult =
+          getSubqueryByGuid(item.subqueryId, queryGet.data.subQueries)
+            ?.selectedAnalogs || selectedAnalogsResult
 
         result.push({
           queryGuid: item.queryId,
@@ -230,6 +303,8 @@ const Maps = observer(({}: Props) => {
       mutate(dataToQuery)
     }
   }, [store.queryGetData])
+
+  console.log(getAnalogsBySubquery)
 
   // @ts-ignore
   return (
@@ -431,89 +506,31 @@ const Maps = observer(({}: Props) => {
                 }}
               >
                 {isSuccess &&
-                  showAnalogs &&
-                  getSubqueryByGuid(
-                    selectedSubQuery,
-                    store.queryGetData!.subQueries
-                  ).analogs.map(
-                    (analog: {
-                      lat: number
-                      lon: number
-                      address: any
-                      price: any
-                      floor: any
-                      apartmentArea: any
-                      kitchenArea: any
-                      hasBalcony: any
-                      distanceToMetro: any
-                      quality: any
-                    }) => (
-                      <CustomPlacemark
-                        coords={[analog.lat, analog.lon]}
-                        type={CustomPlacemarkType.HIDDEN}
-                        title={analog.address}
-                        subtitle={`${analog.price} ₽`}
-                        tags={[
-                          `${analog.floor} этаж`,
-                          `S ${analog.apartmentArea} м²`,
-                          `S кухня ${analog.kitchenArea} м²`,
-                          analog.hasBalcony ? "есть балкон" : "нет балкона",
-                          `${analog.distanceToMetro} мин. до метро`,
-                          analog.quality,
-                        ]}
-                        template={template}
-                        iconTemplate={iconTemplate}
-                        iconShape={iconShape}
-                      />
-                    )
-                  )}
+                  showHiddenAnalogs &&
+                  getAnalogsBySubquery(
+                    getSubqueryByGuid(
+                      selectedSubQuery!,
+                      store.queryGetData!.subQueries
+                    )!,
+                    false
+                  ).map((analog) => (
+                    <CustomPlacemark
+                      coords={[analog!.lat, analog!.lon]}
+                      type={CustomPlacemarkType.HIDDEN}
+                      title={analog.address}
+                      subtitle={`${analog.price} ₽`}
+                      tags={getApartmentTags(analog)}
+                      template={template}
+                      iconTemplate={iconTemplate}
+                      iconShape={iconShape}
+                    />
+                  ))}
 
                 {isSuccess &&
                   showEtalon &&
                   store.queryGetData!.subQueries.map(
                     (subQuery) =>
                       subQuery.guid === selectedSubQuery && (
-                        // <Placemark
-                        //   geometry={[
-                        //     subQuery.standartObject!.lat,
-                        //     subQuery.standartObject!.lon,
-                        //   ]}
-                        //   properties={{
-                        //     content: getTagsTemplate({
-                        //       title: subQuery.standartObject!.address,
-                        //       subtitle: "",
-                        //       tags: [
-                        //         `${subQuery.standartObject!.floor} этаж`,
-                        //         `S ${
-                        //           subQuery.standartObject!.apartmentArea
-                        //         } м²`,
-                        //         `S кухня ${
-                        //           subQuery.standartObject!.kitchenArea
-                        //         } м²`,
-                        //         subQuery.standartObject!.hasBalcony
-                        //           ? "есть балкон"
-                        //           : "нет балкона",
-                        //         `${
-                        //           subQuery.standartObject!.distanceToMetro
-                        //         } мин. до метро`,
-                        //         subQuery.standartObject!.quality,
-                        //       ],
-                        //     }),
-                        //     title: subQuery.standartObject!.address,
-                        //   }}
-                        //   options={{
-                        //     // Применяем шаблон
-                        //     balloonContentLayout: template,
-                        //     balloonPanelMaxMapArea: 0,
-
-                        //     iconLayout: "default#image",
-                        //     iconImageHref: "/etalon-placemark.svg",
-
-                        //     iconImageSize: [18, 22],
-                        //     iconImageOffset: [-9, -22],
-                        //   }}
-                        //   modules={["geoObject.addon.balloon"]}
-                        // />
                         <CustomPlacemark
                           coords={[
                             subQuery.standartObject!.lat,
@@ -522,20 +539,7 @@ const Maps = observer(({}: Props) => {
                           type={CustomPlacemarkType.ETALON}
                           title={subQuery.standartObject!.address}
                           subtitle=""
-                          tags={[
-                            `${subQuery.standartObject!.floor} этаж`,
-                            `S ${subQuery.standartObject!.apartmentArea} м²`,
-                            `S кухня ${
-                              subQuery.standartObject!.kitchenArea
-                            } м²`,
-                            subQuery.standartObject!.hasBalcony
-                              ? "есть балкон"
-                              : "нет балкона",
-                            `${
-                              subQuery.standartObject!.distanceToMetro
-                            } мин. до метро`,
-                            subQuery.standartObject!.quality,
-                          ]}
+                          tags={getApartmentTags(subQuery.standartObject!)}
                           template={template}
                           iconTemplate={iconTemplate}
                           iconShape={iconShape}
@@ -544,69 +548,72 @@ const Maps = observer(({}: Props) => {
                   )}
 
                 {/* Отрисовка маркера после подсчёта формы */}
-                {iconShape && iconShape.length && (
-                  <Placemark
-                    geometry={[55.8, 37.6]}
-                    properties={{
-                      content: getTagsTemplate({
-                        title: "Адрес",
-                        subtitle: "",
-                        tags: [
-                          ` этаж`,
-                          `S м²`,
-                          `S кухня м²`,
-                          "есть балкон",
-                          "нет балкона",
-                          `мин. до метро`,
-                          "qweqwe",
-                        ],
-                      }),
-                      title: "Адрес",
-                    }}
-                    options={{
-                      // Применяем шаблон
-                      balloonContentLayout: template,
-                      balloonPanelMaxMapArea: 0,
+                {iconShape &&
+                  iconShape.length &&
+                  isSuccess &&
+                  showAnalogs &&
+                  getAnalogsBySubquery(
+                    getSubqueryByGuid(
+                      selectedSubQuery!,
+                      store.queryGetData!.subQueries
+                    )!,
+                    true
+                  )!.map((analog) => (
+                    <Placemark
+                      geometry={[analog!.lat, analog!.lon]}
+                      properties={{
+                        content: getTagsTemplate({
+                          title: analog!.address.replace("Москва, ", ""),
+                          subtitle: `${analog.price} ₽`,
+                          tags: getApartmentTags(analog),
+                        }),
+                        title: analog.address!.replace("Москва, ", ""),
+                      }}
+                      options={{
+                        // Применяем шаблон
+                        balloonContentLayout: template,
+                        balloonPanelMaxMapArea: 0,
 
-                      iconLayout: iconTemplate,
-                      iconShape: {
-                        type: "Rectangle",
-                        coordinates: iconShape,
-                      },
-                    }}
-                    modules={["geoObject.addon.balloon"]}
-                  />
-                )}
+                        iconLayout: iconTemplate,
+                        iconShape: {
+                          type: "Rectangle",
+                          coordinates: iconShape,
+                        },
+                      }}
+                      modules={["geoObject.addon.balloon"]}
+                    />
+                  ))}
 
-                {!iconShape && (
-                  <Placemark
-                    geometry={[55.8, 37.6]}
-                    properties={{
-                      content: getTagsTemplate({
-                        title: "Адрес",
-                        subtitle: "",
-                        tags: [
-                          ` этаж`,
-                          `S м²`,
-                          `S кухня м²`,
-                          "есть балкон",
-                          "нет балкона",
-                          `мин. до метро`,
-                          "qweqwe",
-                        ],
-                      }),
-                      title: "Адрес",
-                    }}
-                    options={{
-                      // Применяем шаблон
-                      balloonContentLayout: template,
-                      balloonPanelMaxMapArea: 0,
+                {!iconShape &&
+                  isSuccess &&
+                  showAnalogs &&
+                  getAnalogsBySubquery(
+                    getSubqueryByGuid(
+                      selectedSubQuery!,
+                      store.queryGetData!.subQueries
+                    )!,
+                    true
+                  )!.map((analog) => (
+                    <Placemark
+                      geometry={[analog!.lat, analog!.lon]}
+                      properties={{
+                        content: getTagsTemplate({
+                          title: analog!.address.replace("Москва, ", ""),
+                          subtitle: "",
+                          tags: getApartmentTags(analog),
+                        }),
+                        title: analog!.address.replace("Москва, ", ""),
+                      }}
+                      options={{
+                        // Применяем шаблон
+                        balloonContentLayout: iconTemplate,
+                        balloonPanelMaxMapArea: 0,
 
-                      iconLayout: iconTemplate,
-                    }}
-                    modules={["geoObject.addon.balloon"]}
-                  />
-                )}
+                        iconLayout: iconTemplate,
+                      }}
+                      modules={["geoObject.addon.balloon"]}
+                    />
+                  ))}
 
                 {isSuccess && showSearchArea && (
                   <>

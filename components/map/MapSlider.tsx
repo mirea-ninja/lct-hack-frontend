@@ -1,26 +1,27 @@
 import React from "react";
-import { Link, useTheme } from "@mui/material";
+import { useTheme } from "@mui/material";
 import {
   Box,
   Typography,
   IconButton,
   ToggleButtonGroup,
   ToggleButton,
-} from "@mui/material";
+} from "@mui/material"
 
-import CollapsableAnalogInfo from "./CollapsableAnalogInfo";
+import CollapsableAnalogInfo from "./CollapsableAnalogInfo"
 
-import styles from "./MapSlider.module.scss";
-import { ArrowRight } from "../icons/ArrowRightIcon";
-import { ArrowLeft } from "../icons/ArrowLeftIcon";
-import { ClosedEyeIcon } from "../icons/ClosedEyeIcon";
-import { OpenIcon } from "../icons/OpenIcon";
-import HiddenAnalogsModal from "./HiddenAnalogsModal";
-import { EditorModalType, EditorModal } from "./EditorModal";
+import styles from "./MapSlider.module.scss"
+import { ArrowRight } from "../icons/ArrowRightIcon"
+import { ArrowLeft } from "../icons/ArrowLeftIcon"
+import { ClosedEyeIcon } from "../icons/ClosedEyeIcon"
+import { OpenIcon } from "../icons/OpenIcon"
+import HiddenAnalogsModal from "./HiddenAnalogsModal"
+import { EditorModalType, EditorModal } from "./EditorModal"
 
-import { QueryGet } from "../../apiConnection/gen/models/query-get";
+import { QueryGet } from "../../apiConnection/gen/models/query-get"
 import { SubQueryGet } from "../../apiConnection/gen";
-import { useStore } from "../../logic/DataStore";
+import { useStore } from "../../logic/DataStore"
+import Link from "next/link"
 
 const Plus = () => (
   <svg
@@ -35,10 +36,10 @@ const Plus = () => (
       fill="#038CD2"
     />
   </svg>
-);
+)
 
 const Hr = () => {
-  const theme = useTheme();
+  const theme = useTheme()
   return (
     <Box
       sx={{
@@ -48,8 +49,9 @@ const Hr = () => {
         marginBottom: "10px",
       }}
     />
-  );
-};
+  )
+}
+
 
 interface AnlogBoxProps {
   selectedSubQuery: SubQueryGet;
@@ -112,14 +114,13 @@ export default function MapSlider({
   const [hiddenAnalogsShow, setHiddenAnalogsShow] = React.useState(false);
   const [editorCreateOpen, setEditorCreateOpen] = React.useState(false);
 
-  const theme = useTheme();
-  let store = useStore();
+  const theme = useTheme()
+  let store = useStore()
 
-  console.log("SASS", selectedSubQuery);
 
-  const subqueries = store.queryGetData?.subQueries ?? [];
 
-  // console.log("subqueries", subqueries);
+  const subqueries = store.queryGetData?.subQueries ?? []
+
 
   return (
     <>
@@ -190,7 +191,7 @@ export default function MapSlider({
               <IconButton
                 className={styles.button}
                 onClick={() => {
-                  setEditorCreateOpen(true);
+                  setEditorCreateOpen(true)
                 }}
               >
                 <Plus />
@@ -213,8 +214,8 @@ export default function MapSlider({
           <ToggleButtonGroup
             exclusive
             onChange={(event, newSubqueryIndex) => {
-              setSubquery(newSubqueryIndex);
-              onSelectedSubQueryChange(subqueries[newSubqueryIndex].guid);
+              setSubquery(newSubqueryIndex)
+              onSelectedSubQueryChange(subqueries[newSubqueryIndex].guid)
             }}
             sx={{
               marginTop: "14px",
@@ -262,7 +263,7 @@ export default function MapSlider({
                       : "cтудии"}
                   </Typography>
                 </ToggleButton>
-              );
+              )
             })}
           </ToggleButtonGroup>
 
@@ -271,5 +272,5 @@ export default function MapSlider({
         </Box>
       </Box>
     </>
-  );
+  )
 }
