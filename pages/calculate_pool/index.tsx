@@ -61,6 +61,7 @@ export default function CalculatePoolPage({}: Props) {
   const api = useApiClient()
 
   const [corrections, setCorrections] = useState<boolean>(false)
+  const [link, setLink] = useState<string>()
 
   const standart = store.queryGetData?.subQueries[0].standartObject
 
@@ -88,6 +89,7 @@ export default function CalculatePoolPage({}: Props) {
     },
     onSuccess(data) {
       console.log(data.data)
+      setLink(data.data.link)
     },
   })
 
@@ -100,6 +102,10 @@ export default function CalculatePoolPage({}: Props) {
   }, [])
 
   console.log(toJS(store.queryGetData))
+
+  if (link != null) {
+    window.open(link)
+  }
 
   return (
     <Box>
@@ -162,7 +168,6 @@ export default function CalculatePoolPage({}: Props) {
               </Typography>
             </Stack>
             <Stack direction="row" sx={{ gap: "20px" }}>
-
               <FormControlLabel
                 control={
                   <AppCheckbox
@@ -235,6 +240,7 @@ export default function CalculatePoolPage({}: Props) {
               >
                 Экспортировать пул
               </AppButton>
+              {link != null && <a id="downloadStuff" href={link} download />}
             </Stack>
           </Stack>
         </Stack>
