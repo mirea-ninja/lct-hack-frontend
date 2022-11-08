@@ -11,12 +11,56 @@ import PoolTabs from "../../components/tabs/PoolTabs"
 import { useStore } from "../../logic/DataStore"
 import { useApiClient } from "../../logic/ApiClientHook"
 import { useMutation } from "@tanstack/react-query"
+import { SubQueryGet } from "../../apiConnection/gen"
+import { Pool } from "../../components/tables/PoolTable/types"
+import { toJS } from "mobx"
+
+function SubQueryToPoolTableRender(subquery: SubQueryGet): Pool[] {
+  console.log(toJS(subquery))
+
+  return [
+    subquery.standartObject!,
+    ...subquery.inputApartments!.filter(
+      (obj) => obj.guid != subquery.standartObject!.guid
+    ),
+  ].map((object, i) => {
+    return {
+      id: i,
+      isBasic: true,
+      pricePerSquareMeter: {
+        value: object.m2price ?? 0,
+        change: object.adjustment?.priceArea,
+      },
+      objectPrice: object.price!,
+      floor: { value: object.floor!, change: object.adjustment?.floor },
+      flatSquare: {
+        value: object.apartmentArea!,
+        change: object.adjustment?.aptArea,
+      },
+      kitchenSquare: {
+        value: object.kitchenArea!,
+        change: object.adjustment?.kitchenArea,
+      },
+      hasBalcony: {
+        value: object.hasBalcony!,
+        change: object.adjustment?.hasBalcony,
+      },
+      state: { value: object.quality!, change: object.adjustment?.quality },
+      metro: {
+        value: object.distanceToMetro!,
+        change: object.adjustment?.quality,
+      },
+    }
+  })
+}
 
 type Props = {}
 
 export default function CalculatePoolPage({}: Props) {
   const store = useStore()
   const api = useApiClient()
+
+  const [corrections, setCorrections] = useState<boolean>(false)
 
   const standart = store.queryGetData?.subQueries[0].standartObject
 
@@ -34,12 +78,28 @@ export default function CalculatePoolPage({}: Props) {
     },
   })
 
+  const exportApi = useMutation({
+    mutationFn: (params: { queryId: string; useCorrections: boolean }) => {
+      return api.poolApi.exportApiExportGet(
+        params.queryId,
+        params.useCorrections,
+        false
+      )
+    },
+    onSuccess(data) {
+      console.log(data.data)
+    },
+  })
+
   useEffect(() => {
+    console.log("CALC POOL USE EFFECT")
     for (let i = 0; i < store.queryGetData!.subQueries.length; i++) {
       let subQuery = store.queryGetData?.subQueries[i]
       mutate({ queryId: store.queryGetData!.guid, subqueryId: subQuery!.guid })
     }
   }, [])
+
+  console.log(toJS(store.queryGetData))
 
   return (
     <Box>
@@ -101,9 +161,17 @@ export default function CalculatePoolPage({}: Props) {
                 {standart?.walls ?? "тип стены"}
               </Typography>
             </Stack>
-            <Stack direction="row" sx={{ gap: "50px" }}>
+            <Stack direction="row" sx={{ gap: "20px" }}>
+
               <FormControlLabel
-                control={<AppCheckbox defaultChecked />}
+                control={
+                  <AppCheckbox
+                    onChange={() => {
+                      setCorrections(!corrections)
+                    }}
+                    defaultChecked
+                  />
+                }
                 label={
                   <Typography
                     sx={{
@@ -125,11 +193,53 @@ export default function CalculatePoolPage({}: Props) {
                   color: "#3E3E41",
                 }}
               />
-              <AppButton size="small">Экспортировать пул</AppButton>
+
+              <FormControlLabel
+                control={
+                  <AppCheckbox
+                    onChange={() => {
+                      setCorrections(!corrections)
+                    }}
+                    defaultChecked
+                  />
+                }
+                label={
+                  <Typography
+                    sx={{
+                      maxWidth: "200px",
+                      fontSize: "16px",
+                      lineHeight: "18px",
+                      fontWeight: 500,
+                      color: "var(--text-clr-secondary)",
+                    }}
+                  >
+                    Разбить выходной файл на листы
+                  </Typography>
+                }
+                sx={{
+                  fontSize: "16px",
+                  lineHeight: "18px",
+                  fontWeight: 500,
+                  marginLeft: 0,
+                  color: "#3E3E41",
+                }}
+              />
+              <AppButton
+                size="small"
+                onClick={() => {
+                  exportApi.mutate({
+                    queryId: store.queryGetData!.guid,
+                    useCorrections: corrections,
+                  })
+                }}
+              >
+                Экспортировать пул
+              </AppButton>
             </Stack>
           </Stack>
         </Stack>
         <PoolTabs
+          subQueryToPoolTableRender={SubQueryToPoolTableRender}
           subqueries={
             store.queryGetData?.subQueries ?? [
               {

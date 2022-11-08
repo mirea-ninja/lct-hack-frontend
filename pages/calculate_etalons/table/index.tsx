@@ -12,8 +12,45 @@ import { useStore } from "../../../logic/DataStore"
 import Link from "next/link"
 import { useApiClient } from "../../../logic/ApiClientHook"
 import { useMutation, useQuery } from "@tanstack/react-query"
+import { toJS } from "mobx"
+import { SubQueryGet } from "../../../apiConnection/gen"
+import { Pool } from "../../../components/tables/PoolTable/types"
 
 type Props = {}
+
+function SubQueryToPoolTableRender(subquery: SubQueryGet): Pool[] {
+  return [subquery.standartObject!, ...subquery.selectedAnalogs!].map(
+    (object, i) => {
+      return {
+        id: i,
+        isBasic: true,
+        pricePerSquareMeter: {
+          value: object.m2price ?? 0,
+          change: object.adjustment?.priceArea,
+        },
+        objectPrice: object.price!,
+        floor: { value: object.floor!, change: object.adjustment?.floor },
+        flatSquare: {
+          value: object.apartmentArea!,
+          change: object.adjustment?.aptArea,
+        },
+        kitchenSquare: {
+          value: object.kitchenArea!,
+          change: object.adjustment?.kitchenArea,
+        },
+        hasBalcony: {
+          value: object.hasBalcony!,
+          change: object.adjustment?.hasBalcony,
+        },
+        state: { value: object.quality!, change: object.adjustment?.quality },
+        metro: {
+          value: object.distanceToMetro!,
+          change: object.adjustment?.quality,
+        },
+      }
+    }
+  )
+}
 
 export default function CalculateEtalonsPage({}: Props) {
   const store = useStore()
@@ -21,26 +58,7 @@ export default function CalculateEtalonsPage({}: Props) {
 
   const standart = store.queryGetData?.subQueries[0].standartObject
 
-  const { mutate, isLoading, isError, isSuccess } = useMutation({
-    mutationFn: (params: { queryId: string; subqueryId: string }) => {
-      return api.subqueryApi.calculateAnalogsApiQueryIdSubquerySubidCalculateAnalogsPost(
-        params.queryId,
-        params.subqueryId
-      )
-    },
-    onSettled(data, error, variables, context) {},
-    onSuccess(data) {
-      console.log(data.data)
-      store.queryGetData = data.data
-    },
-  })
-
-  useEffect(() => {
-    for (let i = 0; i < store.queryGetData!.subQueries.length; i++) {
-      let subQuery = store.queryGetData?.subQueries[i]
-      mutate({ queryId: store.queryGetData!.guid, subqueryId: subQuery!.guid })
-    }
-  }, [])
+  console.log(toJS(store.queryGetData))
 
   return (
     <Box>
@@ -97,35 +115,12 @@ export default function CalculateEtalonsPage({}: Props) {
                 }}
               >
                 {standart?.address ?? "Адрес"},{" "}
-                {standart?.quality ?? "качество жилья"},{" "}
+                {standart?.quality?.toLowerCase() ?? "качество жилья"},{" "}
                 {standart?.floors ?? "N"} этажей,{" "}
-                {standart?.walls ?? "тип стены"}
+                {standart?.walls?.toLowerCase() ?? "тип стены"}
               </Typography>
             </Stack>
             <Stack direction="row" sx={{ gap: "50px" }}>
-              <FormControlLabel
-                control={<AppCheckbox defaultChecked />}
-                label={
-                  <Typography
-                    sx={{
-                      maxWidth: "200px",
-                      fontSize: "16px",
-                      lineHeight: "18px",
-                      fontWeight: 500,
-                      color: "var(--text-clr-secondary)",
-                    }}
-                  >
-                    Добавить корректировки в файл
-                  </Typography>
-                }
-                sx={{
-                  fontSize: "16px",
-                  lineHeight: "18px",
-                  fontWeight: 500,
-                  marginLeft: 0,
-                  color: "#3E3E41",
-                }}
-              />
               <Link href="/calculate_etalons/map">
                 <AppButton size="small" variant="secondary">
                   Вернуться на карту
@@ -138,6 +133,7 @@ export default function CalculateEtalonsPage({}: Props) {
           </Stack>
         </Stack>
         <PoolTabs
+          subQueryToPoolTableRender={SubQueryToPoolTableRender}
           subqueries={
             store.queryGetData?.subQueries ?? [
               {
