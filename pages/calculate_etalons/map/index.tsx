@@ -594,6 +594,7 @@ const Maps = observer(({}: Props) => {
                     )!,
                     true
                   )!.map((analog) => (
+                    (analog &&
                     <Placemark
                       geometry={[analog!.lat, analog!.lon]}
                       properties={{
@@ -613,7 +614,7 @@ const Maps = observer(({}: Props) => {
                       }}
                       modules={["geoObject.addon.balloon"]}
                     />
-                  ))}
+                    )))}
 
                 {isSuccess && showSearchArea && (
                   <>
