@@ -267,7 +267,7 @@ export default function MapSlider({
                   >
                     {subQuery.standartObject?.rooms != 0
                       ? `${subQuery.standartObject?.rooms}-комн.`
-                      : "cтудии"}
+                      : "Студии"}
                   </Typography>
                 </ToggleButton>
               )
