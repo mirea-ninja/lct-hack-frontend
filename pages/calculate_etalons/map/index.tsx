@@ -86,9 +86,7 @@ const Maps = observer(({}: Props) => {
   const store = useStore()
   const apiClient = useApiClient()
 
-  const [selectedSubQuery, setSelectedSubQuery] = React.useState<string | null>(
-    null
-  )
+  const [selectedSubQuery, setSelectedSubQuery] = React.useState<string | null>(null)
 
   // Настройки карты
   const [showEtalon, setShowEtalon] = React.useState(true)
@@ -331,14 +329,19 @@ const Maps = observer(({}: Props) => {
 
       <Header stepProgress={3} />
 
-      {isSuccess && (
-        <MapSlider
-        // data={store.queryGetData}
-        // onSliderChange={(value) => {
-        //   store.setQueryGetData(value);
-        // }}
-        />
-      )}
+      {isSuccess &&
+        store.queryGetData!.subQueries.map(
+          (subQuery) =>
+            subQuery.guid === selectedSubQuery && (
+              <MapSlider
+                onSelectedSubQueryChange={(guid) => {
+                  setSelectedSubQuery(guid)
+                }}
+                selectedSubQuery={subQuery}
+              />
+            )
+        )
+      }
       {isSuccess &&
         store.queryGetData!.subQueries.map(
           (subQuery) =>

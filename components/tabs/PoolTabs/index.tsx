@@ -37,7 +37,7 @@ function SubQueryToPoolTableRender(subquery: SubQueryGet): Pool[] {
       id: i,
       isBasic: true,
       pricePerSquareMeter: {
-        value: object.m2price!,
+        value: object.m2price,
         change: object.adjustment?.priceArea,
       },
       objectPrice: object.price!,

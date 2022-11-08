@@ -1,5 +1,5 @@
 import React from "react";
-import { useTheme } from "@mui/material";
+import { Link, useTheme } from "@mui/material";
 import {
   Box,
   Typography,
@@ -19,6 +19,7 @@ import HiddenAnalogsModal from "./HiddenAnalogsModal";
 import { EditorModalType, EditorModal } from "./EditorModal";
 
 import { QueryGet } from "../../apiConnection/gen/models/query-get";
+import { SubQueryGet } from "../../apiConnection/gen";
 import { useStore } from "../../logic/DataStore";
 
 const Plus = () => (
@@ -50,11 +51,62 @@ const Hr = () => {
   );
 };
 
+interface AnlogBoxProps {
+  selectedSubQuery: SubQueryGet;
+}
+
+function AnalogBox({ selectedSubQuery }: AnlogBoxProps) {
+  const store = useStore();
+
+  return (
+    <Box className={styles.cards}>
+      {selectedSubQuery?.selectedAnalogs[0].map((analog, i) => (
+        <>
+          <CollapsableAnalogInfo
+            key={i}
+            address={analog.address}
+            link={analog?.link}
+            price_final={analog?.adjustment?.priceFinal}
+            m2price={analog?.m2price}
+            building_type={analog.segment}
+            floors={analog.floors}
+            walls={analog.walls}
+            floor={analog.floor}
+            apt_area={analog.apartmentArea}
+            kitchen_area={analog.kitchenArea}
+            has_balcony={analog.hasBalcony}
+            to_metro={analog.distanceToMetro}
+            repair_type={analog.quality}
+            trade_adj={analog?.adjustment?.trade}
+            floor_adj={analog?.adjustment?.floor}
+            apt_area_adj={analog?.adjustment?.aptArea}
+            kitchen_area_adj={analog?.adjustment?.kitchenArea}
+            has_balcony_adj={analog?.adjustment?.hasBalcony}
+            to_metro_adj={analog?.adjustment?.distanceToMetro}
+            repair_type_adj={analog?.adjustment?.quality}
+            trade_adj_price={analog?.adjustment?.priceTrade}
+            floor_adj_price={analog?.adjustment?.priceFloor}
+            apt_area_adj_price={analog?.adjustment?.priceArea}
+            kitchen_area_adj_price={analog?.adjustment?.priceKitchen}
+            has_balcony_adj_price={analog?.adjustment?.priceBalcony}
+            to_metro_adj_price={analog?.adjustment?.priceMetro}
+          />
+          <Hr />
+        </>
+      ))}
+    </Box>
+  );
+}
+
 type Props = {
   onSelectedSubQueryChange: (guid: string) => void;
+  selectedSubQuery: SubQueryGet;
 };
 
-export default function MapSlider({ onSelectedSubQueryChange }: Props) {
+export default function MapSlider({
+  onSelectedSubQueryChange,
+  selectedSubQuery,
+}: Props) {
   const [open, setOpen] = React.useState(true);
   const [subquery, setSubquery] = React.useState(0);
   const [hiddenAnalogsShow, setHiddenAnalogsShow] = React.useState(false);
@@ -63,9 +115,11 @@ export default function MapSlider({ onSelectedSubQueryChange }: Props) {
   const theme = useTheme();
   let store = useStore();
 
-  console.log(subquery);
+  console.log("SASS", selectedSubQuery);
 
   const subqueries = store.queryGetData?.subQueries ?? [];
+
+  // console.log("subqueries", subqueries);
 
   return (
     <>
@@ -114,11 +168,11 @@ export default function MapSlider({ onSelectedSubQueryChange }: Props) {
             },
             "&::-webkit-scrollbar-track": {
               backgroundColor: theme.palette.secondary.light,
-              borderRadius: "0px 10px 10px 0px",
+              borderRadius: "10px",
             },
             "&::-webkit-scrollbar-thumb": {
               backgroundColor: theme.palette.secondary.main,
-              borderRadius: "0px 10px 10px 0px",
+              borderRadius: "10px",
             },
           }}
         >
@@ -145,17 +199,17 @@ export default function MapSlider({ onSelectedSubQueryChange }: Props) {
                 className={styles.button}
                 onClick={() => setHiddenAnalogsShow(true)}
               >
-                <ClosedEyeIcon />
+                <ClosedEyeIcon color={theme.palette.primary.main} />
               </IconButton>
-              <IconButton
-                className={styles.button}
-                href="/calculate_etalons/table"
-              >
-                <OpenIcon />
-              </IconButton>
+              <Link href="/calculate_etalons/table">
+                <IconButton className={styles.button}>
+                  <OpenIcon />
+                </IconButton>
+              </Link>
             </Box>
           </Box>
 
+          {/* кнопки выбора подзапроса */}
           <ToggleButtonGroup
             exclusive
             onChange={(event, newSubqueryIndex) => {
@@ -170,10 +224,6 @@ export default function MapSlider({ onSelectedSubQueryChange }: Props) {
             }}
           >
             {subqueries.map((subQuery, i) => {
-              const text =
-                subQuery.standartObject?.rooms != 0
-                  ? `${subQuery.standartObject?.rooms}-комн.`
-                  : "cтудии";
               return (
                 <ToggleButton
                   value={i}
@@ -183,7 +233,7 @@ export default function MapSlider({ onSelectedSubQueryChange }: Props) {
                     borderRadius: "10px",
                     border: "none",
                     color: theme.palette.text.primary,
-                    backgroundColor: "tranparent",
+                    backgroundColor: "transparent",
                     "&.Mui-selected": {
                       color: theme.palette.primary.main,
                       backgroundColor: "transparent",
@@ -207,7 +257,9 @@ export default function MapSlider({ onSelectedSubQueryChange }: Props) {
                         : theme.palette.text.primary
                     }
                   >
-                    {text}
+                    {subQuery.standartObject?.rooms != 0
+                      ? `${subQuery.standartObject?.rooms}-комн.`
+                      : "cтудии"}
                   </Typography>
                 </ToggleButton>
               );
@@ -215,13 +267,7 @@ export default function MapSlider({ onSelectedSubQueryChange }: Props) {
           </ToggleButtonGroup>
 
           {/* Контейнер с инфой раскрывающейся */}
-          <Box className={styles.cards}>
-            <CollapsableAnalogInfo />
-            <Hr />
-            <CollapsableAnalogInfo />
-            <Hr />
-            <CollapsableAnalogInfo />
-          </Box>
+          <AnalogBox selectedSubQuery={selectedSubQuery} />
         </Box>
       </Box>
     </>

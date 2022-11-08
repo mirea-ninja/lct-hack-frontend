@@ -51,8 +51,8 @@ export function EditorModal({ type, open, setOpen }: Props) {
               fontWeight={700}
             >
               {type === EditorModalType.CREATE
-                ? "Добавление аналого (1 комн.)"
-                : "Редактирование аналога (1 комн.)"}
+                ? "Добавление аналога (1 комн.)"
+                : "Редактирование аналога"}
             </Typography>
 
             {type === EditorModalType.EDIT && (

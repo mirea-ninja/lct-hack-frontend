@@ -308,14 +308,12 @@ const PoolData = observer(({ data, id }: PoolDataProps) => {
         }}
       >
         {data.inputApartments!.length} объект{
-          () => {
-          const count = data.inputApartments!.length
-          count % 10 == 1 && count % 100 != 11
+          data.inputApartments!.length % 10 == 1 && data.inputApartments!.length % 100 != 11
           ? ""
-          : count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 10 || count % 100 >= 20)
+          : data.inputApartments!.length % 10 >= 2 && data.inputApartments!.length % 10 <= 4 && (data.inputApartments!.length % 100 < 10 || data.inputApartments!.length % 100 >= 20)
           ? "а"
           : "ов"
-        }}
+        }
       </Typography>
       <Box height={"15px"} />
       <Grid container spacing={1}>
