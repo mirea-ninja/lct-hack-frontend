@@ -92,6 +92,7 @@ export default function PoolTabs({
 }: Props) {
   const [activeTab, setActiveTab] = React.useState(0)
   const data = subQueryToPoolTableRender(subqueries[activeTab])
+  console.log("FJDJKDFJK", data)
 
   return (
     <Paper

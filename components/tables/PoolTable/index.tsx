@@ -102,7 +102,10 @@ const ResultTableRow = ({ row, hasMetroAttribute }: TableRowProps) => {
       <StyledTableCell scope="row">
         <StyledStack>
           {row.pricePerSquareMeter.value} ₽
-            {hasMetroAttribute ? <PercentageItem value={row.pricePerSquareMeter.change} /> : null}
+          {hasMetroAttribute && row.pricePerSquareMeter.value > 0 &&
+               (<PercentageItem value={row.pricePerSquareMeter.change - row.pricePerSquareMeter.value} />)}
+
+
         </StyledStack>
       </StyledTableCell>
       <StyledTableCell align="right">
@@ -111,7 +114,7 @@ const ResultTableRow = ({ row, hasMetroAttribute }: TableRowProps) => {
       <StyledTableCell align="right">
         <StyledStack>
           {row.floor.value}
-          {row.floor.change && <PercentageItem value={row.floor.change} />}
+          {row.floor.change != null && (<PercentageItem value={row.floor.change} />)}
         </StyledStack>
       </StyledTableCell>
       <StyledTableCell align="right">

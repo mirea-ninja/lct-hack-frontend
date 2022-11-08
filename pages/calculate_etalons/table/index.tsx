@@ -115,9 +115,9 @@ export default function CalculateEtalonsPage({}: Props) {
                 }}
               >
                 {standart?.address ?? "Адрес"},{" "}
-                {standart?.quality ?? "качество жилья"},{" "}
+                {standart?.quality?.toLowerCase() ?? "качество жилья"},{" "}
                 {standart?.floors ?? "N"} этажей,{" "}
-                {standart?.walls ?? "тип стены"}
+                {standart?.walls?.toLowerCase() ?? "тип стены"}
               </Typography>
             </Stack>
             <Stack direction="row" sx={{ gap: "50px" }}>
