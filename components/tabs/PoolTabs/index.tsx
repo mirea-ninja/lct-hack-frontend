@@ -33,40 +33,6 @@ function PoolTab({ isActive, text, onClick }: PoolTabProps) {
   )
 }
 
-function SubQueryToPoolTableRender(subquery: SubQueryGet): Pool[] {
-  return [subquery.standartObject!, ...subquery.selectedAnalogs!].map(
-    (object, i) => {
-      return {
-        id: i,
-        isBasic: true,
-        pricePerSquareMeter: {
-          value: object.m2price ?? 0,
-          change: object.adjustment?.priceArea,
-        },
-        objectPrice: object.price!,
-        floor: { value: object.floor!, change: object.adjustment?.floor },
-        flatSquare: {
-          value: object.apartmentArea!,
-          change: object.adjustment?.aptArea,
-        },
-        kitchenSquare: {
-          value: object.kitchenArea!,
-          change: object.adjustment?.kitchenArea,
-        },
-        hasBalcony: {
-          value: object.hasBalcony!,
-          change: object.adjustment?.hasBalcony,
-        },
-        state: { value: object.quality!, change: object.adjustment?.quality },
-        metro: {
-          value: object.distanceToMetro!,
-          change: object.adjustment?.quality,
-        },
-      }
-    }
-  )
-}
-
 function idToRooms(id: number): string {
   switch (id) {
     case 1:
@@ -91,7 +57,6 @@ export default function PoolTabs({
 }: Props) {
   const [activeTab, setActiveTab] = React.useState(0)
   const data = subQueryToPoolTableRender(subqueries[activeTab])
-  console.log(toJS(subqueries))
 
   return (
     <Paper
