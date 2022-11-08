@@ -514,6 +514,7 @@ const Maps = observer(({}: Props) => {
                     )!,
                     false
                   ).map((analog) => (
+                    (analog &&
                     <CustomPlacemark
                       coords={[analog!.lat, analog!.lon]}
                       type={CustomPlacemarkType.HIDDEN}
@@ -524,7 +525,7 @@ const Maps = observer(({}: Props) => {
                       iconTemplate={iconTemplate}
                       iconShape={iconShape}
                     />
-                  ))}
+                  )))}
 
                 {isSuccess &&
                   showEtalon &&
@@ -554,11 +555,12 @@ const Maps = observer(({}: Props) => {
                   showAnalogs &&
                   getAnalogsBySubquery(
                     getSubqueryByGuid(
-                      selectedSubQuery!,
+                      selectedSubQuery,
                       store.queryGetData!.subQueries
                     )!,
                     true
-                  )!.map((analog) => (
+                  ).map((analog) => (
+                    (analog &&
                     <Placemark
                       geometry={[analog!.lat, analog!.lon]}
                       properties={{
@@ -582,7 +584,7 @@ const Maps = observer(({}: Props) => {
                       }}
                       modules={["geoObject.addon.balloon"]}
                     />
-                  ))}
+                  )))}
 
                 {!iconShape &&
                   isSuccess &&
@@ -594,6 +596,7 @@ const Maps = observer(({}: Props) => {
                     )!,
                     true
                   )!.map((analog) => (
+                    (analog &&
                     <Placemark
                       geometry={[analog!.lat, analog!.lon]}
                       properties={{
@@ -613,7 +616,7 @@ const Maps = observer(({}: Props) => {
                       }}
                       modules={["geoObject.addon.balloon"]}
                     />
-                  ))}
+                    )))}
 
                 {isSuccess && showSearchArea && (
                   <>
