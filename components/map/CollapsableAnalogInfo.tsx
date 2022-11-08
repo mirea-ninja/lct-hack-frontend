@@ -118,9 +118,9 @@ export default function CollapsableAnalogInfo(
     link = "https://www.example.com",
 
     price_final = null,
-    m2price = 228228,
+    m2price = null,
     // округлить до 2 знаков после запятой
-    adj_m2price = m2price ? ((m2price - price_final) * 100 / m2price).toFixed(1) : null,
+    adj_m2price = m2price ? ((price_final - m2price) * 100 / m2price).toFixed(1) : null,
 
     building_type = null,
     floors = null,
@@ -133,7 +133,7 @@ export default function CollapsableAnalogInfo(
     to_metro = null,
     repair_type = null,
 
-    trade_adj = -4.5,
+    trade_adj = -0.045,
     floor_adj = null,
     apt_area_adj = null,
     kitchen_area_adj = null,
@@ -163,6 +163,29 @@ export default function CollapsableAnalogInfo(
 
   address = address.replace("Москва, ", "").replace("улица", "ул.").replace("проспект", "пр-кт").replace("переулок", "пер.").replace("площадь", "пл.").replace("ул.,", ",").replace(" ,", ",")
   building_type = building_type?.charAt(0).toUpperCase() + building_type?.slice(1);
+
+  // умножить все _adj на 100 и округлить до 1 знака после запятой. Если после запятой 0, то округлить до целого
+  trade_adj = trade_adj ? (trade_adj * 100).toFixed(1) : null;
+  trade_adj = trade_adj % 1 === 0 ? (trade_adj / 1) : trade_adj;
+
+  floor_adj = floor_adj ? (floor_adj * 100).toFixed(1) : null;
+  floor_adj = floor_adj % 1 === 0 ? (floor_adj / 1) : floor_adj;
+
+  apt_area_adj = apt_area_adj ? (apt_area_adj * 100).toFixed(1) : null;
+  apt_area_adj = apt_area_adj % 1 === 0 ? (apt_area_adj / 1) : apt_area_adj;
+
+  kitchen_area_adj = kitchen_area_adj ? (kitchen_area_adj * 100).toFixed(1) : null;
+  kitchen_area_adj = kitchen_area_adj % 1 === 0 ? (kitchen_area_adj / 1) : kitchen_area_adj;
+
+  has_balcony_adj = has_balcony_adj ? (has_balcony_adj * 100).toFixed(1) : null;
+  has_balcony_adj = has_balcony_adj % 1 === 0 ? (has_balcony_adj / 1) : has_balcony_adj;
+
+  to_metro_adj = to_metro_adj ? (to_metro_adj * 100).toFixed(1) : null;
+  to_metro_adj = to_metro_adj % 1 === 0 ? (to_metro_adj / 1) : to_metro_adj;
+
+  // repair_type_adj = repair_type_adj ? (repair_type_adj * 100).toFixed(1) : null;
+  // repair_type_adj = repair_type_adj % 1 === 0 ? (repair_type_adj / 1) : repair_type_adj;
+
 
   return (
     <>

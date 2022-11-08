@@ -121,29 +121,6 @@ export default function CalculateEtalonsPage({}: Props) {
               </Typography>
             </Stack>
             <Stack direction="row" sx={{ gap: "50px" }}>
-              <FormControlLabel
-                control={<AppCheckbox defaultChecked />}
-                label={
-                  <Typography
-                    sx={{
-                      maxWidth: "200px",
-                      fontSize: "16px",
-                      lineHeight: "18px",
-                      fontWeight: 500,
-                      color: "var(--text-clr-secondary)",
-                    }}
-                  >
-                    Добавить корректировки в файл
-                  </Typography>
-                }
-                sx={{
-                  fontSize: "16px",
-                  lineHeight: "18px",
-                  fontWeight: 500,
-                  marginLeft: 0,
-                  color: "#3E3E41",
-                }}
-              />
               <Link href="/calculate_etalons/map">
                 <AppButton size="small" variant="secondary">
                   Вернуться на карту

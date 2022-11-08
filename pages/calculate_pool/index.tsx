@@ -161,7 +161,8 @@ export default function CalculatePoolPage({}: Props) {
                 {standart?.walls ?? "тип стены"}
               </Typography>
             </Stack>
-            <Stack direction="row" sx={{ gap: "50px" }}>
+            <Stack direction="row" sx={{ gap: "20px" }}>
+
               <FormControlLabel
                 control={
                   <AppCheckbox
@@ -182,6 +183,37 @@ export default function CalculatePoolPage({}: Props) {
                     }}
                   >
                     Добавить корректировки в файл
+                  </Typography>
+                }
+                sx={{
+                  fontSize: "16px",
+                  lineHeight: "18px",
+                  fontWeight: 500,
+                  marginLeft: 0,
+                  color: "#3E3E41",
+                }}
+              />
+
+              <FormControlLabel
+                control={
+                  <AppCheckbox
+                    onChange={() => {
+                      setCorrections(!corrections)
+                    }}
+                    defaultChecked
+                  />
+                }
+                label={
+                  <Typography
+                    sx={{
+                      maxWidth: "200px",
+                      fontSize: "16px",
+                      lineHeight: "18px",
+                      fontWeight: 500,
+                      color: "var(--text-clr-secondary)",
+                    }}
+                  >
+                    Разбить выходной файл на листы
                   </Typography>
                 }
                 sx={{

@@ -62,23 +62,27 @@ function AnalogBox({ selectedSubQuery }: AnlogBoxProps) {
 
   return (
     <Box className={styles.cards}>
-      {selectedSubQuery?.selectedAnalogs[0].map((analog, i) => (
+      {selectedSubQuery?.selectedAnalogs?.map((analog, i) => (
         <>
           <CollapsableAnalogInfo
             key={i}
+
             address={analog.address}
             link={analog?.link}
+
             price_final={analog?.adjustment?.priceFinal}
             m2price={analog?.m2price}
             building_type={analog.segment}
             floors={analog.floors}
             walls={analog.walls}
+
             floor={analog.floor}
             apt_area={analog.apartmentArea}
             kitchen_area={analog.kitchenArea}
             has_balcony={analog.hasBalcony}
             to_metro={analog.distanceToMetro}
             repair_type={analog.quality}
+
             trade_adj={analog?.adjustment?.trade}
             floor_adj={analog?.adjustment?.floor}
             apt_area_adj={analog?.adjustment?.aptArea}
@@ -86,6 +90,7 @@ function AnalogBox({ selectedSubQuery }: AnlogBoxProps) {
             has_balcony_adj={analog?.adjustment?.hasBalcony}
             to_metro_adj={analog?.adjustment?.distanceToMetro}
             repair_type_adj={analog?.adjustment?.quality}
+
             trade_adj_price={analog?.adjustment?.priceTrade}
             floor_adj_price={analog?.adjustment?.priceFloor}
             apt_area_adj_price={analog?.adjustment?.priceArea}
@@ -120,6 +125,8 @@ export default function MapSlider({
 
 
   const subqueries = store.queryGetData?.subQueries ?? []
+
+  console.log("ABOBA", selectedSubQuery)
 
 
   return (

@@ -61,12 +61,12 @@ export default function PoolTable({ rows, hasMetroAttribute = false }: Props) {
       <Table sx={{ minWidth: 700 }} stickyHeader>
         <TableHead>
           <TableRow>
-            <StyledTableCell align="left">Цена за м2</StyledTableCell>
+            <StyledTableCell align="left">Цена / м²</StyledTableCell>
             <StyledTableCell align="left">Стоимость объекта</StyledTableCell>
             <StyledTableCell align="left">Этаж расположения</StyledTableCell>
-            <StyledTableCell align="left">Площадь квартиры, м2</StyledTableCell>
-            <StyledTableCell align="left">Площадь кухни, м2</StyledTableCell>
-            <StyledTableCell align="left">Балкон или лоджия</StyledTableCell>
+            <StyledTableCell align="left">Площадь квартиры, м²</StyledTableCell>
+            <StyledTableCell align="left">Площадь кухни, м²</StyledTableCell>
+            <StyledTableCell align="left">Балкон / лоджия</StyledTableCell>
             {hasMetroAttribute && (
               <StyledTableCell align="left">
                 Время до метро, мин
@@ -102,9 +102,7 @@ const ResultTableRow = ({ row, hasMetroAttribute }: TableRowProps) => {
       <StyledTableCell scope="row">
         <StyledStack>
           {row.pricePerSquareMeter.value} ₽
-          {row.pricePerSquareMeter.change && (
-            <PercentageItem value={row.pricePerSquareMeter.change} />
-          )}
+            {hasMetroAttribute ? <PercentageItem value={row.pricePerSquareMeter.change} /> : null}
         </StyledStack>
       </StyledTableCell>
       <StyledTableCell align="right">
@@ -119,7 +117,7 @@ const ResultTableRow = ({ row, hasMetroAttribute }: TableRowProps) => {
       <StyledTableCell align="right">
         <StyledStack>
           {row.flatSquare.value}
-          {row.flatSquare.change && (
+          {row.flatSquare.change != null && (
             <PercentageItem value={row.flatSquare.change} />
           )}
         </StyledStack>
@@ -127,7 +125,7 @@ const ResultTableRow = ({ row, hasMetroAttribute }: TableRowProps) => {
       <StyledTableCell align="right">
         <StyledStack>
           {row.kitchenSquare.value}
-          {row.kitchenSquare.change && (
+          {row.kitchenSquare.change != null && (
             <PercentageItem value={row.kitchenSquare.change} />
           )}
         </StyledStack>
@@ -135,7 +133,7 @@ const ResultTableRow = ({ row, hasMetroAttribute }: TableRowProps) => {
       <StyledTableCell align="right">
         <StyledStack>
           {row.hasBalcony.value ? "Да" : "Нет"}
-          {row.hasBalcony.change && (
+          {row.hasBalcony.change != null && (
             <PercentageItem value={row.hasBalcony.change} />
           )}
         </StyledStack>
@@ -144,14 +142,14 @@ const ResultTableRow = ({ row, hasMetroAttribute }: TableRowProps) => {
         <StyledTableCell align="right">
           <StyledStack>
             {row.metro.value}
-            {row.metro.change && <PercentageItem value={row.metro.change} />}
+            {row.metro.change != null && <PercentageItem value={row.metro.change} />}
           </StyledStack>
         </StyledTableCell>
       )}
-      <StyledTableCell align="right">
+      <StyledTableCell align="left">
         <StyledStack>
           {row.state.value}
-          {row.state.change && <PercentageItem value={row.state.change} />}
+          {row.state.change != null && <PercentageItem value={row.state.change} />}
         </StyledStack>
       </StyledTableCell>
     </StyledTableRow>

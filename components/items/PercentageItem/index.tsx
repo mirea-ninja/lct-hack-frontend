@@ -48,7 +48,7 @@ export default function PercentageItem({ value, sx, ...props }: Props) {
           color:
             value! > 0
               ? "var(--positive-clr)"
-              : value! === 0
+              : value == 0
               ? "#A6A8B5"
               : "var(--negative-clr)",
           backgroundColor: "#F3F7FA",
@@ -62,12 +62,12 @@ export default function PercentageItem({ value, sx, ...props }: Props) {
     >
       {value! > 0
         ? value! < 1
-          ? `+${value}%`
+          ? `+${(value * 100).toFixed(1) % 1 == 0 ? ((value * 100).toFixed(1) / 1) : (value * 100).toFixed(1)}%`
           : `+${value}₽`
-        : value! === 0
+        : value! == 0
         ? `0%`
         : value! > -1
-        ? `${value}%`
+        ? `${(value * 100).toFixed(1) % 1 == 0 ? ((value * 100).toFixed(1) / 1) : (value * 100).toFixed(1)}%`
         : `${value}₽`}
     </Typography>
   )
