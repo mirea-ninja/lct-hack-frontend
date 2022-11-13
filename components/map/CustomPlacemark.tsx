@@ -59,15 +59,12 @@ export default function CustomPlacemark(props: CustomPlacemarkProps) {
         iconImageHref:
           props.type == CustomPlacemarkType.ETALON
             ? "/etalon-placemark.svg"
-            : "/placemark.svg",
+            : props.type == CustomPlacemarkType.HIDDEN
+            ? "/placemark.svg"
+            : "/selected-placemark.svg",
 
         iconImageSize: [18, 22],
         iconImageOffset: [-9, -22],
-
-        iconShape: {
-          type: "Rectangle",
-          coordinates: props.iconShape,
-        },
       }}
       modules={["geoObject.addon.balloon"]}
     />

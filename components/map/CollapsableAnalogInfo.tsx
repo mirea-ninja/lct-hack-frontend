@@ -1,5 +1,5 @@
 import React from "react";
-import { Collapse, useTheme } from "@mui/material";
+import { Collapse, InputAdornment, Link, useTheme } from "@mui/material";
 import {
   Box,
   Typography,
@@ -13,6 +13,7 @@ import ArrowLeft from "@mui/icons-material/ChevronLeft";
 import { EditorModalType, EditorModal } from "./EditorModal";
 import { PenIcon } from "../icons/PenIcon";
 import { ClosedEyeIcon } from "../icons/ClosedEyeIcon";
+import TextField from "@mui/material/TextField";
 
 interface InfoCardProps {
   title: string;
@@ -20,7 +21,7 @@ interface InfoCardProps {
   isPositive: boolean | null;
 }
 
-const InfoCard = ({ title, description, isPositive }: InfoCardProps) => {
+function InfoCard ({ title, description, isPositive }: InfoCardProps) {
   const theme = useTheme();
 
   return (
@@ -35,7 +36,9 @@ const InfoCard = ({ title, description, isPositive }: InfoCardProps) => {
 
         minWidth: "90px",
 
-        backgroundColor: "#F3F7FA",
+        backgroundColor:
+        // если title содержит "null" или isPositive === null то цвет фона #F6968140 иначе #EEF2F5
+        title.includes("null") ? "#F6968140" : "#EEF2F5",
         borderRadius: "10px",
       }}
     >
@@ -46,35 +49,150 @@ const InfoCard = ({ title, description, isPositive }: InfoCardProps) => {
       >
         {title}
       </Typography>
-      <Typography
+      <TextField
         fontSize={14}
         fontWeight={500}
-        color={
-          isPositive === null
-            ? theme.palette.secondary.dark
-            : isPositive
-            ? "#76BF5C"
-            : "#F69681"
-        }
+        value={description}
+        padding={0}
+        sx={{
+          "& .MuiOutlinedInput-root": {
+            "& fieldset": {
+              border: "none",
+            }},
+
+          alignSelf: "center",
+          input: {
+            color: isPositive === null ? theme.palette.secondary.dark : isPositive ? "#76BF5C" : "#F69681",
+            width: "100%",
+            textAlign: "center",
+            padding: "0px",
+            margin: "0px",
+
+          },
+          width: "fit-content",
+        }}
       >
-        {description}
-      </Typography>
+      </TextField>
     </Box>
   );
 };
 
-export default function CollapsableAnalogInfo() {
+interface AnalogInfoProps {
+  address: string;
+  link: string | null;
+
+  price_final: number | null;
+  m2price: number | null;
+  adj_m2price: number | null;
+
+  building_type: string | null;
+  floors: number | null;
+  walls: string | null;
+
+  floor: number | null;
+  apt_area: number | null;
+  kitchen_area: number | null;
+  has_balcony: boolean | null;
+  to_metro: number | null;
+  repair_type: string | null;
+
+  trade_adj: number | null;
+  floor_adj: number | null;
+  apt_area_adj: number | null;
+  kitchen_area_adj: number | null;
+  has_balcony_adj: number | null;
+  to_metro_adj: number | null;
+  repair_type_adj: number | null;
+
+  trade_adj_price: number | null;
+  floor_adj_price: number | null;
+  apt_area_adj_price: number | null;
+  kitchen_area_adj_price: number | null;
+  has_balcony_adj_price: number | null;
+  to_metro_adj_price: number | null;
+}
+
+export default function CollapsableAnalogInfo(
+  {
+    address = "ул. Ленина, 1",
+    link = "https://www.example.com",
+
+    price_final = null,
+    m2price = null,
+    // округлить до 2 знаков после запятой
+    adj_m2price = m2price ? ((price_final - m2price) * 100 / m2price).toFixed(1) : null,
+
+    building_type = null,
+    floors = null,
+    walls = null,
+
+    floor = null,
+    apt_area = null,
+    kitchen_area = null,
+    has_balcony = null,
+    to_metro = null,
+    repair_type = null,
+
+    trade_adj = -0.045,
+    floor_adj = null,
+    apt_area_adj = null,
+    kitchen_area_adj = null,
+    has_balcony_adj = null,
+    to_metro_adj = null,
+    repair_type_adj = null,
+
+    trade_adj_price = null,
+    floor_adj_price = null,
+    apt_area_adj_price = null,
+    kitchen_area_adj_price = null,
+    has_balcony_adj_price = null,
+    to_metro_adj_price = null,
+  }: AnalogInfoProps,
+) {
   const theme = useTheme();
 
   const [isCollapsed, setIsCollapsed] = React.useState(false);
-  const [editorEditOpen, setEditorEditOpen] = React.useState(false);
+  const [editorOpen, setEditorOpen] = React.useState(false);
+
+  repair_type = repair_type?.toLowerCase();
+  repair_type = repair_type === "муниципальный ремонт"
+                ? "муниципальная"
+                : (repair_type === "современная отделка"
+                  ? "современная"
+                  : "без отделки");
+
+  address = address.replace("Москва, ", "").replace("улица", "ул.").replace("проспект", "пр-кт").replace("переулок", "пер.").replace("площадь", "пл.").replace("ул.,", ",").replace(" ,", ",")
+  building_type = building_type?.charAt(0).toUpperCase() + building_type?.slice(1);
+
+  // умножить все _adj на 100 и округлить до 1 знака после запятой. Если после запятой 0, то округлить до целого
+  trade_adj = trade_adj ? (trade_adj * 100).toFixed(1) : null;
+  trade_adj = trade_adj % 1 === 0 ? (trade_adj / 1) : trade_adj;
+
+  floor_adj = floor_adj ? (floor_adj * 100).toFixed(1) : null;
+  floor_adj = floor_adj % 1 === 0 ? (floor_adj / 1) : floor_adj;
+
+  apt_area_adj = apt_area_adj ? (apt_area_adj * 100).toFixed(1) : null;
+  apt_area_adj = apt_area_adj % 1 === 0 ? (apt_area_adj / 1) : apt_area_adj;
+
+  kitchen_area_adj = kitchen_area_adj ? (kitchen_area_adj * 100).toFixed(1) : null;
+  kitchen_area_adj = kitchen_area_adj % 1 === 0 ? (kitchen_area_adj / 1) : kitchen_area_adj;
+
+  has_balcony_adj = has_balcony_adj ? (has_balcony_adj * 100).toFixed(1) : null;
+  has_balcony_adj = has_balcony_adj % 1 === 0 ? (has_balcony_adj / 1) : has_balcony_adj;
+
+  to_metro_adj = to_metro_adj ? (to_metro_adj * 100).toFixed(1) : null;
+  to_metro_adj = to_metro_adj % 1 === 0 ? (to_metro_adj / 1) : to_metro_adj;
+
+  // repair_type_adj = repair_type_adj ? (repair_type_adj * 100).toFixed(1) : null;
+  // repair_type_adj = repair_type_adj % 1 === 0 ? (repair_type_adj / 1) : repair_type_adj;
+
 
   return (
     <>
       <EditorModal
         type={EditorModalType.EDIT}
-        open={editorEditOpen}
-        setOpen={setEditorEditOpen}
+        open={editorOpen}
+        setOpen={setEditorOpen}
       />
 
       <Box>
@@ -94,16 +212,29 @@ export default function CollapsableAnalogInfo() {
               width: "100%",
             }}
           >
-            <Typography
-              fontSize={20}
-              color={theme.palette.text.primary}
-              fontWeight={700}
-              lineHeight={"22px"}
-              marginRight={"20px"}
-            >
-              Ватунина, 24
-            </Typography>
-            <IconButton onClick={() => setEditorEditOpen(true)}>
+            {/* адрес */}
+            <Link href={link} target="_blank" sx={{textDecoration: "none"}}>
+              <Typography
+                fontSize={20}
+                color={theme.palette.text.primary}
+                fontWeight={700}
+                lineHeight={"22px"}
+                marginRight={"20px"}
+                sx={{
+                  width: "100%",
+                  "&:hover": {
+                    color: theme.palette.primary.main,
+                  },
+
+                }}
+              >
+                {address}
+              </Typography>
+            </Link>
+
+
+            {/* кнопки */}
+            <IconButton onClick={() => setEditorOpen(true)}>
               <PenIcon />
             </IconButton>
             <IconButton>
@@ -118,6 +249,8 @@ export default function CollapsableAnalogInfo() {
             )}
           </IconButton>
         </Box>
+
+        {/* верхние цифры */}
         <Box display={"flex"} alignItems={"center"} marginBottom={"5px"}>
           <Typography
             fontSize={18}
@@ -126,15 +259,7 @@ export default function CollapsableAnalogInfo() {
             fontWeight={500}
             sx={{ marginRight: "5px" }}
           >
-            244 054 ₽
-          </Typography>
-          <Typography
-            fontSize={16}
-            lineHeight={"18px"}
-            color={theme.palette.text.primary}
-            fontWeight={500}
-          >
-            м²
+            {price_final} ₽ / м²
           </Typography>
         </Box>
         <Box display={"flex"} alignItems={"center"}>
@@ -145,16 +270,17 @@ export default function CollapsableAnalogInfo() {
             fontWeight={500}
             sx={{ marginRight: "10px" }}
           >
-            249 800 ₽ м²
+            {m2price} ₽ / м²
           </Typography>
           <Typography
             fontSize={16}
             lineHeight={"18px"}
-            color={"#F79681"}
+            color={adj_m2price < 0 ? "#F79681" : adj_m2price > 0 ? "#76BF5C" : theme.palette.secondary.dark}
             fontWeight={500}
             sx={{ marginRight: "5px" }}
           >
-            -2,3%
+            {adj_m2price > 0 ? "+" : ""}
+            {adj_m2price}%
           </Typography>
           <Typography
             fontSize={16}
@@ -173,53 +299,62 @@ export default function CollapsableAnalogInfo() {
             fontWeight={500}
             sx={{ marginTop: "15px", marginBottom: "20px" }}
           >
-            Современное жилье, 22 этажа, панель
+            {building_type}, <br />
+            {floors} этаж{
+              floors % 10 === 1 && floors % 100 !== 11 ? "" : floors % 10 >= 2 && floors % 10 <= 4 && (floors % 100 < 10 || floors % 100 >= 20) ? "а" : "ей"
+            }, {' '}
+            {walls.toLowerCase()}
           </Typography>
 
+          {/* корректировки */}
           <Grid container spacing={"10px"}>
             <Grid item xs={4}>
               <InfoCard
-                title={"торг"}
-                description={"-4,5%"}
+                title={`торг`}
+                description={`${trade_adj <= 0 ? "" : '+'}${trade_adj}%`}
                 isPositive={false}
               />
             </Grid>
             <Grid item xs={4}>
-              <InfoCard title={"этаж 4"} description={"0"} isPositive={null} />
+              <InfoCard
+                title={`${floor} этаж`}
+                description={`${floor_adj <= 0 ? "" : '+'}${floor_adj}%`}
+                isPositive={floor === null ? null : floor_adj > 0 ? true : floor_adj < 0 ? false : null}
+              />
             </Grid>
             <Grid item xs={4}>
               <InfoCard
-                title={"S 45 м²"}
-                description={"+1,5%"}
-                isPositive={true}
+                title={`S ${apt_area} м²`}
+                description={`${apt_area_adj <= 0 ? "" : '+'}${apt_area_adj}%`}
+                isPositive={apt_area === null ? null : apt_area_adj > 0 ? true : apt_area_adj < 0 ? false : null}
               />
             </Grid>
             <Grid item xs={6}>
               <InfoCard
-                title={"S кухня 45 м²"}
-                description={"+1,5%"}
-                isPositive={true}
+                title={`S кухни ${kitchen_area} м²`}
+                description={`${kitchen_area_adj <= 0 ? "" : '+'}${kitchen_area_adj}%`}
+                isPositive={kitchen_area === null ? null : kitchen_area_adj > 0 ? true : kitchen_area_adj < 0 ? false : null}
               />
             </Grid>
             <Grid item xs={6}>
               <InfoCard
-                title={"нет балкона"}
-                description={"0"}
-                isPositive={null}
+                title={`${has_balcony ? "есть" : "нет"} балкон${has_balcony ? "" : "а"}`}
+                description={`${has_balcony_adj <= 0 ? "" : '+'}${has_balcony_adj}%`}
+                isPositive={has_balcony === null ? null : has_balcony_adj > 0 ? true : has_balcony_adj < 0 ? false : null}
               />
             </Grid>
             <Grid item xs={6}>
               <InfoCard
-                title={"до метро 10 мин."}
-                description={"0"}
-                isPositive={null}
+                title={`до метро ${to_metro} мин.`}
+                description={`${to_metro_adj <= 0 ? "" : '+'}${to_metro_adj}%`}
+                isPositive={to_metro === null ? null : to_metro_adj > 0 ? true : to_metro_adj < 0 ? false : null}
               />
             </Grid>
             <Grid item xs={6}>
               <InfoCard
-                title={"без отделки"}
-                description={"-10 300 ₽"}
-                isPositive={false}
+                title={repair_type}
+                description={`${repair_type_adj <= 0 ? "" : '+'}${repair_type_adj}₽`}
+                isPositive={repair_type === null ? null : repair_type_adj > 0 ? true : repair_type_adj < 0 ? false : null}
               />
             </Grid>
           </Grid>

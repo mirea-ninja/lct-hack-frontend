@@ -1,41 +1,50 @@
-import React from "react";
-import { YMaps, Map, withYMaps, Placemark, Circle } from "react-yandex-maps";
-import { Typography, useTheme } from "@mui/material";
-import Box from "@mui/material/Box";
-import MapSlider from "../../../components/map/MapSlider";
-import ReferenceCard from "../../../components/map/ReferenceCard";
-import Header from "../../../components/main/Header";
-import MinusIcon from "../../../components/icons/MinusIcon";
-import PlusIcon from "../../../components/icons/PlusIcon";
-import MapFilter from "../../../components/map/MapFilter";
-import { Modal } from "@mui/material";
-import { CircularProgress } from "@mui/material";
-import { useStore } from "../../../logic/DataStore";
-import { toJS } from "mobx";
-import { observer } from "mobx-react";
-import { SearchBase } from "../../../apiConnection/parser/models/search-base";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { useApiClient } from "../../../logic/ApiClientHook";
-import { TemplateProvider } from "../../../components/map/TemplateProvider";
-import { ZoomButton } from "../../../components/map/ZoomButton";
-import { Button } from "@mui/material";
-import { ApartmentBase } from "../../../apiConnection/parser/models/apartment-base";
-import { ApartmentGet } from "../../../apiConnection/gen";
-import { CustomPlacemarkType } from "../../../components/map/CustomPlacemark";
-import CustomPlacemark from "../../../components/map/CustomPlacemark";
+import React from "react"
+import {
+  YMaps,
+  Map as Ymap,
+  withYMaps,
+  Placemark,
+  Circle,
+} from "react-yandex-maps"
+import { Typography, useTheme } from "@mui/material"
+import Box from "@mui/material/Box"
+import MapSlider from "../../../components/map/MapSlider"
+import ReferenceCard from "../../../components/map/ReferenceCard"
+import Header from "../../../components/main/Header"
+import MinusIcon from "../../../components/icons/MinusIcon"
+import PlusIcon from "../../../components/icons/PlusIcon"
+import MapFilter from "../../../components/map/MapFilter"
+import { Modal } from "@mui/material"
+import { CircularProgress } from "@mui/material"
+import { useStore } from "../../../logic/DataStore"
+import { toJS } from "mobx"
+import { observer } from "mobx-react"
+import { SearchBase } from "../../../apiConnection/parser/models/search-base"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { useApiClient } from "../../../logic/ApiClientHook"
+import { TemplateProvider } from "../../../components/map/TemplateProvider"
+import { ZoomButton } from "../../../components/map/ZoomButton"
+import { Button } from "@mui/material"
+import { ApartmentBase } from "../../../apiConnection/parser/models/apartment-base"
+import { ApartmentGet, SubQueryGet } from "../../../apiConnection/gen"
+import { CustomPlacemarkType } from "../../../components/map/CustomPlacemark"
+import CustomPlacemark from "../../../components/map/CustomPlacemark"
+import useEffect from "react"
+import { QueryGet } from "../../../apiConnection/gen/models/query-get"
+import { AdjustmentGet } from "../../../apiConnection/gen/models/adjustment-get"
 
-type Props = {};
+type Props = {}
 
 const ConnectedTemplateProvider = withYMaps(TemplateProvider, true, [
   "templateLayoutFactory",
-]);
+])
 
 const getTagTemplate = (tag: string) => {
-  return `<div class="popover-tag">${tag}</div>`;
-};
+  return `<div class="popover-tag">${tag}</div>`
+}
 
 const getTagsTemplate = (data: any) => {
-  const { title, subtitle, tags } = data;
+  const { title, subtitle, tags } = data
   return `<div class="popover">
                 <div class="popover-header">
                     <div class="popover-title">${title}</div>
@@ -46,17 +55,16 @@ const getTagsTemplate = (data: any) => {
                         ${tags.map(getTagTemplate).join("")}
                     </div>
                 </div>
-            </div>`;
-};
+            </div>`
+}
 
-const getSubqueryByGuid = (guid: string, subqueries: any[]) => {
-  return subqueries.find((subquery) => subquery.guid === guid);
-};
+const getSubqueryByGuid = (guid: string, subqueries: SubQueryGet[]) => {
+  return subqueries.find((subquery) => subquery.guid === guid)
+}
 
 const getOnlyValidAnalogs = (analogs: ApartmentBase[] | ApartmentGet[]) => {
   return analogs.filter((analog) => {
     return (
-      analog.address !== null &&
       analog.lat !== null &&
       analog.lon !== null &&
       analog.rooms !== null &&
@@ -68,60 +76,142 @@ const getOnlyValidAnalogs = (analogs: ApartmentBase[] | ApartmentGet[]) => {
       analog.kitchenArea !== null &&
       analog.distanceToMetro !== null &&
       analog.quality !== null
-    );
-  });
-};
+    )
+  })
+}
+
+const getDistance = (
+  a: { lat: number; lon: number },
+  b: { lat: number; lon: number }
+) => {
+  const R = 6372795 // радиус Земли в метрах
+  const lat1 = a.lat
+  const lat2 = b.lat
+  const lon1 = a.lon
+  const lon2 = b.lon
+  const cl1 = Math.cos((lat1 * Math.PI) / 180)
+  const cl2 = Math.cos((lat2 * Math.PI) / 180)
+  const sl1 = Math.sin((lat1 * Math.PI) / 180)
+  const sl2 = Math.sin((lat2 * Math.PI) / 180)
+  const delta = lon2 - lon1
+  const cdelta = Math.cos((delta * Math.PI) / 180)
+  const sdelta = Math.sin((delta * Math.PI) / 180)
+
+  const y = Math.sqrt(
+    Math.pow(cl2 * sdelta, 2) + Math.pow(cl1 * sl2 - sl1 * cl2 * cdelta, 2)
+  )
+  const x = sl1 * sl2 + cl1 * cl2 * cdelta
+  const ad = Math.atan2(y, x)
+  const dist = ad * R // Расстояние между двумя координатами в метрах
+  return Math.abs(dist)
+}
+
+function getAnalogsBySubquery(
+  subquery: SubQueryGet,
+  isSelected: boolean
+): ApartmentGet[] {
+  const analogs = isSelected
+    ? subquery.selectedAnalogs
+    : subquery.analogs!.filter(
+        (analog) => !subquery.selectedAnalogs!.includes(analog)
+      )
+
+  const analogsJs = toJS(analogs)!
+
+  if (isSelected) {
+    return [analogsJs[0]]
+  } else {
+    return analogs
+  }
+}
+
+const getApartmentTags = (analog: ApartmentBase | ApartmentGet) => {
+  return [
+    `${analog.floor} этаж`,
+    `S ${analog.apartmentArea} м²`,
+    `S кухня ${analog.kitchenArea} м²`,
+    analog.hasBalcony ? "есть балкон" : "нет балкона",
+    `${analog.distanceToMetro} мин. до метро`,
+    analog.quality,
+  ]
+}
 
 const Maps = observer(({}: Props) => {
-  const theme = useTheme();
-  const store = useStore();
-  const apiClient = useApiClient();
+  const theme = useTheme()
+  const store = useStore()
+  const apiClient = useApiClient()
 
-  const [selectedSubQuery, setSelectedSubQuery] = React.useState<string | null>(
-    null
-  );
+  const [selectedSubQuery, setSelectedSubQuery] = React.useState<string | null>(null)
 
   // Настройки карты
-  const [showEtalon, setShowEtalon] = React.useState(true);
-  const [showAnalogs, setShowAnalogs] = React.useState(true);
-  const [showSearchArea, setShowSearchArea] = React.useState(true);
-  const [showHiddenAnalogs, setShowHiddenAnalogs] = React.useState(true);
+  const [showEtalon, setShowEtalon] = React.useState(true)
+  const [showAnalogs, setShowAnalogs] = React.useState(true)
+  const [showSearchArea, setShowSearchArea] = React.useState(true)
+  const [showHiddenAnalogs, setShowHiddenAnalogs] = React.useState(true)
 
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
 
-  const [hiddenAnalogs, setHiddenAnalogs] = React.useState<any[]>([]);
+  const [hiddenAnalogs, setHiddenAnalogs] = React.useState<any[]>([])
 
-  console.log("MAPS LOADED WITH STATE:", toJS(store.queryGetData));
+  console.log("MAPS LOADED WITH STATE:", toJS(store.queryGetData))
 
-  const mapRef = React.useRef(null);
+  const mapRef = React.useRef(null)
+
+  const caclAnalogs = useMutation({
+    mutationFn: (params: { queryId: string; subqueryId: string }) => {
+      return apiClient.subqueryApi.calculateAnalogsApiQueryIdSubquerySubidCalculateAnalogsPost(
+        params.queryId,
+        params.subqueryId
+      )
+    },
+    onSuccess(data) {
+      console.log(data.data)
+      store.queryGetData = data.data
+    },
+  })
 
   const { mutate, isLoading, isError, isSuccess } = useMutation({
     mutationFn: async (query: SearchBase[]) => {
-      const result = [];
+      const result = []
+      const analogAdj = new Map<string, AdjustmentGet | undefined>()
 
       for (let i = 0; i < query.length; i++) {
         // Список всех аналогов для подзапроса
-        let analogsResult = [];
+        let analogsResult = []
         // Список выбранных аналогов для подзапроса (по которым будет строиться карта, только валидные)
-        let selectedAnalogsResult = [];
+        let selectedAnalogsResult = []
 
-        const item = query[i];
+        const item = query[i]
 
         // Парсинг аналогов. В момент парсинга парсер отправляет их на удалённый сервер и сохраняет для указанного подзапроса.
-        const res = await apiClient.parser.parseParsePost(item);
+        const res = await apiClient.parser.parseParsePost(item)
 
         // Получаем аналоги с удалённого сервера
         const analogsRes =
           await apiClient.subqueryApi.getAnalogsApiQueryIdSubquerySubidAnalogsGet(
             item.queryId,
             item.subqueryId
-          );
+          )
 
-        const analogs = analogsRes.data;
-        const validAnalogs = getOnlyValidAnalogs(analogs);
+        let analogs = analogsRes.data
 
-        analogsResult.push(analogs);
-        selectedAnalogsResult.push(validAnalogs);
+        const filteredAnalogs = getOnlyValidAnalogs(analogs)
+
+        const validAnalogs = filteredAnalogs.filter((analog) => {
+          const standartObject = store.queryGetData?.subQueries.find(
+            (subquery) => subquery.guid === item.subqueryId
+          )?.standartObject
+
+          const distance = getDistance(
+            { lat: analog.lat, lon: analog.lon },
+            { lat: standartObject.lat, lon: standartObject.lon }
+          )
+
+          return distance <= 1000
+        })
+
+        analogsResult.push(analogs)
+        selectedAnalogsResult.push(validAnalogs)
 
         if (selectedAnalogsResult.length > 0) {
           // Выбираем аналоги на удалённом сервере. Выбранные аналоги будут использоваться для рассчётов
@@ -129,57 +219,71 @@ const Maps = observer(({}: Props) => {
             item.queryId,
             item.subqueryId,
             { guids: validAnalogs.map((el) => el.guid) }
-          );
+          )
         }
+
+        let queryGet =
+          await apiClient.subqueryApi.calculateAnalogsApiQueryIdSubquerySubidCalculateAnalogsPost(
+            item.queryId,
+            item.subqueryId
+          )
+
+        analogs =
+          getSubqueryByGuid(item.subqueryId, queryGet.data.subQueries)
+            ?.analogs || analogs
+
+        selectedAnalogsResult =
+          getSubqueryByGuid(item.subqueryId, queryGet.data.subQueries)
+            ?.selectedAnalogs || selectedAnalogsResult
 
         result.push({
           queryGuid: item.queryId,
           subqueryGuid: item.subqueryId,
           analogs: analogs,
           selectedAnalogs: selectedAnalogsResult,
-        });
+        })
       }
 
-      return result;
+      return result
     },
 
     onSuccess: (data) => {
-      const subqueries = store.queryGetData?.subQueries;
+      const subqueries = store.queryGetData?.subQueries
 
       if (subqueries) {
         data.forEach((item) => {
-          const subquery = getSubqueryByGuid(item.subqueryGuid, subqueries);
+          const subquery = getSubqueryByGuid(item.subqueryGuid, subqueries)
 
           if (subquery) {
-            subquery.analogs = item.analogs;
-            subquery.selectedAnalogs = item.selectedAnalogs;
+            subquery.analogs = item.analogs
+            subquery.selectedAnalogs = item.selectedAnalogs
           }
-        });
+        })
       }
 
-      console.log("UPDATED SUBQUERY", toJS(store.queryGetData));
+      console.log("UPDATED SUBQUERY", toJS(store.queryGetData))
     },
     onError: (error) => {
-      console.log("ERROR", error);
-      setErrorMessage(error.response.data.errors);
+      console.log("ERROR", error)
+      setErrorMessage(error.response.data.errors)
     },
-  });
+  })
 
   React.useEffect(() => {
     if (store.queryGetData?.subQueries) {
-      const subqieries = store.queryGetData.subQueries;
+      const subqieries = store.queryGetData.subQueries
 
       if (subqieries.length == 0) {
-        return;
+        return
       }
 
-      const subquery = subqieries[0];
-      setSelectedSubQuery(subquery.guid);
+      const subquery = subqieries[0]
+      setSelectedSubQuery(subquery.guid)
 
-      const dataToQuery = [];
+      const dataToQuery = []
 
       for (const subQuery of subqieries) {
-        const standartObject = subQuery.standartObject;
+        const standartObject = subQuery.standartObject
         if (standartObject) {
           const data = {
             address: standartObject.address,
@@ -190,15 +294,17 @@ const Maps = observer(({}: Props) => {
             radius: 1500,
             queryId: store.queryGetData.guid,
             subqueryId: subQuery.guid,
-          };
+          }
 
-          dataToQuery.push(data);
+          dataToQuery.push(data)
         }
       }
 
-      mutate(dataToQuery);
+      mutate(dataToQuery)
     }
-  }, [store.queryGetData]);
+  }, [store.queryGetData])
+
+  console.log(getAnalogsBySubquery)
 
   // @ts-ignore
   return (
@@ -245,7 +351,7 @@ const Maps = observer(({}: Props) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         onClose={() => {
-          setErrorMessage(null);
+          setErrorMessage(null)
         }}
       >
         <Box
@@ -277,7 +383,7 @@ const Maps = observer(({}: Props) => {
             <Button
               variant="contained"
               onClick={() => {
-                setErrorMessage(null);
+                setErrorMessage(null)
               }}
               sx={{
                 boxShadow: "none",
@@ -298,28 +404,39 @@ const Maps = observer(({}: Props) => {
 
       <Header stepProgress={3} />
 
-      {isSuccess && (
-        <MapSlider
-        // data={store.queryGetData}
-        // onSliderChange={(value) => {
-        //   store.setQueryGetData(value);
-        // }}
-        />
-      )}
-      <ReferenceCard
-        isExpanded={true}
-        address={store.queryGetData?.subQueries[0]?.standartObject?.address}
-        price={store.queryGetData?.subQueries[0]?.standartObject?.m2price}
-        buildingType={store.queryGetData?.subQueries[0]?.standartObject?.segment}
-        floors={store.queryGetData?.subQueries[0]?.standartObject?.floors}
-        walls={store.queryGetData?.subQueries[0]?.standartObject?.walls}
-        floor={store.queryGetData?.subQueries[0]?.standartObject?.floor}
-        area={store.queryGetData?.subQueries[0]?.standartObject?.apartmentArea}
-        kitchenArea={store.queryGetData?.subQueries[0]?.standartObject?.kitchenArea}
-        hasBalcony={store.queryGetData?.subQueries[0]?.standartObject?.hasBalcony}
-        toMetro={store.queryGetData?.subQueries[0]?.standartObject?.distanceToMetro}
-        repairType={store.queryGetData?.subQueries[0]?.standartObject?.quality}
-      />
+      {isSuccess &&
+        store.queryGetData!.subQueries.map(
+          (subQuery) =>
+            subQuery.guid === selectedSubQuery && (
+              <MapSlider
+                onSelectedSubQueryChange={(guid) => {
+                  setSelectedSubQuery(guid)
+                }}
+                selectedSubQuery={subQuery}
+              />
+            )
+        )
+      }
+      {isSuccess &&
+        store.queryGetData!.subQueries.map(
+          (subQuery) =>
+            subQuery.guid === selectedSubQuery && (
+              <ReferenceCard
+                isExpanded={true}
+                address={subQuery.standartObject?.address}
+                price={subQuery.standartObject?.m2price}
+                buildingType={subQuery.standartObject?.segment}
+                floors={subQuery.standartObject?.floors}
+                walls={subQuery.standartObject?.walls}
+                floor={subQuery.standartObject?.floor}
+                area={subQuery.standartObject?.apartmentArea}
+                kitchenArea={subQuery.standartObject?.kitchenArea}
+                hasBalcony={subQuery.standartObject?.hasBalcony}
+                toMetro={subQuery.standartObject?.distanceToMetro}
+                repairType={subQuery.standartObject?.quality}
+              />
+            )
+        )}
 
       {/* Кнопки зума (+/-) справа экрана */}
       <Box
@@ -372,13 +489,14 @@ const Maps = observer(({}: Props) => {
         <YMaps>
           <ConnectedTemplateProvider>
             {({ template, iconTemplate, iconShape }) => (
-              <Map
+              <Ymap
                 instanceRef={mapRef}
                 defaultState={{
                   center: [
                     store.queryGetData?.subQueries[0]?.standartObject!.lat,
-                    store.queryGetData?.subQueries[0]?.standartObject!.lon],
-                  zoom: 14
+                    store.queryGetData?.subQueries[0]?.standartObject!.lon,
+                  ],
+                  zoom: 14,
                 }}
                 width="100%"
                 height="100vh"
@@ -388,89 +506,32 @@ const Maps = observer(({}: Props) => {
                 }}
               >
                 {isSuccess &&
-                  showAnalogs &&
-                  getSubqueryByGuid(
-                    selectedSubQuery,
-                    store.queryGetData!.subQueries
-                  ).analogs.map(
-                    (analog: {
-                      lat: number;
-                      lon: number;
-                      address: any;
-                      price: any;
-                      floor: any;
-                      apartmentArea: any;
-                      kitchenArea: any;
-                      hasBalcony: any;
-                      distanceToMetro: any;
-                      quality: any;
-                    }) => (
-                      <CustomPlacemark
-                        coords={[analog.lat, analog.lon]}
-                        type={CustomPlacemarkType.HIDDEN}
-                        title={analog.address}
-                        subtitle={`${analog.price} ₽`}
-                        tags={[
-                          `${analog.floor} этаж`,
-                          `S ${analog.apartmentArea} м²`,
-                          `S кухня ${analog.kitchenArea} м²`,
-                          analog.hasBalcony ? "есть балкон" : "нет балкона",
-                          `${analog.distanceToMetro} мин. до метро`,
-                          analog.quality,
-                        ]}
-                        template={template}
-                        iconTemplate={iconTemplate}
-                        iconShape={iconShape}
-                      />
-                    )
-                  )}
+                  showHiddenAnalogs &&
+                  getAnalogsBySubquery(
+                    getSubqueryByGuid(
+                      selectedSubQuery!,
+                      store.queryGetData!.subQueries
+                    )!,
+                    false
+                  ).map((analog) => (
+                    (analog &&
+                    <CustomPlacemark
+                      coords={[analog!.lat, analog!.lon]}
+                      type={CustomPlacemarkType.HIDDEN}
+                      title={analog.address}
+                      subtitle={`${analog.price} ₽`}
+                      tags={getApartmentTags(analog)}
+                      template={template}
+                      iconTemplate={iconTemplate}
+                      iconShape={iconShape}
+                    />
+                  )))}
 
                 {isSuccess &&
                   showEtalon &&
                   store.queryGetData!.subQueries.map(
                     (subQuery) =>
                       subQuery.guid === selectedSubQuery && (
-                        // <Placemark
-                        //   geometry={[
-                        //     subQuery.standartObject!.lat,
-                        //     subQuery.standartObject!.lon,
-                        //   ]}
-                        //   properties={{
-                        //     content: getTagsTemplate({
-                        //       title: subQuery.standartObject!.address,
-                        //       subtitle: "",
-                        //       tags: [
-                        //         `${subQuery.standartObject!.floor} этаж`,
-                        //         `S ${
-                        //           subQuery.standartObject!.apartmentArea
-                        //         } м²`,
-                        //         `S кухня ${
-                        //           subQuery.standartObject!.kitchenArea
-                        //         } м²`,
-                        //         subQuery.standartObject!.hasBalcony
-                        //           ? "есть балкон"
-                        //           : "нет балкона",
-                        //         `${
-                        //           subQuery.standartObject!.distanceToMetro
-                        //         } мин. до метро`,
-                        //         subQuery.standartObject!.quality,
-                        //       ],
-                        //     }),
-                        //     title: subQuery.standartObject!.address,
-                        //   }}
-                        //   options={{
-                        //     // Применяем шаблон
-                        //     balloonContentLayout: template,
-                        //     balloonPanelMaxMapArea: 0,
-
-                        //     iconLayout: "default#image",
-                        //     iconImageHref: "/etalon-placemark.svg",
-
-                        //     iconImageSize: [18, 22],
-                        //     iconImageOffset: [-9, -22],
-                        //   }}
-                        //   modules={["geoObject.addon.balloon"]}
-                        // />
                         <CustomPlacemark
                           coords={[
                             subQuery.standartObject!.lat,
@@ -479,18 +540,7 @@ const Maps = observer(({}: Props) => {
                           type={CustomPlacemarkType.ETALON}
                           title={subQuery.standartObject!.address}
                           subtitle=""
-                          tags={[
-                            `${subQuery.standartObject!.floor} этаж`,
-                            `S ${subQuery.standartObject!.apartmentArea} м²`,
-                            `S кухня ${
-                              subQuery.standartObject!.kitchenArea
-                            } м²`,
-                            subQuery.standartObject!.hasBalcony
-                              ? "есть балкон"
-                              : "нет балкона",
-                            `${subQuery.standartObject!.distanceToMetro} мин. до метро`,
-                            subQuery.standartObject!.quality,
-                          ]}
+                          tags={getApartmentTags(subQuery.standartObject!)}
                           template={template}
                           iconTemplate={iconTemplate}
                           iconShape={iconShape}
@@ -499,94 +549,102 @@ const Maps = observer(({}: Props) => {
                   )}
 
                 {/* Отрисовка маркера после подсчёта формы */}
-                {iconShape && iconShape.length && (
-                  <Placemark
-                    geometry={[55.8, 37.6]}
-                    properties={{
-                      content: getTagsTemplate({
-                        title: "Адрес",
-                        subtitle: "",
-                        tags: [
-                          ` этаж`,
-                          `S м²`,
-                          `S кухня м²`,
-                          "есть балкон",
-                          "нет балкона",
-                          `мин. до метро`,
-                          "qweqwe",
-                        ],
-                      }),
-                      title: "Адрес",
-                    }}
-                    options={{
-                      // Применяем шаблон
-                      balloonContentLayout: template,
-                      balloonPanelMaxMapArea: 0,
+                {iconShape &&
+                  iconShape.length &&
+                  isSuccess &&
+                  showAnalogs &&
+                  getAnalogsBySubquery(
+                    getSubqueryByGuid(
+                      selectedSubQuery,
+                      store.queryGetData!.subQueries
+                    )!,
+                    true
+                  ).map((analog) => (
+                    (analog &&
+                    <Placemark
+                      geometry={[analog!.lat, analog!.lon]}
+                      properties={{
+                        content: getTagsTemplate({
+                          title: analog!.address.replace("Москва, ", ""),
+                          subtitle: `${analog.price} ₽`,
+                          tags: getApartmentTags(analog),
+                        }),
+                        title: analog.address!.replace("Москва, ", ""),
+                      }}
+                      options={{
+                        // Применяем шаблон
+                        balloonContentLayout: template,
+                        balloonPanelMaxMapArea: 0,
 
-                      iconLayout: iconTemplate,
-                      iconShape: {
-                        type: "Rectangle",
-                        coordinates: iconShape,
-                      },
-                    }}
-                    modules={["geoObject.addon.balloon"]}
-                  />
-                )}
+                        iconLayout: iconTemplate,
+                        iconShape: {
+                          type: "Rectangle",
+                          coordinates: iconShape,
+                        },
+                      }}
+                      modules={["geoObject.addon.balloon"]}
+                    />
+                  )))}
 
-                {!iconShape && (
-                  <Placemark
-                    geometry={[55.8, 37.6]}
-                    properties={{
-                      content: getTagsTemplate({
-                        title: "Адрес",
-                        subtitle: "",
-                        tags: [
-                          ` этаж`,
-                          `S м²`,
-                          `S кухня м²`,
-                          "есть балкон",
-                          "нет балкона",
-                          `мин. до метро`,
-                          "qweqwe",
-                        ],
-                      }),
-                      title: "Адрес",
-                    }}
-                    options={{
-                      // Применяем шаблон
-                      balloonContentLayout: template,
-                      balloonPanelMaxMapArea: 0,
+                {!iconShape &&
+                  isSuccess &&
+                  showAnalogs &&
+                  getAnalogsBySubquery(
+                    getSubqueryByGuid(
+                      selectedSubQuery!,
+                      store.queryGetData!.subQueries
+                    )!,
+                    true
+                  )!.map((analog) => (
+                    (analog &&
+                    <Placemark
+                      geometry={[analog!.lat, analog!.lon]}
+                      properties={{
+                        content: getTagsTemplate({
+                          title: analog!.address.replace("Москва, ", ""),
+                          subtitle: "",
+                          tags: getApartmentTags(analog),
+                        }),
+                        title: analog!.address.replace("Москва, ", ""),
+                      }}
+                      options={{
+                        // Применяем шаблон
+                        balloonContentLayout: iconTemplate,
+                        balloonPanelMaxMapArea: 0,
 
-                      iconLayout: iconTemplate,
-                    }}
-                    modules={["geoObject.addon.balloon"]}
-                  />
-                )}
+                        iconLayout: iconTemplate,
+                      }}
+                      modules={["geoObject.addon.balloon"]}
+                    />
+                    )))}
 
                 {isSuccess && showSearchArea && (
-                  <><Circle
-                    geometry={[
-                      [
-                        getSubqueryByGuid(
-                          selectedSubQuery,
-                          store.queryGetData!.subQueries
-                        ).standartObject.lat,
-                        getSubqueryByGuid(
-                          selectedSubQuery,
-                          store.queryGetData!.subQueries
-                        ).standartObject.lon,
-                      ],
-                      1000,
-                    ]}
-                    options={{
-                      fillOpacity: 0,
-                      // rgba(3, 140, 210, 0.2);
-                      strokeColor: "#0385d2",
-                      strokeOpacity: 0.3,
-                      strokeWidth: 3,
+                  <>
+                    <Circle
+                      geometry={[
+                        [
+                          getSubqueryByGuid(
+                            selectedSubQuery,
+                            store.queryGetData!.subQueries
+                          ).standartObject.lat,
+                          getSubqueryByGuid(
+                            selectedSubQuery,
+                            store.queryGetData!.subQueries
+                          ).standartObject.lon,
+                        ],
+                        1000,
+                      ]}
+                      options={{
+                        fillOpacity: 0,
+                        // rgba(3, 140, 210, 0.2);
+                        strokeColor: "#0385d2",
+                        strokeOpacity: 0.3,
+                        strokeWidth: 3,
 
-                      strokeStyle: "10 10",
-                    }} /><Circle
+                        strokeStyle: "10 10",
+                      }}
+                    />
+                    <Circle
                       geometry={[
                         [
                           getSubqueryByGuid(
@@ -608,15 +666,17 @@ const Maps = observer(({}: Props) => {
                         strokeWidth: 3,
 
                         strokeStyle: "10 10",
-                      }} /></>
+                      }}
+                    />
+                  </>
                 )}
-              </Map>
+              </Ymap>
             )}
           </ConnectedTemplateProvider>
         </YMaps>
       </Box>
     </Box>
-  );
-});
+  )
+})
 
-export default Maps;
+export default Maps
