@@ -47,8 +47,11 @@ export default function ImportDonePage() {
               </Typography>
             </Stack>
             <Stack direction="row" gap={3} height="80%">
+              <Link href="/import/pool">
+                <Button variant="accentActive">Вернуться к загрузке</Button>
+              </Link>
               <Link href="/calculate_etalons/map">
-                <Button variant="contained">Найти аналоги</Button>
+                <Button variant="mainActive">Найти аналоги</Button>
               </Link>
             </Stack>
           </Stack>
@@ -75,9 +78,16 @@ export default function ImportDonePage() {
             },
           }}
         >
-          {rows.map((row, i) => (
-            <ReferenceTableExpandable key={i} data={row} roomsCount={i} />
-          ))}
+          {rows.map((row, i) => {
+            const rooms = row.standartObject?.rooms
+            return (
+              <ReferenceTableExpandable
+                key={i}
+                data={row}
+                roomsCount={rooms ?? -1}
+              />
+            )
+          })}
         </Box>
       </Stack>
     </Box>

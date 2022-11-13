@@ -33,9 +33,10 @@ const InfoCard = ({ title, description, isPositive }: InfoCardProps) => {
         padding: "5px",
         gap: "2px",
 
-        minWidth: "90px",
+        minWidth: "fit-content",
+        width: "100%",
 
-        backgroundColor: "#F3F7FA",
+        backgroundColor: isPositive === null ? "#F6968140" : "#EEF2F5",
         borderRadius: "10px",
       }}
     >
@@ -63,10 +64,85 @@ const InfoCard = ({ title, description, isPositive }: InfoCardProps) => {
   );
 };
 
-export default function AnalogInfo() {
+interface AnalogInfoProps {
+  address: string;
+
+  price_final: number | null;
+  m2price: number | null;
+  adj_m2price: number | null;
+
+  building_type: string | null;
+  floors: number | null;
+  walls: string | null;
+
+  floor: number | null;
+  apt_area: number | null;
+  kitchen_area: number | null;
+  has_balcony: boolean | null;
+  to_metro: number | null;
+  repair_type: string | null;
+
+  trade_adj: number | null;
+  floor_adj: number | null;
+  apt_area_adj: number | null;
+  kitchen_area_adj: number | null;
+  has_balcony_adj: number | null;
+  to_metro_adj: number | null;
+  repair_type_adj: number | null;
+
+  trade_adj_price: number | null;
+  floor_adj_price: number | null;
+  apt_area_adj_price: number | null;
+  kitchen_area_adj_price: number | null;
+  has_balcony_adj_price: number | null;
+  to_metro_adj_price: number | null;
+}
+
+export default function AnalogInfo(
+  {
+    address = "ул. Ленина, 1",
+
+    price_final = 337337,
+    m2price = 228228,
+    adj_m2price = -2.3,
+
+    building_type = "cовременнное жилье",
+    floors = 22,
+    walls = "панель",
+
+    floor = 2,
+    apt_area = 33,
+    kitchen_area = 7,
+    has_balcony = true,
+    to_metro = 5,
+    repair_type = "муниципальный ремонт",
+
+    trade_adj = -4.5,
+    floor_adj = 0,
+    apt_area_adj = +2.3,
+    kitchen_area_adj = 0,
+    has_balcony_adj = 0,
+    to_metro_adj = 0,
+    repair_type_adj = 0,
+
+    trade_adj_price = -2500,
+    floor_adj_price = 0,
+    apt_area_adj_price = +1500,
+    kitchen_area_adj_price = 0,
+    has_balcony_adj_price = 0,
+    to_metro_adj_price = 0,
+  }: AnalogInfoProps,
+) {
   const theme = useTheme();
 
   const [editorOpen, setEditorOpen] = React.useState(false);
+
+  repair_type = repair_type?.toLowerCase();
+  repair_type = repair_type === "муниципальный ремонт"
+                ? "муниципальная"
+                : (repair_type === "современная отделка"
+                  ? "современная"
+                  : "без отделки");
 
   return (
     <>
@@ -84,6 +160,7 @@ export default function AnalogInfo() {
             paddingBottom: "15px",
           }}
         >
+          {/* адрес */}
           <Typography
             fontSize={20}
             color={theme.palette.text.primary}
@@ -91,8 +168,10 @@ export default function AnalogInfo() {
             lineHeight={"22px"}
             marginRight={"20px"}
           >
-            Ватунина, 24
+            {address}
           </Typography>
+
+          {/* кнопки */}
           <IconButton onClick={() => setEditorOpen(true)}>
             <PenIcon />
           </IconButton>
@@ -100,23 +179,17 @@ export default function AnalogInfo() {
             <ClosedEyeIcon />
           </IconButton>
         </Box>
+
+        {/* верхние цифры */}
         <Box display={"flex"} alignItems={"center"} marginBottom={"5px"}>
-          <Typography
+        <Typography
             fontSize={18}
             lineHeight={"20px"}
             color={theme.palette.text.primary}
             fontWeight={500}
             sx={{ marginRight: "5px" }}
           >
-            244 054 ₽
-          </Typography>
-          <Typography
-            fontSize={16}
-            lineHeight={"18px"}
-            color={theme.palette.text.primary}
-            fontWeight={500}
-          >
-            м²
+            {price_final} ₽ / м²
           </Typography>
         </Box>
         <Box display={"flex"} alignItems={"center"}>
@@ -127,16 +200,17 @@ export default function AnalogInfo() {
             fontWeight={500}
             sx={{ marginRight: "10px" }}
           >
-            249 800 ₽ м²
+            {m2price} ₽ / м²
           </Typography>
           <Typography
             fontSize={16}
             lineHeight={"18px"}
-            color={"#F79681"}
+            color={adj_m2price < 0 ? "#F79681" : adj_m2price > 0 ? "#76BF5C" : theme.palette.secondary.dark}
             fontWeight={500}
             sx={{ marginRight: "5px" }}
           >
-            -2,3%
+            {adj_m2price > 0 ? "+" : ""}
+            {adj_m2price}%
           </Typography>
           <Typography
             fontSize={16}
@@ -148,57 +222,72 @@ export default function AnalogInfo() {
           </Typography>
         </Box>
         <Box>
-          <Typography
+        <Typography
             fontSize={16}
             lineHeight={"18px"}
             color={theme.palette.secondary.dark}
             fontWeight={500}
             sx={{ marginTop: "15px", marginBottom: "20px" }}
           >
-            Современное жилье, 22 этажа, панель
+            {
+              building_type.replace(/(^\w{1})|(\s+\w{1})/g, (letter) => letter.toUpperCase())
+            }, {' '}
+            {floors} этаж{
+              floors % 10 === 1 && floors % 100 !== 11 ? "" : floors % 10 >= 2 && floors % 10 <= 4 && (floors % 100 < 10 || floors % 100 >= 20) ? "а" : "ей"
+            }, {' '}
+            {walls.toLowerCase()}
           </Typography>
 
+          {/* корректировки */}
           <Box
             sx={{
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              gap: "10px",
+              gap: "5px",
             }}
           >
-            <InfoCard title={"торг"} description={"-4,5%"} isPositive={false} />
-
-            <InfoCard title={"этаж 4"} description={"0"} isPositive={null} />
+            <InfoCard
+                title={`торг`}
+                description={`${trade_adj <= 0 ? "" : '+'}${trade_adj}%`}
+                isPositive={true}
+              />
 
             <InfoCard
-              title={"S 45 м²"}
-              description={"+1,5%"}
-              isPositive={true}
-            />
+                title={`${floor} этаж`}
+                description={`${floor_adj <= 0 ? "" : '+'}${floor_adj}%`}
+                isPositive={floor === null ? null : floor > 0}
+              />
 
             <InfoCard
-              title={"S кухня 45 м²"}
-              description={"+1,5%"}
-              isPositive={true}
-            />
+                title={`S ${apt_area} м²`}
+                description={`${apt_area_adj <= 0 ? "" : '+'}${apt_area_adj}%`}
+                isPositive={apt_area === null ? null : apt_area > 0}
+              />
 
             <InfoCard
-              title={"нет балкона"}
-              description={"0"}
-              isPositive={null}
-            />
+                title={`S кухни ${kitchen_area} м²`}
+                description={`${kitchen_area_adj <= 0 ? "" : '+'}${kitchen_area_adj}%`}
+                isPositive={kitchen_area === null ? null : kitchen_area > 0}
+              />
 
             <InfoCard
-              title={"до метро 10 мин."}
-              description={"0"}
-              isPositive={null}
-            />
+                title={`${has_balcony ? "есть" : "нет"} балкон${has_balcony ? "" : "а"}`}
+                description={`${has_balcony_adj <= 0 ? "" : '+'}${has_balcony_adj}%`}
+                isPositive={has_balcony === null ? null : has_balcony > 0}
+              />
 
             <InfoCard
-              title={"без отделки"}
-              description={"-10 300 ₽"}
-              isPositive={false}
-            />
+                title={`до метро ${to_metro} мин.`}
+                description={`${to_metro_adj <= 0 ? "" : '+'}${to_metro_adj}%`}
+                isPositive={to_metro === null ? null : to_metro > 0}
+              />
+
+           <InfoCard
+                title={repair_type}
+                description={`${repair_type_adj <= 0 ? "" : '+'}${repair_type_adj}₽`}
+                isPositive={repair_type=== null ? null : repair_type > 0}
+              />
           </Box>
         </Box>
       </Box>

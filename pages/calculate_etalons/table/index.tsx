@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React, { useState, useEffect } from "react"
 import Header from "../../../components/main/Header"
 import { Box, Typography } from "@mui/material"
 import { Stack } from "@mui/system"
@@ -9,41 +9,60 @@ import { FormControlLabel } from "@mui/material"
 import AppCheckbox from "../../../components/checkboxes/AppCheckbox"
 import PoolTabs from "../../../components/tabs/PoolTabs"
 import { useStore } from "../../../logic/DataStore"
+import Link from "next/link"
 import { useApiClient } from "../../../logic/ApiClientHook"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { toJS } from "mobx"
+import { SubQueryGet } from "../../../apiConnection/gen"
+import { Pool } from "../../../components/tables/PoolTable/types"
 
 type Props = {}
 
-export default function CalculatePoolPage({}: Props) {
+function SubQueryToPoolTableRender(subquery: SubQueryGet): Pool[] {
+  return [subquery.standartObject!, ...subquery.selectedAnalogs!].map(
+    (object, i) => {
+      return {
+        id: i,
+        isBasic: true,
+        pricePerSquareMeter: {
+          value: object.m2price ?? 0,
+          change: object.adjustment?.priceArea,
+        },
+        objectPrice: object.price!,
+        floor: { value: object.floor!, change: object.adjustment?.floor },
+        flatSquare: {
+          value: object.apartmentArea!,
+          change: object.adjustment?.aptArea,
+        },
+        kitchenSquare: {
+          value: object.kitchenArea!,
+          change: object.adjustment?.kitchenArea,
+        },
+        hasBalcony: {
+          value: object.hasBalcony!,
+          change: object.adjustment?.hasBalcony,
+        },
+        state: { value: object.quality!, change: object.adjustment?.quality },
+        metro: {
+          value: object.distanceToMetro!,
+          change: object.adjustment?.quality,
+        },
+      }
+    }
+  )
+}
+
+export default function CalculateEtalonsPage({}: Props) {
   const store = useStore()
   const api = useApiClient()
 
   const standart = store.queryGetData?.subQueries[0].standartObject
 
-  const { mutate, isLoading, isError, isSuccess } = useMutation({
-    mutationFn: (params: { queryId: string; subqueryId: string }) => {
-      return api.subqueryApi.calculatePoolApiQueryIdSubquerySubidCalculatePoolPost(
-        params.queryId,
-        params.subqueryId
-      )
-    },
-    onSettled(data, error, variables, context) {},
-    onSuccess(data) {
-      console.log(data.data)
-      store.queryGetData = data.data
-    },
-  })
-
-  useEffect(() => {
-    for (let i = 0; i < store.queryGetData!.subQueries.length; i++) {
-      let subQuery = store.queryGetData?.subQueries[i]
-      mutate({ queryId: store.queryGetData!.guid, subqueryId: subQuery!.guid })
-    }
-  }, [])
+  console.log(toJS(store.queryGetData))
 
   return (
     <Box>
-      <Header stepProgress={5} />
+      <Header stepProgress={4} />
       <Box sx={{ padding: "30px" }}>
         <Stack sx={{ mb: "30px", gap: "20px" }}>
           <Stack
@@ -60,7 +79,7 @@ export default function CalculatePoolPage({}: Props) {
                 color: "var(--text-clr-main)",
               }}
             >
-              Расчет цен для пула объектов
+              Расчет цены эталонного объекта
             </Typography>
             <IconButton>
               <CloseIcon />
@@ -96,40 +115,25 @@ export default function CalculatePoolPage({}: Props) {
                 }}
               >
                 {standart?.address ?? "Адрес"},{" "}
-                {standart?.quality ?? "качество жилья"},{" "}
+                {standart?.quality?.toLowerCase() ?? "качество жилья"},{" "}
                 {standart?.floors ?? "N"} этажей,{" "}
-                {standart?.walls ?? "тип стены"}
+                {standart?.walls?.toLowerCase() ?? "тип стены"}
               </Typography>
             </Stack>
             <Stack direction="row" sx={{ gap: "50px" }}>
-              <FormControlLabel
-                control={<AppCheckbox defaultChecked />}
-                label={
-                  <Typography
-                    sx={{
-                      maxWidth: "200px",
-                      fontSize: "16px",
-                      lineHeight: "18px",
-                      fontWeight: 500,
-                      color: "var(--text-clr-secondary)",
-                    }}
-                  >
-                    Добавить корректировки в файл
-                  </Typography>
-                }
-                sx={{
-                  fontSize: "16px",
-                  lineHeight: "18px",
-                  fontWeight: 500,
-                  marginLeft: 0,
-                  color: "#3E3E41",
-                }}
-              />
-              <AppButton size="small">Экспортировать пул</AppButton>
+              <Link href="/calculate_etalons/map">
+                <AppButton size="small" variant="secondary">
+                  Вернуться на карту
+                </AppButton>
+              </Link>
+              <Link href="/calculate_pool">
+                <AppButton size="small">Рассчитать пул</AppButton>
+              </Link>
             </Stack>
           </Stack>
         </Stack>
         <PoolTabs
+          subQueryToPoolTableRender={SubQueryToPoolTableRender}
           subqueries={
             store.queryGetData?.subQueries ?? [
               {
@@ -177,6 +181,7 @@ export default function CalculatePoolPage({}: Props) {
               },
             ]
           }
+          hasMetroAttribute
         />
       </Box>
     </Box>

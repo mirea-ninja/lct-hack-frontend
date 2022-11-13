@@ -65,7 +65,7 @@ const ToMetroTag = (toMetro: number) => {
 }
 
 const RepairTypeTag = (repairType: string) => {
-  return Tag(repairType)
+  return Tag(repairType.toLowerCase())
 }
 
 type Props = {
@@ -101,7 +101,7 @@ export default function ReferenceCard({
 }: Props) {
   const theme = useTheme()
 
-  const [isCollapsed, setIsCollapsed] = React.useState(!isExpanded)
+  const [isCollapsed, setIsCollapsed] = React.useState(isExpanded)
 
   return (
     <Box
@@ -109,7 +109,7 @@ export default function ReferenceCard({
         zIndex: 1000,
         display: "flex",
         flexDirection: "column",
-        alignItems: "flex-start",
+        alignItems: "stretch",
         padding: "20px",
         gap: "5px",
 
@@ -188,8 +188,8 @@ export default function ReferenceCard({
           </Stack>
         </Box>
       </Collapse>
-      <Link href="/calculate_etalons/etalon">
-        <Button variant={"mainActive"} sx={{ width: "100%", height: "50px" }}>
+      <Link href="/calculate_pool">
+        <Button variant={"mainActive"} sx={{ width: "100%", height: "50px",}}>
           Рассчитать пул
         </Button>
       </Link>

@@ -126,6 +126,7 @@ const theme = createTheme(
               fontWeight: "500",
               fontSize: "18px",
               lineHeight: "22px",
+              padding: "10px",
               "&:hover": {
                 backgroundColor: commonTheme.palette.primary.darker,
               },
@@ -139,6 +140,7 @@ const theme = createTheme(
               fontWeight: "500",
               fontSize: "18px",
               lineHeight: "22px",
+              padding: "10px",
               "&:hover": {
                 backgroundColor: commonTheme.palette.secondary.light,
               },
@@ -152,6 +154,7 @@ const theme = createTheme(
               fontWeight: "500",
               fontSize: "18px",
               lineHeight: "22px",
+              padding: "10px",
             },
           },
         ],

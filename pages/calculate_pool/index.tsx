@@ -1,29 +1,73 @@
-import React, { useState, useEffect } from "react"
-import Header from "../../../components/main/Header"
+import React, { useEffect, useState } from "react"
+import Header from "../../components/main/Header"
 import { Box, Typography } from "@mui/material"
 import { Stack } from "@mui/system"
-import AppButton from "../../../components/buttons/AppButton"
+import AppButton from "../../components/buttons/AppButton"
 import IconButton from "@mui/material/IconButton"
-import { CloseIcon } from "../../../components/icons/CloseIcon"
+import { CloseIcon } from "../../components/icons/CloseIcon"
 import { FormControlLabel } from "@mui/material"
-import AppCheckbox from "../../../components/checkboxes/AppCheckbox"
-import PoolTabs from "../../../components/tabs/PoolTabs"
-import { useStore } from "../../../logic/DataStore"
-import Link from "next/link"
-import { useApiClient } from "../../../logic/ApiClientHook"
-import { useMutation, useQuery } from "@tanstack/react-query"
+import AppCheckbox from "../../components/checkboxes/AppCheckbox"
+import PoolTabs from "../../components/tabs/PoolTabs"
+import { useStore } from "../../logic/DataStore"
+import { useApiClient } from "../../logic/ApiClientHook"
+import { useMutation } from "@tanstack/react-query"
+import { SubQueryGet } from "../../apiConnection/gen"
+import { Pool } from "../../components/tables/PoolTable/types"
+import { toJS } from "mobx"
+
+function SubQueryToPoolTableRender(subquery: SubQueryGet): Pool[] {
+  console.log(toJS(subquery))
+
+  return [
+    subquery.standartObject!,
+    ...subquery.inputApartments!.filter(
+      (obj) => obj.guid != subquery.standartObject!.guid
+    ),
+  ].map((object, i) => {
+    return {
+      id: i,
+      isBasic: true,
+      pricePerSquareMeter: {
+        value: object.m2price ?? 0,
+        change: object.adjustment?.priceArea,
+      },
+      objectPrice: object.price!,
+      floor: { value: object.floor!, change: object.adjustment?.floor },
+      flatSquare: {
+        value: object.apartmentArea!,
+        change: object.adjustment?.aptArea,
+      },
+      kitchenSquare: {
+        value: object.kitchenArea!,
+        change: object.adjustment?.kitchenArea,
+      },
+      hasBalcony: {
+        value: object.hasBalcony!,
+        change: object.adjustment?.hasBalcony,
+      },
+      state: { value: object.quality!, change: object.adjustment?.quality },
+      metro: {
+        value: object.distanceToMetro!,
+        change: object.adjustment?.quality,
+      },
+    }
+  })
+}
 
 type Props = {}
 
-export default function CalculateEtalonsPage({}: Props) {
+export default function CalculatePoolPage({}: Props) {
   const store = useStore()
   const api = useApiClient()
+
+  const [corrections, setCorrections] = useState<boolean>(false)
+  const [link, setLink] = useState<string>()
 
   const standart = store.queryGetData?.subQueries[0].standartObject
 
   const { mutate, isLoading, isError, isSuccess } = useMutation({
     mutationFn: (params: { queryId: string; subqueryId: string }) => {
-      return api.subqueryApi.calculateAnalogsApiQueryIdSubquerySubidCalculateAnalogsPost(
+      return api.subqueryApi.calculatePoolApiQueryIdSubquerySubidCalculatePoolPost(
         params.queryId,
         params.subqueryId
       )
@@ -35,16 +79,37 @@ export default function CalculateEtalonsPage({}: Props) {
     },
   })
 
+  const exportApi = useMutation({
+    mutationFn: (params: { queryId: string; useCorrections: boolean }) => {
+      return api.poolApi.exportApiExportGet(
+        params.queryId,
+        params.useCorrections,
+        false
+      )
+    },
+    onSuccess(data) {
+      console.log(data.data)
+      setLink(data.data.link)
+    },
+  })
+
   useEffect(() => {
+    console.log("CALC POOL USE EFFECT")
     for (let i = 0; i < store.queryGetData!.subQueries.length; i++) {
       let subQuery = store.queryGetData?.subQueries[i]
       mutate({ queryId: store.queryGetData!.guid, subqueryId: subQuery!.guid })
     }
   }, [])
 
+  console.log(toJS(store.queryGetData))
+
+  if (link != null) {
+    window.open(link)
+  }
+
   return (
     <Box>
-      <Header stepProgress={4} />
+      <Header stepProgress={5} />
       <Box sx={{ padding: "30px" }}>
         <Stack sx={{ mb: "30px", gap: "20px" }}>
           <Stack
@@ -61,7 +126,7 @@ export default function CalculateEtalonsPage({}: Props) {
                 color: "var(--text-clr-main)",
               }}
             >
-              Расчет цены эталонного объекта
+              Расчет цен для пула объектов
             </Typography>
             <IconButton>
               <CloseIcon />
@@ -97,14 +162,21 @@ export default function CalculateEtalonsPage({}: Props) {
                 }}
               >
                 {standart?.address ?? "Адрес"},{" "}
-                {standart?.quality ?? "качество жилья"},{" "}
+                {/* {standart?.quality ?? "качество жилья"},{" "} */}
                 {standart?.floors ?? "N"} этажей,{" "}
                 {standart?.walls ?? "тип стены"}
               </Typography>
             </Stack>
-            <Stack direction="row" sx={{ gap: "50px" }}>
+            <Stack direction="row" sx={{ gap: "20px" }}>
               <FormControlLabel
-                control={<AppCheckbox defaultChecked />}
+                control={
+                  <AppCheckbox
+                    onChange={() => {
+                      setCorrections(!corrections)
+                    }}
+                    defaultChecked
+                  />
+                }
                 label={
                   <Typography
                     sx={{
@@ -126,18 +198,54 @@ export default function CalculateEtalonsPage({}: Props) {
                   color: "#3E3E41",
                 }}
               />
-              <Link href="/calculate_etalons/map">
-                <AppButton size="small" variant="secondary">
-                  Вернуться на карту
-                </AppButton>
-              </Link>
-              <Link href="/calculate_etalons/pool">
-                <AppButton size="small">Рассчитать пул</AppButton>
-              </Link>
+
+              <FormControlLabel
+                control={
+                  <AppCheckbox
+                    onChange={() => {
+                      setCorrections(!corrections)
+                    }}
+                    defaultChecked
+                  />
+                }
+                label={
+                  <Typography
+                    sx={{
+                      maxWidth: "200px",
+                      fontSize: "16px",
+                      lineHeight: "18px",
+                      fontWeight: 500,
+                      color: "var(--text-clr-secondary)",
+                    }}
+                  >
+                    Разбить выходной файл на листы
+                  </Typography>
+                }
+                sx={{
+                  fontSize: "16px",
+                  lineHeight: "18px",
+                  fontWeight: 500,
+                  marginLeft: 0,
+                  color: "#3E3E41",
+                }}
+              />
+              <AppButton
+                size="small"
+                onClick={() => {
+                  exportApi.mutate({
+                    queryId: store.queryGetData!.guid,
+                    useCorrections: corrections,
+                  })
+                }}
+              >
+                Экспортировать пул
+              </AppButton>
+              {link != null && <a id="downloadStuff" href={link} download />}
             </Stack>
           </Stack>
         </Stack>
         <PoolTabs
+          subQueryToPoolTableRender={SubQueryToPoolTableRender}
           subqueries={
             store.queryGetData?.subQueries ?? [
               {
@@ -185,7 +293,6 @@ export default function CalculateEtalonsPage({}: Props) {
               },
             ]
           }
-          hasMetroAttribute
         />
       </Box>
     </Box>

@@ -10,6 +10,7 @@ import Paper from "@mui/material/Paper"
 import { Pool } from "./types"
 import PercentageItem from "../../items/PercentageItem"
 import { Stack } from "@mui/system"
+import { toJS } from "mobx"
 
 const StyledStack = styled(Stack)({
   display: "flex",
@@ -48,92 +49,30 @@ const StyledTableRow = styled(TableRow)({
   },
 })
 
-const fakeRows: Pool[] = [
-  {
-    id: Math.random(),
-    isBasic: true,
-    pricePerSquareMeter: { value: 357100 },
-    objectPrice: 39673490,
-    floor: { value: 1 },
-    flatSquare: { value: 6 },
-    kitchenSquare: { value: 24 },
-    hasBalcony: { value: false },
-    state: { value: "Муниципальный ремонт" },
-    metro: { value: 5 },
-  },
-  {
-    id: Math.random(),
-    isBasic: false,
-    pricePerSquareMeter: { value: 357100, change: 4.5 },
-    objectPrice: 39673490,
-    floor: { value: 1, change: -4.5 },
-    flatSquare: { value: 6, change: 4.5 },
-    kitchenSquare: { value: 24, change: -4.5 },
-    hasBalcony: { value: false, change: 4.5 },
-    state: { value: "Муниципальный ремонт", change: 4.5 },
-    metro: { value: 43, change: -4.5 },
-  },
-  {
-    id: Math.random(),
-    isBasic: false,
-    pricePerSquareMeter: { value: 357100, change: 4.5 },
-    objectPrice: 39673490,
-    floor: { value: 1, change: 4.5 },
-    flatSquare: { value: 6, change: 4.5 },
-    kitchenSquare: { value: 24, change: -4.5 },
-    hasBalcony: { value: false, change: 4.5 },
-    state: { value: "Муниципальный ремонт", change: 4.5 },
-    metro: { value: 43, change: 4.5 },
-  },
-  {
-    id: Math.random(),
-    isBasic: false,
-    pricePerSquareMeter: { value: 357100, change: -4.5 },
-    objectPrice: 39673490,
-    floor: { value: 1, change: 4.5 },
-    flatSquare: { value: 6, change: 4.5 },
-    kitchenSquare: { value: 24, change: -4.5 },
-    hasBalcony: { value: false, change: 4.5 },
-    state: { value: "Муниципальный ремонт", change: 4.5 },
-    metro: { value: 43, change: 4.5 },
-  },
-  {
-    id: Math.random(),
-    isBasic: false,
-    pricePerSquareMeter: { value: 357100, change: 4.5 },
-    objectPrice: 39673490,
-    floor: { value: 1, change: -4.5 },
-    flatSquare: { value: 6, change: 4.5 },
-    kitchenSquare: { value: 24, change: -4.5 },
-    hasBalcony: { value: false, change: 4.5 },
-    state: { value: "Муниципальный ремонт", change: 4.5 },
-    metro: { value: 43, change: -4.5 },
-  },
-]
-
 type Props = {
   hasMetroAttribute?: boolean
   rows: Pool[]
 }
 
 export default function PoolTable({ rows, hasMetroAttribute = false }: Props) {
+  console.log(toJS(rows))
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} stickyHeader>
         <TableHead>
           <TableRow>
-            <StyledTableCell align="left">Цена за м2</StyledTableCell>
+            <StyledTableCell align="left">Цена / м²</StyledTableCell>
             <StyledTableCell align="left">Стоимость объекта</StyledTableCell>
             <StyledTableCell align="left">Этаж расположения</StyledTableCell>
-            <StyledTableCell align="left">Площадь квартиры, м2</StyledTableCell>
-            <StyledTableCell align="left">Площадь кухни, м2</StyledTableCell>
-            <StyledTableCell align="left">Балкон или лоджия</StyledTableCell>
-            <StyledTableCell align="left">Состояние</StyledTableCell>
+            <StyledTableCell align="left">Площадь квартиры, м²</StyledTableCell>
+            <StyledTableCell align="left">Площадь кухни, м²</StyledTableCell>
+            <StyledTableCell align="left">Балкон / лоджия</StyledTableCell>
             {hasMetroAttribute && (
               <StyledTableCell align="left">
                 Время до метро, мин
               </StyledTableCell>
             )}
+            <StyledTableCell align="left">Отделка</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -156,14 +95,17 @@ type TableRowProps = {
 }
 
 const ResultTableRow = ({ row, hasMetroAttribute }: TableRowProps) => {
+  console.log(toJS(row))
+
   return (
     <StyledTableRow key={row.id}>
       <StyledTableCell scope="row">
         <StyledStack>
           {row.pricePerSquareMeter.value} ₽
-          {row.pricePerSquareMeter.change && (
-            <PercentageItem value={row.pricePerSquareMeter.change} />
-          )}
+          {hasMetroAttribute && row.pricePerSquareMeter.value > 0 &&
+               (<PercentageItem value={row.pricePerSquareMeter.change - row.pricePerSquareMeter.value} />)}
+
+
         </StyledStack>
       </StyledTableCell>
       <StyledTableCell align="right">
@@ -172,13 +114,13 @@ const ResultTableRow = ({ row, hasMetroAttribute }: TableRowProps) => {
       <StyledTableCell align="right">
         <StyledStack>
           {row.floor.value}
-          {row.floor.change && <PercentageItem value={row.floor.change} />}
+          {row.floor.change != null && (<PercentageItem value={row.floor.change} />)}
         </StyledStack>
       </StyledTableCell>
       <StyledTableCell align="right">
         <StyledStack>
           {row.flatSquare.value}
-          {row.flatSquare.change && (
+          {row.flatSquare.change != null && (
             <PercentageItem value={row.flatSquare.change} />
           )}
         </StyledStack>
@@ -186,7 +128,7 @@ const ResultTableRow = ({ row, hasMetroAttribute }: TableRowProps) => {
       <StyledTableCell align="right">
         <StyledStack>
           {row.kitchenSquare.value}
-          {row.kitchenSquare.change && (
+          {row.kitchenSquare.change != null && (
             <PercentageItem value={row.kitchenSquare.change} />
           )}
         </StyledStack>
@@ -194,25 +136,25 @@ const ResultTableRow = ({ row, hasMetroAttribute }: TableRowProps) => {
       <StyledTableCell align="right">
         <StyledStack>
           {row.hasBalcony.value ? "Да" : "Нет"}
-          {row.hasBalcony.change && (
+          {row.hasBalcony.change != null && (
             <PercentageItem value={row.hasBalcony.change} />
           )}
-        </StyledStack>
-      </StyledTableCell>
-      <StyledTableCell align="right">
-        <StyledStack>
-          {row.state.value}
-          {row.state.change && <PercentageItem value={row.state.change} />}
         </StyledStack>
       </StyledTableCell>
       {hasMetroAttribute && (
         <StyledTableCell align="right">
           <StyledStack>
             {row.metro.value}
-            {row.metro.change && <PercentageItem value={row.metro.change} />}
+            {row.metro.change != null && <PercentageItem value={row.metro.change} />}
           </StyledStack>
         </StyledTableCell>
       )}
+      <StyledTableCell align="left">
+        <StyledStack>
+          {row.state.value}
+          {row.state.change != null && <PercentageItem value={row.state.change} />}
+        </StyledStack>
+      </StyledTableCell>
     </StyledTableRow>
   )
 }
