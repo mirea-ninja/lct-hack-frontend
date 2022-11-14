@@ -69,7 +69,8 @@ const InfoCard = ({ title, description, isPositive }: InfoCardProps) => {
 
           width: "fit-content",
 
-          backgroundColor: title.includes("null") ? "#F6968140" : "#EEF2F5",
+          backgroundColor: title.includes("null") || title.includes("не указано")
+           ? "#F6968140" : "#EEF2F5",
           borderRadius: "10px",
         }}
       >
@@ -187,13 +188,13 @@ export default function CollapsableAnalogInfo({
     ? (((price_final - m2price) * 100) / m2price).toFixed(1)
     : null;
 
-  repair_type = repair_type?.toLowerCase();
+  repair_type = repair_type ? repair_type?.toLowerCase() : null;
   repair_type =
     repair_type === "муниципальный ремонт"
       ? "муниципальная"
       : repair_type === "современная отделка"
       ? "современная"
-      : "без отделки";
+      : repair_type === null ? "не указано" : "без отделки";
 
   address = address
     .replace("Москва, ", "")

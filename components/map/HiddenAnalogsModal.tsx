@@ -48,8 +48,10 @@ export default function HiddenAnalogsModal({
     );
     console.log("selectedSubQuery!!!!, ", selectedSubQuery);
     console.log("selectedSubQueryIndex", selectedSubQueryIndex);
-    if (selectedSubQueryIndex !== -1) {
+    if (selectedSubQueryIndex !== -1
+     && analog.floor !== null && analog.apartmentArea !== null && analog.kitchenArea !== null && analog.hasBalcony !== null && analog.quality !== null && analog.distanceToMetro !== null) {
       // Обновляем состояние в Store: добавляем аналог в список выбранных аналогов
+
       store.queryGetData!.subQueries[
         selectedSubQueryIndex
       ].selectedAnalogs.push(analog);

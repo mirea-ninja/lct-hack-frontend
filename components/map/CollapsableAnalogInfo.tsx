@@ -99,7 +99,7 @@ export default function CollapsableAnalogInfo(
   let m2price = analog.m2price
   let building_type = analog.segment
   let floors = analog.floors
-  let walls = analog.walls
+  let walls = analog.walls ? analog.walls : "тип стен не указан"
 
   let floor = analog.floor
   let apt_area = analog.apartmentArea
@@ -282,7 +282,7 @@ export default function CollapsableAnalogInfo(
             {floors} этаж{
               floors % 10 === 1 && floors % 100 !== 11 ? "" : floors % 10 >= 2 && floors % 10 <= 4 && (floors % 100 < 10 || floors % 100 >= 20) ? "а" : "ей"
             }, {' '}
-            {walls.toLowerCase()}
+            {`${walls}`.toLowerCase()}
           </Typography>
 
           {/* корректировки */}
