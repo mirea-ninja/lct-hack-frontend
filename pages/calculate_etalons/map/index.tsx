@@ -590,14 +590,11 @@ const Maps = observer(({}: Props) => {
                 {!iconShape &&
                   isSuccess &&
                   showAnalogs &&
-                  getAnalogsBySubquery(
                     getSubqueryByGuid(
                       selectedSubQuery!,
                       store.queryGetData!.subQueries
-                    )!,
-                    true
-                  )!.map((analog) => (
-                    (analog &&
+                    )?.selectedAnalogs?.map((analog) => (
+                    (
                     <Placemark
                       geometry={[analog!.lat, analog!.lon]}
                       properties={{

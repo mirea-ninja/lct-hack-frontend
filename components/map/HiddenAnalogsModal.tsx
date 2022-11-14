@@ -8,6 +8,7 @@ import Modal from "@mui/material/Modal";
 import {CloseIcon} from "../icons/CloseIcon";
 import AnalogInfo from "./AnalogInfo";
 import styles from "./HiddenAnalogsModal.module.scss";
+import { SubQueryGet } from "../../apiConnection/gen/models/sub-query-get";
 
 const Hr = () => {
     const theme = useTheme();
@@ -26,9 +27,10 @@ const Hr = () => {
 type Props = {
     open: boolean,
     setOpen: (open: boolean) => void,
+    selectedSubQuery: SubQueryGet,
 }
 
-export default function HiddenAnalogsModal({open, setOpen}: Props) {
+export default function HiddenAnalogsModal({open, setOpen, selectedSubQuery}: Props) {
     const theme = useTheme();
 
     return (
@@ -62,13 +64,40 @@ export default function HiddenAnalogsModal({open, setOpen}: Props) {
                 </Box>
 
                 {/* body */}
-                <Box sx={{width: "100%", marginTop: "30px"}}>
-                    <Hr/>
-                    <AnalogInfo/>
-                    <Hr/>
-                    <AnalogInfo/>
-                    <Hr/>
-                    <AnalogInfo/>
+                <Box
+                    sx={{
+                        width: "100%",
+                        marginTop: "5px",
+                        scrollBehavior: "smooth",
+                        overflowY: "auto",
+                        overflowX: "hidden",
+                        scrollbarWidth: "thin",
+                        scrollbarColor: `${theme.palette.secondary.light} ${theme.palette.secondary.main}`,
+                        "&::-webkit-scrollbar": {
+                        width: "6px",
+                        },
+                        "&::-webkit-scrollbar-track": {
+                        backgroundColor: theme.palette.secondary.light,
+                        borderRadius: "10px",
+                        },
+                        "&::-webkit-scrollbar-thumb": {
+                        backgroundColor: theme.palette.secondary.main,
+                        borderRadius: "10px",
+                        },
+                    }}>
+                    {selectedSubQuery?.analogs?.map((analog, i) => (
+                    <>
+                        {selectedSubQuery?.selectedAnalogs?.findIndex((selectedAnalog) => selectedAnalog.guid === analog.guid) === -1 && (
+                            <>
+                                <AnalogInfo
+                                    key={analog.guid}
+                                    analog={analog!}
+                                />
+                                {i !== selectedSubQuery?.analogs?.length - 1  && <Hr />}
+                            </>
+                        )}
+                    </>
+                ))}
                 </Box>
             </Box>
         </Modal>

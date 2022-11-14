@@ -86,7 +86,6 @@ export default function MapSlider({
   selectedSubQuery,
 }: Props) {
   const [open, setOpen] = React.useState(true);
-  const [subquery, setSubquery] = React.useState(0);
   const [hiddenAnalogsShow, setHiddenAnalogsShow] = React.useState(false);
   const [editorCreateOpen, setEditorCreateOpen] = React.useState(false);
 
@@ -113,6 +112,7 @@ export default function MapSlider({
       <HiddenAnalogsModal
         open={hiddenAnalogsShow}
         setOpen={setHiddenAnalogsShow}
+        selectedSubQuery={selectedSubQuery}
       />
       <Box className={styles.container}>
         {/* Кнопка открытия/закрытия панели */}
@@ -195,7 +195,6 @@ export default function MapSlider({
             exclusive
             onChange={(event, newSubqueryIndex) => {
               onSelectedSubQueryChange(subqueries[newSubqueryIndex].guid)
-              // setSubquery(newSubqueryIndex)
             }}
             sx={{
               marginTop: "14px",

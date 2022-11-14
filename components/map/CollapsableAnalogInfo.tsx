@@ -73,8 +73,7 @@ function InfoCard ({ title, description, isPositive }: InfoCardProps) {
           },
           width: "fit-content",
         }}
-      >
-      </TextField>
+      />
     </Box>
   );
 };
@@ -92,19 +91,23 @@ export default function CollapsableAnalogInfo(
   const [isCollapsed, setIsCollapsed] = React.useState(false);
   const [editorOpen, setEditorOpen] = React.useState(false);
 
-  let address = analog.address ? analog.address : "ул. Ленина, д. 1";
+  let address = analog.address ? analog.address : "Адрес не указан";
+
   let link = analog.link ? analog.link : "https://www.example.com"
+
   let price_final = analog.adjustment?.priceFinal
   let m2price = analog.m2price
   let building_type = analog.segment
   let floors = analog.floors
   let walls = analog.walls
+
   let floor = analog.floor
   let apt_area = analog.apartmentArea
   let kitchen_area = analog.kitchenArea
   let has_balcony = analog.hasBalcony
   let to_metro = analog.distanceToMetro
   let repair_type = analog.quality
+
   let trade_adj = analog.adjustment?.trade
   let floor_adj = analog.adjustment?.floor
   let apt_area_adj = analog.adjustment?.aptArea
@@ -112,6 +115,7 @@ export default function CollapsableAnalogInfo(
   let has_balcony_adj = analog.adjustment?.hasBalcony
   let to_metro_adj = analog.adjustment?.distanceToMetro
   let repair_type_adj = analog.adjustment?.quality
+
   let trade_adj_price = analog.adjustment?.priceTrade
   let floor_adj_price = analog.adjustment?.priceFloor
   let apt_area_adj_price = analog.adjustment?.priceArea
