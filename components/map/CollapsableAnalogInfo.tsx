@@ -14,6 +14,8 @@ import { EditorModalType, EditorModal } from "./EditorModal";
 import { PenIcon } from "../icons/PenIcon";
 import { ClosedEyeIcon } from "../icons/ClosedEyeIcon";
 import TextField from "@mui/material/TextField";
+import AddedByUserIcon from "../icons/AddedByUserIcon";
+import { ApartmentGet } from "../../apiConnection/gen/models/apartment-get";
 
 interface InfoCardProps {
   title: string;
@@ -78,81 +80,46 @@ function InfoCard ({ title, description, isPositive }: InfoCardProps) {
 };
 
 interface AnalogInfoProps {
-  address: string;
-  link: string | null;
-
-  price_final: number | null;
-  m2price: number | null;
-  adj_m2price: number | null;
-
-  building_type: string | null;
-  floors: number | null;
-  walls: string | null;
-
-  floor: number | null;
-  apt_area: number | null;
-  kitchen_area: number | null;
-  has_balcony: boolean | null;
-  to_metro: number | null;
-  repair_type: string | null;
-
-  trade_adj: number | null;
-  floor_adj: number | null;
-  apt_area_adj: number | null;
-  kitchen_area_adj: number | null;
-  has_balcony_adj: number | null;
-  to_metro_adj: number | null;
-  repair_type_adj: number | null;
-
-  trade_adj_price: number | null;
-  floor_adj_price: number | null;
-  apt_area_adj_price: number | null;
-  kitchen_area_adj_price: number | null;
-  has_balcony_adj_price: number | null;
-  to_metro_adj_price: number | null;
+  key: string
+  analog: ApartmentGet;
 }
 
 export default function CollapsableAnalogInfo(
-  {
-    address = "ул. Ленина, 1",
-    link = "https://www.example.com",
-
-    price_final = null,
-    m2price = null,
-    // округлить до 2 знаков после запятой
-    adj_m2price = m2price ? ((price_final - m2price) * 100 / m2price).toFixed(1) : null,
-
-    building_type = null,
-    floors = null,
-    walls = null,
-
-    floor = null,
-    apt_area = null,
-    kitchen_area = null,
-    has_balcony = null,
-    to_metro = null,
-    repair_type = null,
-
-    trade_adj = -0.045,
-    floor_adj = null,
-    apt_area_adj = null,
-    kitchen_area_adj = null,
-    has_balcony_adj = null,
-    to_metro_adj = null,
-    repair_type_adj = null,
-
-    trade_adj_price = null,
-    floor_adj_price = null,
-    apt_area_adj_price = null,
-    kitchen_area_adj_price = null,
-    has_balcony_adj_price = null,
-    to_metro_adj_price = null,
-  }: AnalogInfoProps,
+  { key, analog }: AnalogInfoProps
 ) {
   const theme = useTheme();
 
   const [isCollapsed, setIsCollapsed] = React.useState(false);
   const [editorOpen, setEditorOpen] = React.useState(false);
+
+  let address = analog.address ? analog.address : "ул. Ленина, д. 1";
+  let link = analog.link ? analog.link : "https://www.example.com"
+  let price_final = analog.adjustment?.priceFinal
+  let m2price = analog.m2price
+  let building_type = analog.segment
+  let floors = analog.floors
+  let walls = analog.walls
+  let floor = analog.floor
+  let apt_area = analog.apartmentArea
+  let kitchen_area = analog.kitchenArea
+  let has_balcony = analog.hasBalcony
+  let to_metro = analog.distanceToMetro
+  let repair_type = analog.quality
+  let trade_adj = analog.adjustment?.trade
+  let floor_adj = analog.adjustment?.floor
+  let apt_area_adj = analog.adjustment?.aptArea
+  let kitchen_area_adj = analog.adjustment?.kitchenArea
+  let has_balcony_adj = analog.adjustment?.hasBalcony
+  let to_metro_adj = analog.adjustment?.distanceToMetro
+  let repair_type_adj = analog.adjustment?.quality
+  let trade_adj_price = analog.adjustment?.priceTrade
+  let floor_adj_price = analog.adjustment?.priceFloor
+  let apt_area_adj_price = analog.adjustment?.priceArea
+  let kitchen_area_adj_price = analog.adjustment?.priceKitchen
+  let has_balcony_adj_price = analog.adjustment?.priceBalcony
+  let to_metro_adj_price = analog.adjustment?.priceMetro
+
+  let adj_m2price = m2price ? ((price_final - m2price) * 100 / m2price).toFixed(1) : null
 
   repair_type = repair_type?.toLowerCase();
   repair_type = repair_type === "муниципальный ремонт"
@@ -193,6 +160,7 @@ export default function CollapsableAnalogInfo(
         type={EditorModalType.EDIT}
         open={editorOpen}
         setOpen={setEditorOpen}
+        // selectedSubQuery={selectedSubQuery}
       />
 
       <Box>
@@ -213,7 +181,12 @@ export default function CollapsableAnalogInfo(
             }}
           >
             {/* адрес */}
-            <Link href={link} target="_blank" sx={{textDecoration: "none"}}>
+            <Link
+              href={link !== "https://www.example.com" ? link : "#"}
+              target={link !== "https://www.example.com" ? "_blank" : "_self"}
+              sx={{textDecoration: "none"}}
+            >
+
               <Typography
                 fontSize={20}
                 color={theme.palette.text.primary}
@@ -223,11 +196,13 @@ export default function CollapsableAnalogInfo(
                 sx={{
                   width: "100%",
                   "&:hover": {
-                    color: theme.palette.primary.main,
+                    color: link !== "https://www.example.com"
+                    ? theme.palette.primary.main
+                    : theme.palette.text.primary,
                   },
-
                 }}
               >
+                {link === "https://www.example.com" && <AddedByUserIcon />}
                 {address}
               </Typography>
             </Link>
