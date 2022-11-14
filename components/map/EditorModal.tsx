@@ -1,6 +1,6 @@
 import React from "react";
 
-import { useTheme } from "@mui/material";
+import { Link, useTheme } from "@mui/material";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -13,6 +13,7 @@ import MenuItem from "@mui/material/MenuItem";
 import TextField from "@mui/material/TextField";
 import styles from "./EditorModal.module.scss";
 import { CloseIcon } from "../icons/CloseIcon";
+import { SubQueryGet } from "../../apiConnection/gen/models/sub-query-get";
 
 export enum EditorModalType {
   CREATE,
@@ -23,9 +24,35 @@ type Props = {
   type: EditorModalType;
   open: boolean;
   setOpen: (open: boolean) => void;
+  // selectedSubQuery?: SubQueryGet;
+  link?: string;
+  address?: string;
+  floor?: number;
+  floors?: number;
+  repairType?: string;
+  aptArea?: number;
+  kitchenArea?: number;
+  hasBalcony?: boolean;
+  distanceToMetro?: number;
+  price?: number;
 };
 
-export function EditorModal({ type, open, setOpen }: Props) {
+export function EditorModal(
+  {
+    type,
+    open,
+    setOpen,
+    link = "https://www.example.com",
+    address = "ул. Ленина, д. 1",
+    floor = 1,
+    floors = 5,
+    repairType = "без отделки",
+    aptArea = 50,
+    kitchenArea = 10,
+    hasBalcony = false,
+    distanceToMetro = 100,
+    price = 1000000,
+  }: Props) {
   const theme = useTheme();
 
   return (
@@ -55,7 +82,12 @@ export function EditorModal({ type, open, setOpen }: Props) {
                 : "Редактирование аналога"}
             </Typography>
 
-            {type === EditorModalType.EDIT && (
+            {type === EditorModalType.EDIT && link !== "https://www.example.com" && (
+              <Link
+              href={link !== "https://www.example.com" ? link : "#"}
+              target={link !== "https://www.example.com" ? "_blank" : "_self"}
+              sx={{textDecoration: "none"}}
+              >
               <Typography
                 fontSize={18}
                 lineHeight={"20px"}
@@ -64,6 +96,7 @@ export function EditorModal({ type, open, setOpen }: Props) {
               >
                 Объявление
               </Typography>
+              </Link>
             )}
           </Box>
           <IconButton onClick={() => setOpen(false)}>
@@ -108,15 +141,11 @@ export function EditorModal({ type, open, setOpen }: Props) {
               sx={{ minWidth: "64px", paddingRight: "20px" }}
             />
             <FormControl variant="outlined" fullWidth>
-              <InputLabel>Ремонт</InputLabel>
+              <InputLabel>Отделка</InputLabel>
               <Select>
-                <MenuItem value="">
-                  <em>None</em>
-                </MenuItem>
-
-                <MenuItem value={10}>Один</MenuItem>
-                <MenuItem value={20}>Два</MenuItem>
-                <MenuItem value={30}>Три</MenuItem>
+                <MenuItem value={"без отделки"}>Без отделки</MenuItem>
+                <MenuItem value={"муниципальный ремонт"}>Муниципальный ремонт</MenuItem>
+                <MenuItem value={"современная отделка"}>Современная отделка</MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -160,8 +189,8 @@ export function EditorModal({ type, open, setOpen }: Props) {
             >
               <InputLabel>Балкон</InputLabel>
               <Select>
-                <MenuItem value={"Да"}>Да</MenuItem>
-                <MenuItem value={"Нет"}>Нет</MenuItem>
+                <MenuItem value={true}>есть</MenuItem>
+                <MenuItem value={false}>Нет</MenuItem>
               </Select>
             </FormControl>
             <TextField
@@ -188,7 +217,7 @@ export function EditorModal({ type, open, setOpen }: Props) {
                 fontSize={18}
                 lineHeight={"20px"}
                 fontWeight={700}
-                color={theme.palette.secondary.dark}
+                color={theme.palette.text.primary}
               >
                 Цена общая
               </Typography>

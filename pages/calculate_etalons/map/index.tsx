@@ -339,7 +339,8 @@ const Maps = observer(({}: Props) => {
             <CircularProgress />
           </Box>
           <Typography variant="h6" id="modal-modal-title" component="div">
-            Ищем аналоги по вашему запросу. Это может занять какое-то время.
+            Ищем аналоги по вашему запросу.
+            Это может занять какое-то время.
             Пожалуйста, подождите.
           </Typography>
         </Box>
@@ -548,18 +549,15 @@ const Maps = observer(({}: Props) => {
                       )
                   )}
 
-                {/* Отрисовка маркера после подсчёта формы */}
+                {/* Отрисовка маркера после подсчёта формы. Маркер для валидных аналогов */}
                 {iconShape &&
                   iconShape.length &&
                   isSuccess &&
                   showAnalogs &&
-                  getAnalogsBySubquery(
-                    getSubqueryByGuid(
-                      selectedSubQuery,
-                      store.queryGetData!.subQueries
-                    )!,
-                    true
-                  ).map((analog) => (
+                  getSubqueryByGuid(
+                    selectedSubQuery!,
+                    store.queryGetData!.subQueries
+                  )?.selectedAnalogs?.map((analog) => (
                     (analog &&
                     <Placemark
                       geometry={[analog!.lat, analog!.lon]}
@@ -586,17 +584,15 @@ const Maps = observer(({}: Props) => {
                     />
                   )))}
 
+                {/* Тоже маркер для валидных аналогов */}
                 {!iconShape &&
                   isSuccess &&
                   showAnalogs &&
-                  getAnalogsBySubquery(
                     getSubqueryByGuid(
                       selectedSubQuery!,
                       store.queryGetData!.subQueries
-                    )!,
-                    true
-                  )!.map((analog) => (
-                    (analog &&
+                    )?.selectedAnalogs?.map((analog) => (
+                    (
                     <Placemark
                       geometry={[analog!.lat, analog!.lon]}
                       properties={{

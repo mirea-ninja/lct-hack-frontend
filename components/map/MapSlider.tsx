@@ -14,6 +14,7 @@ import styles from "./MapSlider.module.scss"
 import { ArrowRight } from "../icons/ArrowRightIcon"
 import { ArrowLeft } from "../icons/ArrowLeftIcon"
 import { ClosedEyeIcon } from "../icons/ClosedEyeIcon"
+import { ClosedEyeIconBig } from "../icons/ClosedEyeIconBig";
 import { OpenIcon } from "../icons/OpenIcon"
 import HiddenAnalogsModal from "./HiddenAnalogsModal"
 import { EditorModalType, EditorModal } from "./EditorModal"
@@ -65,40 +66,10 @@ function AnalogBox({ selectedSubQuery }: AnlogBoxProps) {
       {selectedSubQuery?.selectedAnalogs?.map((analog, i) => (
         <>
           <CollapsableAnalogInfo
-            key={i}
-
-            address={analog.address}
-            link={analog?.link}
-
-            price_final={analog?.adjustment?.priceFinal}
-            m2price={analog?.m2price}
-            building_type={analog.segment}
-            floors={analog.floors}
-            walls={analog.walls}
-
-            floor={analog.floor}
-            apt_area={analog.apartmentArea}
-            kitchen_area={analog.kitchenArea}
-            has_balcony={analog.hasBalcony}
-            to_metro={analog.distanceToMetro}
-            repair_type={analog.quality}
-
-            trade_adj={analog?.adjustment?.trade}
-            floor_adj={analog?.adjustment?.floor}
-            apt_area_adj={analog?.adjustment?.aptArea}
-            kitchen_area_adj={analog?.adjustment?.kitchenArea}
-            has_balcony_adj={analog?.adjustment?.hasBalcony}
-            to_metro_adj={analog?.adjustment?.distanceToMetro}
-            repair_type_adj={analog?.adjustment?.quality}
-
-            trade_adj_price={analog?.adjustment?.priceTrade}
-            floor_adj_price={analog?.adjustment?.priceFloor}
-            apt_area_adj_price={analog?.adjustment?.priceArea}
-            kitchen_area_adj_price={analog?.adjustment?.priceKitchen}
-            has_balcony_adj_price={analog?.adjustment?.priceBalcony}
-            to_metro_adj_price={analog?.adjustment?.priceMetro}
+            key={analog.guid}
+            analog={analog!}
           />
-          <Hr />
+          {i !== selectedSubQuery?.selectedAnalogs?.length - 1 && <Hr />}
         </>
       ))}
     </Box>
@@ -115,9 +86,9 @@ export default function MapSlider({
   selectedSubQuery,
 }: Props) {
   const [open, setOpen] = React.useState(true);
-  const [subquery, setSubquery] = React.useState(0);
   const [hiddenAnalogsShow, setHiddenAnalogsShow] = React.useState(false);
   const [editorCreateOpen, setEditorCreateOpen] = React.useState(false);
+
 
   const theme = useTheme()
   let store = useStore()
@@ -136,10 +107,12 @@ export default function MapSlider({
         type={EditorModalType.CREATE}
         open={editorCreateOpen}
         setOpen={setEditorCreateOpen}
+        // selectedSubQuery={selectedSubQuery}
       />
       <HiddenAnalogsModal
         open={hiddenAnalogsShow}
         setOpen={setHiddenAnalogsShow}
+        selectedSubQuery={selectedSubQuery}
       />
       <Box className={styles.container}>
         {/* Кнопка открытия/закрытия панели */}
@@ -207,7 +180,7 @@ export default function MapSlider({
                 className={styles.button}
                 onClick={() => setHiddenAnalogsShow(true)}
               >
-                <ClosedEyeIcon color={theme.palette.primary.main} />
+                <ClosedEyeIconBig />
               </IconButton>
               <Link href="/calculate_etalons/table">
                 <IconButton className={styles.button}>
@@ -221,7 +194,6 @@ export default function MapSlider({
           <ToggleButtonGroup
             exclusive
             onChange={(event, newSubqueryIndex) => {
-              setSubquery(newSubqueryIndex)
               onSelectedSubQueryChange(subqueries[newSubqueryIndex].guid)
             }}
             sx={{
@@ -242,16 +214,11 @@ export default function MapSlider({
                     border: "none",
                     color: theme.palette.text.primary,
                     backgroundColor: "transparent",
-                    "&.Mui-selected": {
-                      color: theme.palette.primary.main,
-                      backgroundColor: "transparent",
 
-                      "&:hover": {
-                        backgroundColor: "transparent",
-                      },
-                    },
                     "&:hover": {
                       backgroundColor: "transparent",
+                      borderRadius: "10px",
+
                     },
                   }}
                 >
@@ -259,8 +226,11 @@ export default function MapSlider({
                     fontSize={16}
                     fontWeight={500}
                     lineHeight={"18px"}
+                    // sx={{
+
+                    // }}
                     color={
-                      subquery === i
+                      subQuery === selectedSubQuery
                         ? theme.palette.primary.main
                         : theme.palette.text.primary
                     }
