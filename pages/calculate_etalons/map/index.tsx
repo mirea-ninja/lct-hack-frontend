@@ -422,20 +422,22 @@ const Maps = observer(({}: Props) => {
         store.queryGetData!.subQueries.map(
           (subQuery) =>
             subQuery.guid === selectedSubQuery && (
-              <ReferenceCard
-                isExpanded={true}
-                address={subQuery.standartObject?.address}
-                price={subQuery.standartObject?.m2price}
-                buildingType={subQuery.standartObject?.segment}
-                floors={subQuery.standartObject?.floors}
-                walls={subQuery.standartObject?.walls}
-                floor={subQuery.standartObject?.floor}
-                area={subQuery.standartObject?.apartmentArea}
-                kitchenArea={subQuery.standartObject?.kitchenArea}
-                hasBalcony={subQuery.standartObject?.hasBalcony}
-                toMetro={subQuery.standartObject?.distanceToMetro}
-                repairType={subQuery.standartObject?.quality}
-              />
+                <ReferenceCard
+                  isExpanded={true}
+                  address={subQuery.standartObject?.address}
+                  price={(subQuery.selectedAnalogs.reduce((acc, item) => {
+                    return acc + item.adjustment?.priceFinal
+                  }, 0) / subQuery.selectedAnalogs.length).toFixed(0)}
+                  buildingType={subQuery.standartObject?.segment}
+                  floors={subQuery.standartObject?.floors}
+                  walls={subQuery.standartObject?.walls}
+                  floor={subQuery.standartObject?.floor}
+                  area={subQuery.standartObject?.apartmentArea}
+                  kitchenArea={subQuery.standartObject?.kitchenArea}
+                  hasBalcony={subQuery.standartObject?.hasBalcony}
+                  toMetro={subQuery.standartObject?.distanceToMetro}
+                  repairType={subQuery.standartObject?.quality}
+                />
             )
         )}
 

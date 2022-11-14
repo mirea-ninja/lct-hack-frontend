@@ -13,6 +13,7 @@ import ArrowLeft from "@mui/icons-material/ChevronLeft";
 import { EditorModal, EditorModalType } from "./EditorModal";
 import { PenIcon } from "../icons/PenIcon";
 import { ClosedEyeIcon } from "../icons/ClosedEyeIcon";
+import { OpenedEyeIcon } from "../icons/OpenedEyeIcon";
 import AddedByUserIcon from "../icons/AddedByUserIcon";
 import { ApartmentGet } from "../../apiConnection/gen/models/apartment-get";
 import Modal from "@mui/material/Modal";
@@ -25,40 +26,8 @@ interface InfoCardProps {
 
 const InfoCard = ({ title, description, isPositive }: InfoCardProps) => {
   const theme = useTheme();
-
-  const [errorShown, setErrorShown] = React.useState(false);
-
   return (
     <>
-      <Modal
-        open={errorShown}
-        onClose={() => setErrorShown(false)}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box
-          sx={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            transform: "translate(-50%, -50%)",
-            width: 400,
-            bgcolor: "background.paper",
-            border: "2px solid #000",
-            boxShadow: 24,
-            p: 4,
-          }}
-        >
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            Ошибка при установке выбранного аналога
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            Кажется, что аналог, который вы хотите выбрать, имеет недопустимые
-            поля. Пожалуйста, проверьте, что все поля заполнены корректно и
-            попробуйте еще раз.
-          </Typography>
-        </Box>
-      </Modal>
       <Box
         sx={{
           display: "flex",
@@ -72,6 +41,7 @@ const InfoCard = ({ title, description, isPositive }: InfoCardProps) => {
           backgroundColor: title.includes("null") || title.includes("не указано")
            ? "#F6968140" : "#EEF2F5",
           borderRadius: "10px",
+          border: title.includes("null") || title.includes("не указано") ? "2px solid #FF000080" : null,
         }}
       >
         <Typography
@@ -128,27 +98,28 @@ export default function CollapsableAnalogInfo({
   const theme = useTheme();
 
   const [editorOpen, setEditorOpen] = React.useState(false);
+  const [errorShown, setErrorShown] = React.useState(false);
 
-  let address = analog.address ? analog.address : "Адрес не указан";
-  let link = analog.link ? analog.link : "https://www.example.com";
+  let address = analog.address ? analog.address : "Адрес не указан"
+  let link = analog.link ? analog.link : "https://www.example.com"
 
+  let m2price = analog.m2price ? analog.m2price : "Цена за кв.м. не указана"
   let price_final = analog.adjustment?.priceFinal
     ? analog.adjustment?.priceFinal
-    : "?";
-  let m2price = analog.m2price ? analog.m2price : "Цена за кв.м. не указана";
+    : m2price
 
-  let building_type = analog.segment ? analog.segment : "Тип жилья не указан";
-  let floors = analog.floors ? analog.floors : null;
-  let walls = analog.walls ? analog.walls : "Тип стен не указан";
-  let floor = analog.floor ? analog.floor : null;
-  let apt_area = analog.apartmentArea ? analog.apartmentArea : null;
-  let kitchen_area = analog.kitchenArea ? analog.kitchenArea : null;
-  let has_balcony = analog.hasBalcony ? analog.hasBalcony : null;
-  let to_metro = analog.distanceToMetro ? analog.distanceToMetro : null;
-  let repair_type = analog.quality ? analog.quality : null;
+  let building_type = analog.segment ? analog.segment : "Тип жилья не указан"
+  let floors = analog.floors ? analog.floors : null
+  let walls = analog.walls ? analog.walls : "Тип стен не указан"
+  let floor = analog.floor ? analog.floor : null
+  let apt_area = analog.apartmentArea ? analog.apartmentArea : null
+  let kitchen_area = analog.kitchenArea ? analog.kitchenArea : null
+  let has_balcony = analog.hasBalcony ? analog.hasBalcony : null
+  let to_metro = analog.distanceToMetro ? analog.distanceToMetro : null
+  let repair_type = analog.quality ? analog.quality : null
 
-  let trade_adj = analog.adjustment?.trade ? analog.adjustment?.trade : -0.045;
-  let floor_adj = analog.adjustment?.floor ? analog.adjustment?.floor : 0;
+  let trade_adj = analog.adjustment?.trade ? analog.adjustment?.trade : -0.045
+  let floor_adj = analog.adjustment?.floor ? analog.adjustment?.floor : 0
   let apt_area_adj = analog.adjustment?.aptArea
     ? analog.adjustment?.aptArea
     : 0;
@@ -235,6 +206,35 @@ export default function CollapsableAnalogInfo({
 
   return (
     <>
+    <Modal
+        open={errorShown}
+        onClose={() => setErrorShown(false)}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box
+          sx={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            transform: "translate(-50%, -50%)",
+            width: 600,
+            bgcolor: "background.paper",
+            border: "2px solid #FF0000",
+            boxShadow: 24,
+            p: 4,
+            borderRadius: "10px",
+          }}
+        >
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            <b>Ошибка при установке выбранного аналога</b>
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2}}>
+            Этот аналог имеет недопустимые поля! <br/> Пожалуйста, проверьте, что все поля заполнены корректно и
+            попробуйте еще раз.<br/> Вы можете заполнить поля, нажав на иконку карандаша.
+          </Typography>
+        </Box>
+      </Modal>
       <EditorModal
         type={EditorModalType.EDIT}
         open={editorOpen}
@@ -282,13 +282,17 @@ export default function CollapsableAnalogInfo({
           </IconButton>
           <IconButton
             onClick={() => {
-              // TODO: если есть невалидные данные, то отобразить ошибку!
+              // TODO: если есть невалидные данные (analog.floor !== null && analog.apartmentArea !== null && analog.kitchenArea !== null && analog.hasBalcony !== null && analog.quality !== null && analog.distanceToMetro !== null), то отобразить ошибку!
+              if ( !analog.floor || !analog.apartmentArea || !analog.kitchenArea || !analog.hasBalcony || !analog.quality || !analog.distanceToMetro) {
+                setErrorShown(true);
+                return;
+              }
 
               setSelected(analog);
             }}
-            title="Сделать выбранным"
+            title="Выбрать для расчёта"
           >
-            <ClosedEyeIcon />
+            <OpenedEyeIcon />
           </IconButton>
         </Box>
 
