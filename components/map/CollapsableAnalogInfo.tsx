@@ -132,7 +132,7 @@ export default function CollapsableAnalogInfo(
                   ? "современная"
                   : "без отделки");
 
-  address = address.replace("Москва, ", "").replace("улица", "ул.").replace("проспект", "пр-кт").replace("переулок", "пер.").replace("площадь", "пл.").replace("ул.,", ",").replace(" ,", ",")
+  address = address.replace("Москва, ", "").replace("улица", "ул.").replace("проспект", "пр-кт").replace("переулок", "пер.").replace("площадь", "пл.").replace("ул.,", ",").replace("корп.", "к.").replace(" ,", ",")
   building_type = building_type?.charAt(0).toUpperCase() + building_type?.slice(1);
 
   // умножить все _adj на 100 и округлить до 1 знака после запятой. Если после запятой 0, то округлить до целого
