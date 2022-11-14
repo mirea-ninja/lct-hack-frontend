@@ -71,10 +71,8 @@ export default function ArchivePage({}: Props) {
                 onClose={handleClose}
               />
               <Select value={type} onChange={handleChange} displayEmpty>
-                <MenuItem value=''>Сначала новые</MenuItem>
-                <MenuItem value={10}>Ten</MenuItem>
-                <MenuItem value={20}>Twenty</MenuItem>
-                <MenuItem value={30}>Thirty</MenuItem>
+                <MenuItem value='new'>Сначала новые</MenuItem>
+                <MenuItem value='old'>Сначала старые</MenuItem>
               </Select>
             </Stack>
             <TextField
