@@ -98,7 +98,7 @@ export function EditorModal({
         link,
       };
 
-      apiClient.apartmentApi.updateApiQueryIdSubquerySubidApartmentAidPut(
+      apiClient.apartmentApi.patchApiQueryIdSubquerySubidApartmentAidPatch(
         { ...analogs[analogIndex] },
         store.queryGetData.guid,
         selectedSubQueryGuid,
