@@ -68,6 +68,7 @@ function AnalogBox({ selectedSubQuery }: AnlogBoxProps) {
           <CollapsableAnalogInfo
             key={analog.guid}
             analog={analog!}
+            selectedSubQueryGuid={selectedSubQuery.guid}
           />
           {i !== selectedSubQuery?.selectedAnalogs?.length - 1 && <Hr />}
         </>
@@ -96,8 +97,6 @@ export default function MapSlider({
 
 
   const subqueries = store.queryGetData?.subQueries ?? []
-
-  console.log("ABOBA", selectedSubQuery)
 
 
   return (
