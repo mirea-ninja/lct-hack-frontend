@@ -63,14 +63,14 @@ function AnalogBox({ selectedSubQuery }: AnlogBoxProps) {
 
   return (
     <Box className={styles.cards}>
-      {selectedSubQuery?.selectedAnalogs?.map((analog, i) => (
+      {selectedSubQuery.selectedAnalogs!.map((analog, i) => (
         <>
           <CollapsableAnalogInfo
             key={analog.guid}
             analog={analog!}
             selectedSubQueryGuid={selectedSubQuery.guid}
           />
-          {i !== selectedSubQuery?.selectedAnalogs?.length - 1 && <Hr />}
+          {i !== selectedSubQuery.selectedAnalogs!.length - 1 && <Hr />}
         </>
       ))}
     </Box>
@@ -106,7 +106,7 @@ export default function MapSlider({
         type={EditorModalType.CREATE}
         open={editorCreateOpen}
         setOpen={setEditorCreateOpen}
-        // selectedSubQuery={selectedSubQuery}
+        selectedSubQueryGuid={selectedSubQuery.guid}
       />
       <HiddenAnalogsModal
         open={hiddenAnalogsShow}

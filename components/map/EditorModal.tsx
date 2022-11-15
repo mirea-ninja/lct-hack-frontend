@@ -14,6 +14,10 @@ import TextField from "@mui/material/TextField";
 import styles from "./EditorModal.module.scss";
 import { CloseIcon } from "../icons/CloseIcon";
 import { SubQueryGet } from "../../apiConnection/gen/models/sub-query-get";
+import { useStore } from "../../logic/DataStore";
+import { useApiClient } from "../../logic/ApiClientHook";
+import { ApartmentGet } from "../../apiConnection/gen/models/apartment-get";
+import { ApartmentCreate } from "../../apiConnection/gen";
 
 export enum EditorModalType {
   CREATE,
@@ -24,36 +28,154 @@ type Props = {
   type: EditorModalType;
   open: boolean;
   setOpen: (open: boolean) => void;
-  // selectedSubQuery?: SubQueryGet;
-  link?: string;
-  address?: string;
-  floor?: number;
-  floors?: number;
-  repairType?: string;
-  aptArea?: number;
-  kitchenArea?: number;
-  hasBalcony?: boolean;
-  distanceToMetro?: number;
-  price?: number;
+  selectedSubQueryGuid: string;
+  analog: ApartmentGet | undefined;
 };
 
-export function EditorModal(
-  {
-    type,
-    open,
-    setOpen,
-    link = "https://www.example.com",
-    address = "ул. Ленина, д. 1",
-    floor = 1,
-    floors = 5,
-    repairType = "без отделки",
-    aptArea = 50,
-    kitchenArea = 10,
-    hasBalcony = false,
-    distanceToMetro = 100,
-    price = 1000000,
-  }: Props) {
+export function EditorModal({
+  type,
+  open,
+  setOpen,
+  selectedSubQueryGuid,
+  analog,
+}: Props) {
   const theme = useTheme();
+
+  const store = useStore();
+  const apiClient = useApiClient();
+
+  const link = analog?.link ?? "https://www.example.com";
+  const [address, setAddress] = React.useState(analog ? analog.address : "");
+  const [floor, setFloor] = React.useState(analog ? analog.floor : 1);
+  const [floors, setFloors] = React.useState(analog ? analog.floors : 5);
+  const [quality, setQuality] = React.useState(
+    analog ? analog.quality : "без отделки"
+  );
+  const [apartmentArea, setApartmentArea] = React.useState(
+    analog ? analog.apartmentArea : 50
+  );
+  const [kitchenArea, setKitchenArea] = React.useState(
+    analog ? analog.kitchenArea : 10
+  );
+  const [hasBalcony, setHasBalcony] = React.useState(
+    analog ? analog.hasBalcony : false
+  );
+  const [distanceToMetro, setDistanceToMetro] = React.useState(
+    analog ? analog.distanceToMetro : 0
+  );
+  const [price, setPrice] = React.useState(analog ? analog.price : 0);
+
+  const onEditComplete = () => {
+    if (store.queryGetData === null) return;
+
+    const selectedSubQueryIndex = store.queryGetData.subQueries.findIndex(
+      (subQuery) => subQuery.guid === selectedSubQueryGuid
+    );
+
+    if (selectedSubQueryIndex === -1) return;
+
+    const analogs =
+      store.queryGetData.subQueries[selectedSubQueryIndex].analogs!;
+
+    if (type === EditorModalType.EDIT) {
+      const analogIndex = analogs.findIndex((a) => a.guid === analog?.guid);
+
+      if (analogIndex === -1) return;
+
+      store.queryGetData.subQueries[selectedSubQueryIndex].analogs![
+        analogIndex
+      ] = {
+        ...analogs[analogIndex],
+        address,
+        floor,
+        floors,
+        quality,
+        apartmentArea,
+        kitchenArea,
+        hasBalcony,
+        distanceToMetro,
+        price,
+        link,
+      };
+
+      apiClient.apartmentApi.updateApiQueryIdSubquerySubidApartmentAidPut(
+        { ...analogs[analogIndex] },
+        store.queryGetData.guid,
+        selectedSubQueryGuid,
+        analogs[analogIndex].guid
+      );
+    } else if (type === EditorModalType.CREATE) {
+      const standartObject =
+        store.queryGetData.subQueries[selectedSubQueryIndex].standartObject;
+
+      if (standartObject === undefined) return;
+
+      const segment = standartObject.segment;
+      const walls = standartObject.walls;
+      const rooms = standartObject.rooms;
+
+      const newAnalog: ApartmentCreate = {
+        address,
+        floor,
+        floors,
+        quality,
+        apartmentArea,
+        kitchenArea,
+        hasBalcony,
+        distanceToMetro,
+        segment: segment.toLowerCase(),
+        walls: walls!.toLowerCase(),
+        rooms,
+        price,
+      };
+
+      apiClient.apartmentApi
+        .createApiQueryIdSubquerySubidApartmentPost(
+          { ...newAnalog },
+          store.queryGetData.guid,
+          selectedSubQueryGuid
+        )
+        .then((response) => {
+          store.queryGetData!.subQueries[selectedSubQueryIndex].analogs!.push({
+            ...newAnalog,
+            guid: response.data.guid,
+          });
+
+          // Устанавливаем новый аналог в качестве выбранного аналога в локальном состоянии
+          store.queryGetData!.subQueries[
+            selectedSubQueryIndex
+          ].selectedAnalogs = [
+            ...store.queryGetData!.subQueries[selectedSubQueryIndex]
+              .selectedAnalogs,
+            {
+              ...newAnalog,
+              guid: response.data.guid,
+            },
+          ];
+
+          // Заново устанавливаем аналоги, чтобы обновить список
+          apiClient.subqueryApi
+            .createAnalogsApiQueryIdSubquerySubidAnalogsPost(
+              analogs,
+              store.queryGetData!.guid,
+              selectedSubQueryGuid
+            )
+            .then(() => {
+              // Заново выбираем аналоги
+              apiClient.subqueryApi.setAnalogsApiQueryIdSubquerySubidUserAnalogsPost(
+                store.queryGetData!.guid,
+                selectedSubQueryGuid,
+                { guids: analogs.map((a) => a.guid) }
+              );
+            });
+        });
+    }
+  };
+
+  const handleClick = () => {
+    onEditComplete();
+    setOpen(false);
+  };
 
   return (
     <Modal
@@ -82,22 +204,25 @@ export function EditorModal(
                 : "Редактирование аналога"}
             </Typography>
 
-            {type === EditorModalType.EDIT && link !== "https://www.example.com" && (
-              <Link
-              href={link !== "https://www.example.com" ? link : "#"}
-              target={link !== "https://www.example.com" ? "_blank" : "_self"}
-              sx={{textDecoration: "none"}}
-              >
-              <Typography
-                fontSize={18}
-                lineHeight={"20px"}
-                color={theme.palette.accent.color}
-                fontWeight={500}
-              >
-                Объявление
-              </Typography>
-              </Link>
-            )}
+            {type === EditorModalType.EDIT &&
+              link !== "https://www.example.com" && (
+                <Link
+                  href={link !== "https://www.example.com" ? link : "#"}
+                  target={
+                    link !== "https://www.example.com" ? "_blank" : "_self"
+                  }
+                  sx={{ textDecoration: "none" }}
+                >
+                  <Typography
+                    fontSize={18}
+                    lineHeight={"20px"}
+                    color={theme.palette.accent.color}
+                    fontWeight={500}
+                  >
+                    Объявление
+                  </Typography>
+                </Link>
+              )}
           </Box>
           <IconButton onClick={() => setOpen(false)}>
             <CloseIcon />
@@ -110,20 +235,22 @@ export function EditorModal(
             <TextField
               variant="outlined"
               placeholder="Адрес"
-              value={"Шарикоподшипниковская, 123"}
+              value={address}
               sx={{
                 minWidth: "350px",
                 paddingRight: "20px",
               }}
+              onChange={(e) => setAddress(e.target.value)}
             />
             <TextField
               variant="outlined"
               placeholder="Этаж"
-              value={"3"}
+              value={floor}
               sx={{
                 minWidth: "108px",
                 paddingRight: "5px",
               }}
+              onChange={(e) => setFloor(parseInt(e.target.value))}
             />
             <Typography
               fontSize={18}
@@ -137,15 +264,23 @@ export function EditorModal(
             <TextField
               variant="outlined"
               placeholder="Этаж"
-              value={"24"}
+              value={floors}
               sx={{ minWidth: "64px", paddingRight: "20px" }}
+              onChange={(e) => setFloors(parseInt(e.target.value))}
             />
             <FormControl variant="outlined" fullWidth>
               <InputLabel>Отделка</InputLabel>
-              <Select>
+              <Select
+                value={quality}
+                onChange={(e) => setQuality(e.target.value)}
+              >
                 <MenuItem value={"без отделки"}>Без отделки</MenuItem>
-                <MenuItem value={"муниципальный ремонт"}>Муниципальный ремонт</MenuItem>
-                <MenuItem value={"современная отделка"}>Современная отделка</MenuItem>
+                <MenuItem value={"муниципальный ремонт"}>
+                  Муниципальный ремонт
+                </MenuItem>
+                <MenuItem value={"современная отделка"}>
+                  Современная отделка
+                </MenuItem>
               </Select>
             </FormControl>
           </Box>
@@ -153,11 +288,12 @@ export function EditorModal(
             <TextField
               variant="outlined"
               placeholder="S общая"
-              value={"45"}
+              value={apartmentArea}
               sx={{
                 minWidth: "183px",
                 paddingRight: "5px",
               }}
+              onChange={(e) => setApartmentArea(parseInt(e.target.value))}
             />
             <Typography
               fontSize={18}
@@ -171,8 +307,9 @@ export function EditorModal(
             <TextField
               variant="outlined"
               placeholder="S кухни"
-              value={"163"}
+              value={kitchenArea}
               sx={{ minWidth: "163px", paddingRight: "5px" }}
+              onChange={(e) => setKitchenArea(parseInt(e.target.value))}
             />
             <Typography
               fontSize={18}
@@ -188,16 +325,23 @@ export function EditorModal(
               sx={{ minWidth: "190px", paddingRight: "20px" }}
             >
               <InputLabel>Балкон</InputLabel>
-              <Select>
-                <MenuItem value={true}>есть</MenuItem>
-                <MenuItem value={false}>Нет</MenuItem>
+
+              <Select
+                value={hasBalcony ? "есть" : "нет"}
+                onChange={(value) => {
+                  setHasBalcony(value.target.value === "есть");
+                }}
+              >
+                <MenuItem value={"есть"}>Есть</MenuItem>
+                <MenuItem value={"нет"}>Нет</MenuItem>
               </Select>
             </FormControl>
             <TextField
               variant="outlined"
               placeholder="до метро пешком"
-              value={"163"}
+              value={distanceToMetro}
               sx={{ minWidth: "205px", paddingRight: "5px" }}
+              onChange={(e) => setDistanceToMetro(parseInt(e.target.value))}
             />
             <Typography
               fontSize={18}
@@ -224,13 +368,15 @@ export function EditorModal(
               <TextField
                 variant="outlined"
                 placeholder="Цена"
-                value={"163"}
+                value={price}
                 sx={{ minWidth: "165px" }}
+                onChange={(e) => setPrice(parseInt(e.target.value))}
               />
             </Box>
             <Button
               variant={"mainActive"}
               sx={{ width: "300px", height: "60px" }}
+              onClick={handleClick}
             >
               {type === EditorModalType.CREATE
                 ? "Добавить"

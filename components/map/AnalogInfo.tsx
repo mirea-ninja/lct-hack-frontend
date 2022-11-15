@@ -38,10 +38,15 @@ const InfoCard = ({ title, description, isPositive }: InfoCardProps) => {
 
           width: "fit-content",
 
-          backgroundColor: title.includes("null") || title.includes("не указано")
-           ? "#F6968140" : "#EEF2F5",
+          backgroundColor:
+            title.includes("null") || title.includes("не указано")
+              ? "#F6968140"
+              : "#EEF2F5",
           borderRadius: "10px",
-          border: title.includes("null") || title.includes("не указано") ? "2px solid #FF000080" : null,
+          border:
+            title.includes("null") || title.includes("не указано")
+              ? "2px solid #FF000080"
+              : null,
         }}
       >
         <Typography
@@ -88,38 +93,40 @@ interface AnalogInfoProps {
   key: string;
   analog: ApartmentGet;
   setSelected: (apartment: ApartmentGet) => void;
+  selectedSubQueryGuid: string;
 }
 
 export default function CollapsableAnalogInfo({
   key,
   analog,
   setSelected,
+  selectedSubQueryGuid,
 }: AnalogInfoProps) {
   const theme = useTheme();
 
   const [editorOpen, setEditorOpen] = React.useState(false);
   const [errorShown, setErrorShown] = React.useState(false);
 
-  let address = analog.address ? analog.address : "Адрес не указан"
-  let link = analog.link ? analog.link : "https://www.example.com"
+  let address = analog.address ? analog.address : "Адрес не указан";
+  let link = analog.link ? analog.link : "https://www.example.com";
 
-  let m2price = analog.m2price ? analog.m2price : "Цена за кв.м. не указана"
+  let m2price = analog.m2price ? analog.m2price : "Цена за кв.м. не указана";
   let price_final = analog.adjustment?.priceFinal
     ? analog.adjustment?.priceFinal
-    : m2price
+    : m2price;
 
-  let building_type = analog.segment ? analog.segment : "Тип жилья не указан"
-  let floors = analog.floors ? analog.floors : null
-  let walls = analog.walls ? analog.walls : "Тип стен не указан"
-  let floor = analog.floor ? analog.floor : null
-  let apt_area = analog.apartmentArea ? analog.apartmentArea : null
-  let kitchen_area = analog.kitchenArea ? analog.kitchenArea : null
-  let has_balcony = analog.hasBalcony ? analog.hasBalcony : null
-  let to_metro = analog.distanceToMetro ? analog.distanceToMetro : null
-  let repair_type = analog.quality ? analog.quality : null
+  let building_type = analog.segment ? analog.segment : "Тип жилья не указан";
+  let floors = analog.floors ? analog.floors : null;
+  let walls = analog.walls ? analog.walls : "Тип стен не указан";
+  let floor = analog.floor ? analog.floor : null;
+  let apt_area = analog.apartmentArea ? analog.apartmentArea : null;
+  let kitchen_area = analog.kitchenArea ? analog.kitchenArea : null;
+  let has_balcony = analog.hasBalcony ? analog.hasBalcony : null;
+  let to_metro = analog.distanceToMetro ? analog.distanceToMetro : null;
+  let repair_type = analog.quality ? analog.quality : null;
 
-  let trade_adj = analog.adjustment?.trade ? analog.adjustment?.trade : -0.045
-  let floor_adj = analog.adjustment?.floor ? analog.adjustment?.floor : 0
+  let trade_adj = analog.adjustment?.trade ? analog.adjustment?.trade : -0.045;
+  let floor_adj = analog.adjustment?.floor ? analog.adjustment?.floor : 0;
   let apt_area_adj = analog.adjustment?.aptArea
     ? analog.adjustment?.aptArea
     : 0;
@@ -165,7 +172,9 @@ export default function CollapsableAnalogInfo({
       ? "муниципальная"
       : repair_type === "современная отделка"
       ? "современная"
-      : repair_type === null ? "не указано" : "без отделки";
+      : repair_type === null
+      ? "не указано"
+      : "без отделки";
 
   address = address
     .replace("Москва, ", "")
@@ -206,7 +215,7 @@ export default function CollapsableAnalogInfo({
 
   return (
     <>
-    <Modal
+      <Modal
         open={errorShown}
         onClose={() => setErrorShown(false)}
         aria-labelledby="modal-modal-title"
@@ -229,17 +238,24 @@ export default function CollapsableAnalogInfo({
           <Typography id="modal-modal-title" variant="h6" component="h2">
             <b>Ошибка при установке выбранного аналога</b>
           </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2}}>
-            Этот аналог имеет недопустимые поля! <br/> Пожалуйста, проверьте, что все поля заполнены корректно и
-            попробуйте еще раз.<br/> Вы можете заполнить поля, нажав на иконку карандаша.
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            Этот аналог имеет недопустимые поля! <br /> Пожалуйста, проверьте,
+            что все поля заполнены корректно и попробуйте еще раз.
+            <br /> Вы можете заполнить поля, нажав на иконку карандаша.
           </Typography>
         </Box>
       </Modal>
-      <EditorModal
-        type={EditorModalType.EDIT}
-        open={editorOpen}
-        setOpen={setEditorOpen}
-      />
+
+      {analog !== undefined ? (
+        <EditorModal
+          type={EditorModalType.EDIT}
+          open={editorOpen}
+          setOpen={setEditorOpen}
+          selectedSubQueryGuid={selectedSubQueryGuid}
+          analog={analog}
+        />
+      ) : null}
+
       <Box paddingRight="10px">
         <Box
           sx={{
@@ -283,7 +299,14 @@ export default function CollapsableAnalogInfo({
           <IconButton
             onClick={() => {
               // TODO: если есть невалидные данные (analog.floor !== null && analog.apartmentArea !== null && analog.kitchenArea !== null && analog.hasBalcony !== null && analog.quality !== null && analog.distanceToMetro !== null), то отобразить ошибку!
-              if ( !analog.floor || !analog.apartmentArea || !analog.kitchenArea || !analog.hasBalcony || !analog.quality || !analog.distanceToMetro) {
+              if (
+                !analog.floor ||
+                !analog.apartmentArea ||
+                !analog.kitchenArea ||
+                !analog.hasBalcony ||
+                !analog.quality ||
+                !analog.distanceToMetro
+              ) {
                 setErrorShown(true);
                 return;
               }

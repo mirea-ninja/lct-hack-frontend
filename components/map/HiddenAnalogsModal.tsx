@@ -46,15 +46,24 @@ export default function HiddenAnalogsModal({
     const selectedSubQueryIndex = store.queryGetData!.subQueries.findIndex(
       (subQuery) => subQuery.guid === selectedSubQuery.guid
     );
-    console.log("selectedSubQuery!!!!, ", selectedSubQuery);
-    console.log("selectedSubQueryIndex", selectedSubQueryIndex);
-    if (selectedSubQueryIndex !== -1
-     && analog.floor !== null && analog.apartmentArea !== null && analog.kitchenArea !== null && analog.hasBalcony !== null && analog.quality !== null && analog.distanceToMetro !== null) {
+
+    if (store.queryGetData === null) return;
+    if (selectedSubQueryIndex === -1) return;
+
+    if (
+      selectedSubQueryIndex !== -1 &&
+      analog.floor !== null &&
+      analog.apartmentArea !== null &&
+      analog.kitchenArea !== null &&
+      analog.hasBalcony !== null &&
+      analog.quality !== null &&
+      analog.distanceToMetro !== null
+    ) {
       // Обновляем состояние в Store: добавляем аналог в список выбранных аналогов
 
-      store.queryGetData!.subQueries[
+      store.queryGetData.subQueries[
         selectedSubQueryIndex
-      ].selectedAnalogs.push(analog);
+      ].selectedAnalogs!.push(analog);
     }
 
     // Отправляем запрос на сервер для обновления аналогов (перезаписываем список выбранных аналогов)
@@ -62,9 +71,9 @@ export default function HiddenAnalogsModal({
       store.queryGetData!.guid,
       selectedSubQuery.guid,
       {
-        guids: store.queryGetData!.subQueries[
+        guids: store.queryGetData.subQueries[
           selectedSubQueryIndex
-        ].selectedAnalogs.map((analog) => analog.guid),
+        ].selectedAnalogs!.map((analog) => analog.guid),
       }
     );
   };
@@ -122,9 +131,9 @@ export default function HiddenAnalogsModal({
             },
           }}
         >
-          {selectedSubQuery?.analogs?.map((analog, i) => (
+          {selectedSubQuery.analogs!.map((analog, i) => (
             <>
-              {selectedSubQuery?.selectedAnalogs?.findIndex(
+              {selectedSubQuery.selectedAnalogs?.findIndex(
                 (selectedAnalog) => selectedAnalog.guid === analog.guid
               ) === -1 && (
                 <>
@@ -133,7 +142,7 @@ export default function HiddenAnalogsModal({
                     analog={analog!}
                     setSelected={onAnalogSetSelected}
                   />
-                  {i !== selectedSubQuery?.analogs?.length - 1 && <Hr />}
+                  {i !== selectedSubQuery.analogs!.length - 1 && <Hr />}
                 </>
               )}
             </>

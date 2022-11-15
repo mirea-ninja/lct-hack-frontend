@@ -214,12 +214,15 @@ export default function CollapsableAnalogInfo({
 
   return (
     <>
-      <EditorModal
-        type={EditorModalType.EDIT}
-        open={editorOpen}
-        setOpen={setEditorOpen}
-        // selectedSubQuery={selectedSubQuery}
-      />
+      {analog !== undefined ? (
+        <EditorModal
+          type={EditorModalType.EDIT}
+          open={editorOpen}
+          setOpen={setEditorOpen}
+          selectedSubQueryGuid={selectedSubQueryGuid}
+          analog={analog}
+        />
+      ) : null}
 
       <Box>
         <Box
