@@ -1,15 +1,15 @@
-import React from "react"
-import Header from "../../../components/main/Header"
-import ReferenceTableExpandable from "../../../components/ImportDonePage/ReferenceTableExpandable"
+import React from "react";
+import Header from "../../../components/main/Header";
+import ReferenceTableExpandable from "../../../components/ImportDonePage/ReferenceTableExpandable";
 import {
   DataRow,
   RepairType,
   SegmentType,
   WallMaterials,
-} from "../../../components/ImportDonePage/types"
-import Button from "@mui/material/Button"
-import TextBox from "../../../components/TextBox/TextBox"
-import { useApiClient } from "../../../logic/ApiClientHook"
+} from "../../../components/ImportDonePage/types";
+import Button from "@mui/material/Button";
+import TextBox from "../../../components/TextBox/TextBox";
+import { useApiClient } from "../../../logic/ApiClientHook";
 import {
   Typography,
   Accordion,
@@ -17,17 +17,17 @@ import {
   AccordionDetails,
   Box,
   Stack,
-} from "@mui/material"
-import { useStore } from "../../../logic/DataStore"
-import { toJS } from "mobx"
-import Link from "next/link"
+} from "@mui/material";
+import { useStore } from "../../../logic/DataStore";
+import { toJS } from "mobx";
+import Link from "next/link";
 
 export default function ImportDonePage() {
-  let store = useStore()
-  let api = useApiClient()
+  let store = useStore();
+  let api = useApiClient();
 
-  console.log(toJS(store.queryGetData))
-  const rows = store.queryGetData?.subQueries ?? []
+  console.log(toJS(store.queryGetData));
+  const rows = store.queryGetData?.subQueries ?? [];
 
   return (
     <Box>
@@ -46,14 +46,25 @@ export default function ImportDonePage() {
                 {store!.queryGetData!.subQueries[0]!.standartObject!.address}
               </Typography>
             </Stack>
-            <Stack direction="row" gap={3} height="80%">
-              <Link href="/import/pool">
-                <Button variant="accentActive">Вернуться к загрузке</Button>
-              </Link>
-              <Link href="/calculate_etalons/map">
-                <Button variant="mainActive">Найти аналоги</Button>
-              </Link>
-            </Stack>
+
+            {/* Если store.isAnalogsLoaded === true, то это значит, 
+            что пользователь пришёл сюда со страницы архива, а не после загрузки пула*/}
+            {store.isAnalogsLoaded ===  false ? (
+              <Stack direction="row" gap={3} height="80%">
+                <Link href="/import/pool">
+                  <Button variant="accentActive">Вернуться к загрузке</Button>
+                </Link>
+                <Link href="/calculate_etalons/map">
+                  <Button variant="mainActive">Найти аналоги</Button>
+                </Link>
+              </Stack>
+            ) : (
+              <Stack direction="row" gap={3} height="80%">
+                <Link href="/calculate_etalons/map">
+                  <Button variant="mainActive">Перейти на карту</Button>
+                </Link>
+              </Stack>
+            )}
           </Stack>
         </Stack>
         <Box
@@ -79,17 +90,17 @@ export default function ImportDonePage() {
           }}
         >
           {rows.map((row, i) => {
-            const rooms = row.standartObject?.rooms
+            const rooms = row.standartObject?.rooms;
             return (
               <ReferenceTableExpandable
                 key={i}
                 data={row}
                 roomsCount={rooms ?? -1}
               />
-            )
+            );
           })}
         </Box>
       </Stack>
     </Box>
-  )
+  );
 }
