@@ -205,6 +205,12 @@ export function EditorModal({
         });
     }
 
+    // Рассчитываем новые корректировки
+    await apiClient.subqueryApi.calculateAnalogsApiQueryIdSubquerySubidCalculateAnalogsPost(
+      store.queryGetData!.guid,
+      selectedSubQueryGuid
+    );
+
     // Отправляем на повторный рассчет аналогов
     const res = await apiClient.subqueryApi.recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost(
       store.queryGetData.guid,

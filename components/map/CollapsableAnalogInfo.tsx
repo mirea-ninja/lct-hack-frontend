@@ -126,15 +126,22 @@ export default function CollapsableAnalogInfo({
           }
         )
         .then((_) => {
-          // Отправляем аналоги на перерасчет
           apiClient.subqueryApi
-            .recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost(
+            .calculateAnalogsApiQueryIdSubquerySubidCalculateAnalogsPost(
               store.queryGetData!.guid,
               selectedSubQueryGuid
             )
-            .then((res) => {
-              // Обновляем локальное состояние с учётом перерасчёта
-              store.updGetQueryData(res.data);
+            .then((_) => {
+              // Отправляем аналоги на перерасчет
+              apiClient.subqueryApi
+                .recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost(
+                  store.queryGetData!.guid,
+                  selectedSubQueryGuid
+                )
+                .then((res) => {
+                  // Обновляем локальное состояние с учётом перерасчёта
+                  store.updGetQueryData(res.data);
+                });
             });
         });
     }
