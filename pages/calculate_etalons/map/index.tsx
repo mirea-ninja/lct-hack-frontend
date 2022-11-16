@@ -272,8 +272,8 @@ const Maps = observer(({}: Props) => {
     if (store.isAnalogsLoaded) {
       if (selectedSubQuery === null) {
         setSelectedSubQuery(store.queryGetData?.subQueries[0].guid);
-        return;
       }
+      return;
     }
 
     const subqieries = store.queryGetData.subQueries;
@@ -409,44 +409,45 @@ const Maps = observer(({}: Props) => {
 
       <Header stepProgress={3} />
 
-      {isSuccess ||
-        (store.isAnalogsLoaded &&
-          store.queryGetData!.subQueries.map(
-            (subQuery) =>
-              subQuery.guid === selectedSubQuery && (
-                <MapSlider
-                  onSelectedSubQueryChange={(guid) => {
-                    setSelectedSubQuery(guid);
-                  }}
-                  selectedSubQuery={subQuery}
-                />
-              )
-          ))}
-      {isSuccess ||
-        (store.isAnalogsLoaded &&
-          store.queryGetData!.subQueries.map(
-            (subQuery) =>
-              subQuery.guid === selectedSubQuery && (
-                <ReferenceCard
-                  isExpanded={true}
-                  address={subQuery.standartObject?.address}
-                  price={(
-                    subQuery.selectedAnalogs.reduce((acc, item) => {
-                      return acc + item.adjustment?.priceFinal;
-                    }, 0) / subQuery.selectedAnalogs.length
-                  ).toFixed(0)}
-                  buildingType={subQuery.standartObject?.segment}
-                  floors={subQuery.standartObject?.floors}
-                  walls={subQuery.standartObject?.walls}
-                  floor={subQuery.standartObject?.floor}
-                  area={subQuery.standartObject?.apartmentArea}
-                  kitchenArea={subQuery.standartObject?.kitchenArea}
-                  hasBalcony={subQuery.standartObject?.hasBalcony}
-                  toMetro={subQuery.standartObject?.distanceToMetro}
-                  repairType={subQuery.standartObject?.quality}
-                />
-              )
-          ))}
+      {/* Выдвижная панель слева со списком подзапросов и аналогов для них */}
+      {(isSuccess || store.isAnalogsLoaded) &&
+        store.queryGetData!.subQueries.map(
+          (subQuery) =>
+            subQuery.guid === selectedSubQuery && (
+              <MapSlider
+                onSelectedSubQueryChange={(guid) => {
+                  setSelectedSubQuery(guid);
+                }}
+                selectedSubQuery={subQuery}
+              />
+            )
+        )}
+
+      {/* Карточка справа с информацией об эталонном объекте */}
+      {(isSuccess || store.isAnalogsLoaded) &&
+        store.queryGetData!.subQueries.map(
+          (subQuery) =>
+            subQuery.guid === selectedSubQuery && (
+              <ReferenceCard
+                isExpanded={true}
+                address={subQuery.standartObject?.address}
+                price={(
+                  subQuery.selectedAnalogs.reduce((acc, item) => {
+                    return acc + item.adjustment?.priceFinal;
+                  }, 0) / subQuery.selectedAnalogs.length
+                ).toFixed(0)}
+                buildingType={subQuery.standartObject?.segment}
+                floors={subQuery.standartObject?.floors}
+                walls={subQuery.standartObject?.walls}
+                floor={subQuery.standartObject?.floor}
+                area={subQuery.standartObject?.apartmentArea}
+                kitchenArea={subQuery.standartObject?.kitchenArea}
+                hasBalcony={subQuery.standartObject?.hasBalcony}
+                toMetro={subQuery.standartObject?.distanceToMetro}
+                repairType={subQuery.standartObject?.quality}
+              />
+            )
+        )}
 
       {/* Кнопки зума (+/-) справа экрана */}
       <Box
@@ -515,52 +516,52 @@ const Maps = observer(({}: Props) => {
                   suppressObsoleteBrowserNotifier: true,
                 }}
               >
-                {isSuccess ||
-                  (store.isAnalogsLoaded &&
-                    showHiddenAnalogs &&
-                    getAnalogsBySubquery(
-                      getSubqueryByGuid(
-                        selectedSubQuery!,
-                        store.queryGetData!.subQueries
-                      )!,
-                      false
-                    ).map(
-                      (analog) =>
-                        analog && (
-                          <CustomPlacemark
-                            coords={[analog!.lat, analog!.lon]}
-                            type={CustomPlacemarkType.HIDDEN}
-                            title={analog.address}
-                            subtitle={`${analog.price} ₽`}
-                            tags={getApartmentTags(analog)}
-                            template={template}
-                            iconTemplate={iconTemplate}
-                            iconShape={iconShape}
-                          />
-                        )
-                    ))}
+                {/* Плейсмарки скрытых аналогов */}
+                {(isSuccess || store.isAnalogsLoaded) &&
+                  showHiddenAnalogs &&
+                  getAnalogsBySubquery(
+                    getSubqueryByGuid(
+                      selectedSubQuery!,
+                      store.queryGetData!.subQueries
+                    )!,
+                    false
+                  ).map(
+                    (analog) =>
+                      analog && (
+                        <CustomPlacemark
+                          coords={[analog!.lat, analog!.lon]}
+                          type={CustomPlacemarkType.HIDDEN}
+                          title={analog.address}
+                          subtitle={`${analog.price} ₽`}
+                          tags={getApartmentTags(analog)}
+                          template={template}
+                          iconTemplate={iconTemplate}
+                          iconShape={iconShape}
+                        />
+                      )
+                  )}
 
-                {isSuccess ||
-                  (store.isAnalogsLoaded &&
-                    showEtalon &&
-                    store.queryGetData!.subQueries.map(
-                      (subQuery) =>
-                        subQuery.guid === selectedSubQuery && (
-                          <CustomPlacemark
-                            coords={[
-                              subQuery.standartObject!.lat,
-                              subQuery.standartObject!.lon,
-                            ]}
-                            type={CustomPlacemarkType.ETALON}
-                            title={subQuery.standartObject!.address}
-                            subtitle=""
-                            tags={getApartmentTags(subQuery.standartObject!)}
-                            template={template}
-                            iconTemplate={iconTemplate}
-                            iconShape={iconShape}
-                          />
-                        )
-                    ))}
+                {/* Плейсмарк эталонного объекта */}
+                {(isSuccess || store.isAnalogsLoaded) &&
+                  showEtalon &&
+                  store.queryGetData!.subQueries.map(
+                    (subQuery) =>
+                      subQuery.guid === selectedSubQuery && (
+                        <CustomPlacemark
+                          coords={[
+                            subQuery.standartObject!.lat,
+                            subQuery.standartObject!.lon,
+                          ]}
+                          type={CustomPlacemarkType.ETALON}
+                          title={subQuery.standartObject!.address}
+                          subtitle=""
+                          tags={getApartmentTags(subQuery.standartObject!)}
+                          template={template}
+                          iconTemplate={iconTemplate}
+                          iconShape={iconShape}
+                        />
+                      )
+                  )}
 
                 {/* Отрисовка маркера после подсчёта формы. Маркер для валидных аналогов */}
                 {iconShape &&
@@ -628,6 +629,7 @@ const Maps = observer(({}: Props) => {
                     />
                   ))}
 
+                {/* Отображение поисковой области */}
                 {(isSuccess || store.isAnalogsLoaded) && showSearchArea && (
                   <>
                     <Circle
