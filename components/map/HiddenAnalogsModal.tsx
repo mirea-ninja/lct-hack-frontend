@@ -67,15 +67,23 @@ export default function HiddenAnalogsModal({
     }
 
     // Отправляем запрос на сервер для обновления аналогов (перезаписываем список выбранных аналогов)
-    apiClient.subqueryApi.setAnalogsApiQueryIdSubquerySubidUserAnalogsPost(
-      store.queryGetData!.guid,
-      selectedSubQuery.guid,
-      {
-        guids: store.queryGetData.subQueries[
-          selectedSubQueryIndex
-        ].selectedAnalogs!.map((analog) => analog.guid),
-      }
-    );
+    apiClient.subqueryApi
+      .setAnalogsApiQueryIdSubquerySubidUserAnalogsPost(
+        store.queryGetData!.guid,
+        selectedSubQuery.guid,
+        {
+          guids: store.queryGetData.subQueries[
+            selectedSubQueryIndex
+          ].selectedAnalogs!.map((analog) => analog.guid),
+        }
+      )
+      .then((_) => {
+        // Отправляем аналоги на перерасчет
+        apiClient.subqueryApi.recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost(
+          store.queryGetData!.guid,
+          selectedSubQueryGuid
+        );
+      });
   };
 
   return (
@@ -141,6 +149,7 @@ export default function HiddenAnalogsModal({
                     key={analog.guid}
                     analog={analog!}
                     setSelected={onAnalogSetSelected}
+                    selectedSubQueryGuid={selectedSubQuery.guid}
                   />
                   {i !== selectedSubQuery.analogs!.length - 1 && <Hr />}
                 </>

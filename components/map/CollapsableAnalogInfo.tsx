@@ -115,15 +115,23 @@ export default function CollapsableAnalogInfo({
         ].selectedAnalogs!.filter((tmp) => tmp.guid !== analog.guid);
 
       // Отправляем запрос на сервер для обновления аналогов (перезаписываем список выбранных аналогов)
-      apiClient.subqueryApi.setAnalogsApiQueryIdSubquerySubidUserAnalogsPost(
-        store.queryGetData!.guid,
-        selectedSubQueryGuid,
-        {
-          guids: store.queryGetData.subQueries[
-            selectedSubQueryIndex
-          ].selectedAnalogs!.map((analog) => analog.guid),
-        }
-      );
+      apiClient.subqueryApi
+        .setAnalogsApiQueryIdSubquerySubidUserAnalogsPost(
+          store.queryGetData!.guid,
+          selectedSubQueryGuid,
+          {
+            guids: store.queryGetData.subQueries[
+              selectedSubQueryIndex
+            ].selectedAnalogs!.map((analog) => analog.guid),
+          }
+        )
+        .then((_) => {
+          // Отправляем аналоги на перерасчет
+          apiClient.subqueryApi.recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost(
+            store.queryGetData!.guid,
+            selectedSubQueryGuid
+          );
+        });
     }
   };
 
