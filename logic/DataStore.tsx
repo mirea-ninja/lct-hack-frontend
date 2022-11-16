@@ -41,6 +41,10 @@ export class Store {
   file: File | null = null
   poolName: string = ""
 
+  // true, если открывалась карта и аналоги были загружены. 
+  // Переменная нужна для того, чтобы при повторном открытии карты не загружать аналоги повторно
+  isAnalogsLoaded: boolean = false
+
   constructor() {
     makeAutoObservable(this)
 
@@ -57,6 +61,8 @@ export class Store {
   updGetQueryData = (data: QueryGet) => {
     this.queryGetData = data
   }
+
+  updGetQueryDataAnalogs 
 }
 
 const StoreContext = React.createContext<Store>(new Store())

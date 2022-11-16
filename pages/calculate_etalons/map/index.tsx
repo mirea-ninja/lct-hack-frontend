@@ -1,50 +1,48 @@
-import React from "react"
+import React from "react";
 import {
   YMaps,
   Map as Ymap,
   withYMaps,
   Placemark,
   Circle,
-} from "react-yandex-maps"
-import { Typography, useTheme } from "@mui/material"
-import Box from "@mui/material/Box"
-import MapSlider from "../../../components/map/MapSlider"
-import ReferenceCard from "../../../components/map/ReferenceCard"
-import Header from "../../../components/main/Header"
-import MinusIcon from "../../../components/icons/MinusIcon"
-import PlusIcon from "../../../components/icons/PlusIcon"
-import MapFilter from "../../../components/map/MapFilter"
-import { Modal } from "@mui/material"
-import { CircularProgress } from "@mui/material"
-import { useStore } from "../../../logic/DataStore"
-import { toJS } from "mobx"
-import { observer } from "mobx-react"
-import { SearchBase } from "../../../apiConnection/parser/models/search-base"
-import { useMutation, useQuery } from "@tanstack/react-query"
-import { useApiClient } from "../../../logic/ApiClientHook"
-import { TemplateProvider } from "../../../components/map/TemplateProvider"
-import { ZoomButton } from "../../../components/map/ZoomButton"
-import { Button } from "@mui/material"
-import { ApartmentBase } from "../../../apiConnection/parser/models/apartment-base"
-import { ApartmentGet, SubQueryGet } from "../../../apiConnection/gen"
-import { CustomPlacemarkType } from "../../../components/map/CustomPlacemark"
-import CustomPlacemark from "../../../components/map/CustomPlacemark"
-import useEffect from "react"
-import { QueryGet } from "../../../apiConnection/gen/models/query-get"
-import { AdjustmentGet } from "../../../apiConnection/gen/models/adjustment-get"
+} from "react-yandex-maps";
+import { Typography, useTheme } from "@mui/material";
+import Box from "@mui/material/Box";
+import MapSlider from "../../../components/map/MapSlider";
+import ReferenceCard from "../../../components/map/ReferenceCard";
+import Header from "../../../components/main/Header";
+import MinusIcon from "../../../components/icons/MinusIcon";
+import PlusIcon from "../../../components/icons/PlusIcon";
+import MapFilter from "../../../components/map/MapFilter";
+import { Modal } from "@mui/material";
+import { CircularProgress } from "@mui/material";
+import { useStore } from "../../../logic/DataStore";
+import { toJS } from "mobx";
+import { observer } from "mobx-react";
+import { SearchBase } from "../../../apiConnection/parser/models/search-base";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useApiClient } from "../../../logic/ApiClientHook";
+import { TemplateProvider } from "../../../components/map/TemplateProvider";
+import { ZoomButton } from "../../../components/map/ZoomButton";
+import { Button } from "@mui/material";
+import { ApartmentBase } from "../../../apiConnection/parser/models/apartment-base";
+import { ApartmentGet, SubQueryGet } from "../../../apiConnection/gen";
+import { CustomPlacemarkType } from "../../../components/map/CustomPlacemark";
+import CustomPlacemark from "../../../components/map/CustomPlacemark";
+import { AdjustmentGet } from "../../../apiConnection/gen/models/adjustment-get";
 
-type Props = {}
+type Props = {};
 
 const ConnectedTemplateProvider = withYMaps(TemplateProvider, true, [
   "templateLayoutFactory",
-])
+]);
 
 const getTagTemplate = (tag: string) => {
-  return `<div class="popover-tag">${tag}</div>`
-}
+  return `<div class="popover-tag">${tag}</div>`;
+};
 
 const getTagsTemplate = (data: any) => {
-  const { title, subtitle, tags } = data
+  const { title, subtitle, tags } = data;
   return `<div class="popover">
                 <div class="popover-header">
                     <div class="popover-title">${title}</div>
@@ -55,12 +53,12 @@ const getTagsTemplate = (data: any) => {
                         ${tags.map(getTagTemplate).join("")}
                     </div>
                 </div>
-            </div>`
-}
+            </div>`;
+};
 
 const getSubqueryByGuid = (guid: string, subqueries: SubQueryGet[]) => {
-  return subqueries.find((subquery) => subquery.guid === guid)
-}
+  return subqueries.find((subquery) => subquery.guid === guid);
+};
 
 const getOnlyValidAnalogs = (analogs: ApartmentBase[] | ApartmentGet[]) => {
   return analogs.filter((analog) => {
@@ -76,35 +74,35 @@ const getOnlyValidAnalogs = (analogs: ApartmentBase[] | ApartmentGet[]) => {
       analog.kitchenArea !== null &&
       analog.distanceToMetro !== null &&
       analog.quality !== null
-    )
-  })
-}
+    );
+  });
+};
 
 const getDistance = (
   a: { lat: number; lon: number },
   b: { lat: number; lon: number }
 ) => {
-  const R = 6372795 // радиус Земли в метрах
-  const lat1 = a.lat
-  const lat2 = b.lat
-  const lon1 = a.lon
-  const lon2 = b.lon
-  const cl1 = Math.cos((lat1 * Math.PI) / 180)
-  const cl2 = Math.cos((lat2 * Math.PI) / 180)
-  const sl1 = Math.sin((lat1 * Math.PI) / 180)
-  const sl2 = Math.sin((lat2 * Math.PI) / 180)
-  const delta = lon2 - lon1
-  const cdelta = Math.cos((delta * Math.PI) / 180)
-  const sdelta = Math.sin((delta * Math.PI) / 180)
+  const R = 6372795; // радиус Земли в метрах
+  const lat1 = a.lat;
+  const lat2 = b.lat;
+  const lon1 = a.lon;
+  const lon2 = b.lon;
+  const cl1 = Math.cos((lat1 * Math.PI) / 180);
+  const cl2 = Math.cos((lat2 * Math.PI) / 180);
+  const sl1 = Math.sin((lat1 * Math.PI) / 180);
+  const sl2 = Math.sin((lat2 * Math.PI) / 180);
+  const delta = lon2 - lon1;
+  const cdelta = Math.cos((delta * Math.PI) / 180);
+  const sdelta = Math.sin((delta * Math.PI) / 180);
 
   const y = Math.sqrt(
     Math.pow(cl2 * sdelta, 2) + Math.pow(cl1 * sl2 - sl1 * cl2 * cdelta, 2)
-  )
-  const x = sl1 * sl2 + cl1 * cl2 * cdelta
-  const ad = Math.atan2(y, x)
-  const dist = ad * R // Расстояние между двумя координатами в метрах
-  return Math.abs(dist)
-}
+  );
+  const x = sl1 * sl2 + cl1 * cl2 * cdelta;
+  const ad = Math.atan2(y, x);
+  const dist = ad * R; // Расстояние между двумя координатами в метрах
+  return Math.abs(dist);
+};
 
 function getAnalogsBySubquery(
   subquery: SubQueryGet,
@@ -114,14 +112,14 @@ function getAnalogsBySubquery(
     ? subquery.selectedAnalogs
     : subquery.analogs!.filter(
         (analog) => !subquery.selectedAnalogs!.includes(analog)
-      )
+      );
 
-  const analogsJs = toJS(analogs)!
+  const analogsJs = toJS(analogs)!;
 
   if (isSelected) {
-    return [analogsJs[0]]
+    return [analogsJs[0]];
   } else {
-    return analogs
+    return analogs;
   }
 }
 
@@ -133,85 +131,85 @@ const getApartmentTags = (analog: ApartmentBase | ApartmentGet) => {
     analog.hasBalcony ? "есть балкон" : "нет балкона",
     `${analog.distanceToMetro} мин. до метро`,
     analog.quality,
-  ]
-}
+  ];
+};
 
 const Maps = observer(({}: Props) => {
-  const theme = useTheme()
-  const store = useStore()
-  const apiClient = useApiClient()
+  const store = useStore();
+  const apiClient = useApiClient();
 
-  const [selectedSubQuery, setSelectedSubQuery] = React.useState<string | null>(null)
+  const [selectedSubQuery, setSelectedSubQuery] = React.useState<string | null>(
+    null
+  );
 
   // Настройки карты
-  const [showEtalon, setShowEtalon] = React.useState(true)
-  const [showAnalogs, setShowAnalogs] = React.useState(true)
-  const [showSearchArea, setShowSearchArea] = React.useState(true)
-  const [showHiddenAnalogs, setShowHiddenAnalogs] = React.useState(true)
+  const [showEtalon, setShowEtalon] = React.useState(true);
+  const [showAnalogs, setShowAnalogs] = React.useState(true);
+  const [showSearchArea, setShowSearchArea] = React.useState(true);
+  const [showHiddenAnalogs, setShowHiddenAnalogs] = React.useState(true);
 
-  const [errorMessage, setErrorMessage] = React.useState<string | null>(null)
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
 
-  const [hiddenAnalogs, setHiddenAnalogs] = React.useState<any[]>([])
+  console.log("MAPS LOADED WITH STATE:", toJS(store.queryGetData));
 
-  console.log("MAPS LOADED WITH STATE:", toJS(store.queryGetData))
-
-  const mapRef = React.useRef(null)
+  const mapRef = React.useRef(null);
 
   const caclAnalogs = useMutation({
     mutationFn: (params: { queryId: string; subqueryId: string }) => {
       return apiClient.subqueryApi.calculateAnalogsApiQueryIdSubquerySubidCalculateAnalogsPost(
         params.queryId,
         params.subqueryId
-      )
+      );
     },
     onSuccess(data) {
-      console.log(data.data)
-      store.queryGetData = data.data
+      console.log(data.data);
+      store.queryGetData = data.data;
     },
-  })
+  });
 
+  // Обновление карты (получение аналогов)
   const { mutate, isLoading, isError, isSuccess } = useMutation({
     mutationFn: async (query: SearchBase[]) => {
-      const result = []
-      const analogAdj = new Map<string, AdjustmentGet | undefined>()
+      const result = [];
+      const analogAdj = new Map<string, AdjustmentGet | undefined>();
 
       for (let i = 0; i < query.length; i++) {
         // Список всех аналогов для подзапроса
-        let analogsResult = []
+        let analogsResult = [];
         // Список выбранных аналогов для подзапроса (по которым будет строиться карта, только валидные)
-        let selectedAnalogsResult = []
+        let selectedAnalogsResult = [];
 
-        const item = query[i]
+        const item = query[i];
 
         // Парсинг аналогов. В момент парсинга парсер отправляет их на удалённый сервер и сохраняет для указанного подзапроса.
-        const res = await apiClient.parser.parseParsePost(item)
+        const res = await apiClient.parser.parseParsePost(item);
 
         // Получаем аналоги с удалённого сервера
         const analogsRes =
           await apiClient.subqueryApi.getAnalogsApiQueryIdSubquerySubidAnalogsGet(
             item.queryId,
             item.subqueryId
-          )
+          );
 
-        let analogs = analogsRes.data
+        let analogs = analogsRes.data;
 
-        const filteredAnalogs = getOnlyValidAnalogs(analogs)
+        const filteredAnalogs = getOnlyValidAnalogs(analogs);
 
         const validAnalogs = filteredAnalogs.filter((analog) => {
           const standartObject = store.queryGetData?.subQueries.find(
             (subquery) => subquery.guid === item.subqueryId
-          )?.standartObject
+          )?.standartObject;
 
           const distance = getDistance(
             { lat: analog.lat, lon: analog.lon },
             { lat: standartObject.lat, lon: standartObject.lon }
-          )
+          );
 
-          return distance <= 1000
-        })
+          return distance <= 1000;
+        });
 
-        analogsResult.push(analogs)
-        selectedAnalogsResult.push(validAnalogs)
+        analogsResult.push(analogs);
+        selectedAnalogsResult.push(validAnalogs);
 
         if (selectedAnalogsResult.length > 0) {
           // Выбираем аналоги на удалённом сервере. Выбранные аналоги будут использоваться для рассчётов
@@ -219,92 +217,99 @@ const Maps = observer(({}: Props) => {
             item.queryId,
             item.subqueryId,
             { guids: validAnalogs.map((el) => el.guid) }
-          )
+          );
         }
 
         let queryGet =
           await apiClient.subqueryApi.calculateAnalogsApiQueryIdSubquerySubidCalculateAnalogsPost(
             item.queryId,
             item.subqueryId
-          )
+          );
 
         analogs =
           getSubqueryByGuid(item.subqueryId, queryGet.data.subQueries)
-            ?.analogs || analogs
+            ?.analogs || analogs;
 
         selectedAnalogsResult =
           getSubqueryByGuid(item.subqueryId, queryGet.data.subQueries)
-            ?.selectedAnalogs || selectedAnalogsResult
+            ?.selectedAnalogs || selectedAnalogsResult;
 
         result.push({
           queryGuid: item.queryId,
           subqueryGuid: item.subqueryId,
           analogs: analogs,
           selectedAnalogs: selectedAnalogsResult,
-        })
+        });
       }
 
-      return result
+      return result;
     },
 
     onSuccess: (data) => {
-      const subqueries = store.queryGetData?.subQueries
+      const subqueries = store.queryGetData?.subQueries;
 
       if (subqueries) {
         data.forEach((item) => {
-          const subquery = getSubqueryByGuid(item.subqueryGuid, subqueries)
+          const subquery = getSubqueryByGuid(item.subqueryGuid, subqueries);
 
           if (subquery) {
-            subquery.analogs = item.analogs
-            subquery.selectedAnalogs = item.selectedAnalogs
+            subquery.analogs = item.analogs;
+            subquery.selectedAnalogs = item.selectedAnalogs;
           }
-        })
+        });
       }
 
-      console.log("UPDATED SUBQUERY", toJS(store.queryGetData))
+      console.log("UPDATED SUBQUERY", toJS(store.queryGetData));
     },
     onError: (error) => {
-      console.log("ERROR", error)
-      setErrorMessage(error.response.data.errors)
+      console.log("ERROR", error);
+      setErrorMessage(error.response.data.errors);
     },
-  })
+  });
 
   React.useEffect(() => {
-    if (store.queryGetData?.subQueries) {
-      const subqieries = store.queryGetData.subQueries
-
-      if (subqieries.length == 0) {
-        return
+    if (store.queryGetData === null) return;
+    if (store.isAnalogsLoaded) {
+      if (selectedSubQuery === null) {
+        setSelectedSubQuery(store.queryGetData?.subQueries[0].guid);
+        return;
       }
-
-      const subquery = subqieries[0]
-      setSelectedSubQuery(subquery.guid)
-
-      const dataToQuery = []
-
-      for (const subQuery of subqieries) {
-        const standartObject = subQuery.standartObject
-        if (standartObject) {
-          const data = {
-            address: standartObject.address,
-            floors: standartObject.floors,
-            rooms: standartObject.rooms,
-            segment: standartObject.segment.toLowerCase(),
-            walls: standartObject.walls!.toLowerCase(),
-            radius: 1500,
-            queryId: store.queryGetData.guid,
-            subqueryId: subQuery.guid,
-          }
-
-          dataToQuery.push(data)
-        }
-      }
-
-      mutate(dataToQuery)
     }
-  }, [store.queryGetData])
 
-  console.log(getAnalogsBySubquery)
+    const subqieries = store.queryGetData.subQueries;
+
+    if (subqieries.length == 0) {
+      return;
+    }
+
+    const subquery = subqieries[0];
+    setSelectedSubQuery(subquery.guid);
+
+    const dataToQuery = [];
+
+    for (const subQuery of subqieries) {
+      const standartObject = subQuery.standartObject;
+      if (standartObject) {
+        const data = {
+          address: standartObject.address,
+          floors: standartObject.floors,
+          rooms: standartObject.rooms,
+          segment: standartObject.segment.toLowerCase(),
+          walls: standartObject.walls!.toLowerCase(),
+          radius: 1500,
+          queryId: store.queryGetData.guid,
+          subqueryId: subQuery.guid,
+        };
+
+        dataToQuery.push(data);
+      }
+    }
+
+    mutate(dataToQuery);
+    store.isAnalogsLoaded = true;
+  }, [store.queryGetData]);
+
+  console.log(getAnalogsBySubquery);
 
   // @ts-ignore
   return (
@@ -339,8 +344,7 @@ const Maps = observer(({}: Props) => {
             <CircularProgress />
           </Box>
           <Typography variant="h6" id="modal-modal-title" component="div">
-            Ищем аналоги по вашему запросу.
-            Это может занять какое-то время.
+            Ищем аналоги по вашему запросу. Это может занять какое-то время.
             Пожалуйста, подождите.
           </Typography>
         </Box>
@@ -352,7 +356,7 @@ const Maps = observer(({}: Props) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
         onClose={() => {
-          setErrorMessage(null)
+          setErrorMessage(null);
         }}
       >
         <Box
@@ -384,7 +388,7 @@ const Maps = observer(({}: Props) => {
             <Button
               variant="contained"
               onClick={() => {
-                setErrorMessage(null)
+                setErrorMessage(null);
               }}
               sx={{
                 boxShadow: "none",
@@ -405,29 +409,32 @@ const Maps = observer(({}: Props) => {
 
       <Header stepProgress={3} />
 
-      {isSuccess &&
-        store.queryGetData!.subQueries.map(
-          (subQuery) =>
-            subQuery.guid === selectedSubQuery && (
-              <MapSlider
-                onSelectedSubQueryChange={(guid) => {
-                  setSelectedSubQuery(guid)
-                }}
-                selectedSubQuery={subQuery}
-              />
-            )
-        )
-      }
-      {isSuccess &&
-        store.queryGetData!.subQueries.map(
-          (subQuery) =>
-            subQuery.guid === selectedSubQuery && (
+      {isSuccess ||
+        (store.isAnalogsLoaded &&
+          store.queryGetData!.subQueries.map(
+            (subQuery) =>
+              subQuery.guid === selectedSubQuery && (
+                <MapSlider
+                  onSelectedSubQueryChange={(guid) => {
+                    setSelectedSubQuery(guid);
+                  }}
+                  selectedSubQuery={subQuery}
+                />
+              )
+          ))}
+      {isSuccess ||
+        (store.isAnalogsLoaded &&
+          store.queryGetData!.subQueries.map(
+            (subQuery) =>
+              subQuery.guid === selectedSubQuery && (
                 <ReferenceCard
                   isExpanded={true}
                   address={subQuery.standartObject?.address}
-                  price={(subQuery.selectedAnalogs.reduce((acc, item) => {
-                    return acc + item.adjustment?.priceFinal
-                  }, 0) / subQuery.selectedAnalogs.length).toFixed(0)}
+                  price={(
+                    subQuery.selectedAnalogs.reduce((acc, item) => {
+                      return acc + item.adjustment?.priceFinal;
+                    }, 0) / subQuery.selectedAnalogs.length
+                  ).toFixed(0)}
                   buildingType={subQuery.standartObject?.segment}
                   floors={subQuery.standartObject?.floors}
                   walls={subQuery.standartObject?.walls}
@@ -438,8 +445,8 @@ const Maps = observer(({}: Props) => {
                   toMetro={subQuery.standartObject?.distanceToMetro}
                   repairType={subQuery.standartObject?.quality}
                 />
-            )
-        )}
+              )
+          ))}
 
       {/* Кнопки зума (+/-) справа экрана */}
       <Box
@@ -508,93 +515,98 @@ const Maps = observer(({}: Props) => {
                   suppressObsoleteBrowserNotifier: true,
                 }}
               >
-                {isSuccess &&
-                  showHiddenAnalogs &&
-                  getAnalogsBySubquery(
-                    getSubqueryByGuid(
-                      selectedSubQuery!,
-                      store.queryGetData!.subQueries
-                    )!,
-                    false
-                  ).map((analog) => (
-                    (analog &&
-                    <CustomPlacemark
-                      coords={[analog!.lat, analog!.lon]}
-                      type={CustomPlacemarkType.HIDDEN}
-                      title={analog.address}
-                      subtitle={`${analog.price} ₽`}
-                      tags={getApartmentTags(analog)}
-                      template={template}
-                      iconTemplate={iconTemplate}
-                      iconShape={iconShape}
-                    />
-                  )))}
+                {isSuccess ||
+                  (store.isAnalogsLoaded &&
+                    showHiddenAnalogs &&
+                    getAnalogsBySubquery(
+                      getSubqueryByGuid(
+                        selectedSubQuery!,
+                        store.queryGetData!.subQueries
+                      )!,
+                      false
+                    ).map(
+                      (analog) =>
+                        analog && (
+                          <CustomPlacemark
+                            coords={[analog!.lat, analog!.lon]}
+                            type={CustomPlacemarkType.HIDDEN}
+                            title={analog.address}
+                            subtitle={`${analog.price} ₽`}
+                            tags={getApartmentTags(analog)}
+                            template={template}
+                            iconTemplate={iconTemplate}
+                            iconShape={iconShape}
+                          />
+                        )
+                    ))}
 
-                {isSuccess &&
-                  showEtalon &&
-                  store.queryGetData!.subQueries.map(
-                    (subQuery) =>
-                      subQuery.guid === selectedSubQuery && (
-                        <CustomPlacemark
-                          coords={[
-                            subQuery.standartObject!.lat,
-                            subQuery.standartObject!.lon,
-                          ]}
-                          type={CustomPlacemarkType.ETALON}
-                          title={subQuery.standartObject!.address}
-                          subtitle=""
-                          tags={getApartmentTags(subQuery.standartObject!)}
-                          template={template}
-                          iconTemplate={iconTemplate}
-                          iconShape={iconShape}
-                        />
-                      )
-                  )}
+                {isSuccess ||
+                  (store.isAnalogsLoaded &&
+                    showEtalon &&
+                    store.queryGetData!.subQueries.map(
+                      (subQuery) =>
+                        subQuery.guid === selectedSubQuery && (
+                          <CustomPlacemark
+                            coords={[
+                              subQuery.standartObject!.lat,
+                              subQuery.standartObject!.lon,
+                            ]}
+                            type={CustomPlacemarkType.ETALON}
+                            title={subQuery.standartObject!.address}
+                            subtitle=""
+                            tags={getApartmentTags(subQuery.standartObject!)}
+                            template={template}
+                            iconTemplate={iconTemplate}
+                            iconShape={iconShape}
+                          />
+                        )
+                    ))}
 
                 {/* Отрисовка маркера после подсчёта формы. Маркер для валидных аналогов */}
                 {iconShape &&
                   iconShape.length &&
-                  isSuccess &&
+                  (isSuccess || store.isAnalogsLoaded) &&
+                  showAnalogs &&
+                  getSubqueryByGuid(
+                    selectedSubQuery!,
+                    store.queryGetData!.subQueries
+                  )?.selectedAnalogs?.map(
+                    (analog) =>
+                      analog && (
+                        <Placemark
+                          geometry={[analog!.lat, analog!.lon]}
+                          properties={{
+                            content: getTagsTemplate({
+                              title: analog!.address.replace("Москва, ", ""),
+                              subtitle: `${analog.price} ₽`,
+                              tags: getApartmentTags(analog),
+                            }),
+                            title: analog.address!.replace("Москва, ", ""),
+                          }}
+                          options={{
+                            // Применяем шаблон
+                            balloonContentLayout: template,
+                            balloonPanelMaxMapArea: 0,
+
+                            iconLayout: iconTemplate,
+                            iconShape: {
+                              type: "Rectangle",
+                              coordinates: iconShape,
+                            },
+                          }}
+                          modules={["geoObject.addon.balloon"]}
+                        />
+                      )
+                  )}
+
+                {/* Тоже маркер для валидных аналогов */}
+                {!iconShape &&
+                  (isSuccess || store.isAnalogsLoaded) &&
                   showAnalogs &&
                   getSubqueryByGuid(
                     selectedSubQuery!,
                     store.queryGetData!.subQueries
                   )?.selectedAnalogs?.map((analog) => (
-                    (analog &&
-                    <Placemark
-                      geometry={[analog!.lat, analog!.lon]}
-                      properties={{
-                        content: getTagsTemplate({
-                          title: analog!.address.replace("Москва, ", ""),
-                          subtitle: `${analog.price} ₽`,
-                          tags: getApartmentTags(analog),
-                        }),
-                        title: analog.address!.replace("Москва, ", ""),
-                      }}
-                      options={{
-                        // Применяем шаблон
-                        balloonContentLayout: template,
-                        balloonPanelMaxMapArea: 0,
-
-                        iconLayout: iconTemplate,
-                        iconShape: {
-                          type: "Rectangle",
-                          coordinates: iconShape,
-                        },
-                      }}
-                      modules={["geoObject.addon.balloon"]}
-                    />
-                  )))}
-
-                {/* Тоже маркер для валидных аналогов */}
-                {!iconShape &&
-                  isSuccess &&
-                  showAnalogs &&
-                    getSubqueryByGuid(
-                      selectedSubQuery!,
-                      store.queryGetData!.subQueries
-                    )?.selectedAnalogs?.map((analog) => (
-                    (
                     <Placemark
                       geometry={[analog!.lat, analog!.lon]}
                       properties={{
@@ -614,9 +626,9 @@ const Maps = observer(({}: Props) => {
                       }}
                       modules={["geoObject.addon.balloon"]}
                     />
-                    )))}
+                  ))}
 
-                {isSuccess && showSearchArea && (
+                {(isSuccess || store.isAnalogsLoaded) && showSearchArea && (
                   <>
                     <Circle
                       geometry={[
@@ -674,7 +686,7 @@ const Maps = observer(({}: Props) => {
         </YMaps>
       </Box>
     </Box>
-  )
-})
+  );
+});
 
-export default Maps
+export default Maps;
