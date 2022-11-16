@@ -20,6 +20,7 @@ import { HTTPValidationError } from '../models';
 import { QueryCreate } from '../models';
 import { QueryGet } from '../models';
 import { QueryPatch } from '../models';
+import { Sort } from '../models';
 /**
  * QueryApi - axios parameter creator
  * @export
@@ -71,12 +72,19 @@ export const QueryApiAxiosParamCreator = function (configuration?: Configuration
         /**
          * Получить список всех запросов
          * @summary Получение всех запросов
+         * @param {Sort} [sort] Cортировка
+         * @param {Date} [start] Дата начала
+         * @param {Date} [end] Дата окончания
+         * @param {Array<string>} [segment] Сегмент
+         * @param {Array<string>} [walls] Стены
+         * @param {number} [floorsMin] Минимальное количество этажей
+         * @param {number} [floorsMax] Максимальное количество этажей
          * @param {number} [limit] 
          * @param {number} [offset] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        getAllApiQueryGet: async (limit?: number, offset?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+        getAllApiQueryGet: async (sort?: Sort, start?: Date, end?: Date, segment?: Array<string>, walls?: Array<string>, floorsMin?: number, floorsMax?: number, limit?: number, offset?: number, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
             const localVarPath = `/api/query`;
             // use dummy base URL string because the URL constructor only accepts absolute URLs.
             const localVarUrlObj = new URL(localVarPath, 'https://example.com');
@@ -89,6 +97,38 @@ export const QueryApiAxiosParamCreator = function (configuration?: Configuration
             const localVarQueryParameter = {} as any;
 
             // authentication HTTPBearer required
+
+            if (sort !== undefined) {
+                localVarQueryParameter['sort'] = sort;
+            }
+
+            if (start !== undefined) {
+                localVarQueryParameter['start'] = (start as any instanceof Date) ?
+                    (start as any).toISOString() :
+                    start;
+            }
+
+            if (end !== undefined) {
+                localVarQueryParameter['end'] = (end as any instanceof Date) ?
+                    (end as any).toISOString() :
+                    end;
+            }
+
+            if (segment) {
+                localVarQueryParameter['segment'] = segment;
+            }
+
+            if (walls) {
+                localVarQueryParameter['walls'] = walls;
+            }
+
+            if (floorsMin !== undefined) {
+                localVarQueryParameter['floors_min'] = floorsMin;
+            }
+
+            if (floorsMax !== undefined) {
+                localVarQueryParameter['floors_max'] = floorsMax;
+            }
 
             if (limit !== undefined) {
                 localVarQueryParameter['limit'] = limit;
@@ -284,13 +324,20 @@ export const QueryApiFp = function(configuration?: Configuration) {
         /**
          * Получить список всех запросов
          * @summary Получение всех запросов
+         * @param {Sort} [sort] Cортировка
+         * @param {Date} [start] Дата начала
+         * @param {Date} [end] Дата окончания
+         * @param {Array<string>} [segment] Сегмент
+         * @param {Array<string>} [walls] Стены
+         * @param {number} [floorsMin] Минимальное количество этажей
+         * @param {number} [floorsMax] Максимальное количество этажей
          * @param {number} [limit] 
          * @param {number} [offset] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllApiQueryGet(limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Array<QueryGet>>>> {
-            const localVarAxiosArgs = await QueryApiAxiosParamCreator(configuration).getAllApiQueryGet(limit, offset, options);
+        async getAllApiQueryGet(sort?: Sort, start?: Date, end?: Date, segment?: Array<string>, walls?: Array<string>, floorsMin?: number, floorsMax?: number, limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<Array<QueryGet>>>> {
+            const localVarAxiosArgs = await QueryApiAxiosParamCreator(configuration).getAllApiQueryGet(sort, start, end, segment, walls, floorsMin, floorsMax, limit, offset, options);
             return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
                 const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
                 return axios.request(axiosRequestArgs);
@@ -362,13 +409,20 @@ export const QueryApiFactory = function (configuration?: Configuration, basePath
         /**
          * Получить список всех запросов
          * @summary Получение всех запросов
+         * @param {Sort} [sort] Cортировка
+         * @param {Date} [start] Дата начала
+         * @param {Date} [end] Дата окончания
+         * @param {Array<string>} [segment] Сегмент
+         * @param {Array<string>} [walls] Стены
+         * @param {number} [floorsMin] Минимальное количество этажей
+         * @param {number} [floorsMax] Максимальное количество этажей
          * @param {number} [limit] 
          * @param {number} [offset] 
          * @param {*} [options] Override http request option.
          * @throws {RequiredError}
          */
-        async getAllApiQueryGet(limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<AxiosResponse<Array<QueryGet>>> {
-            return QueryApiFp(configuration).getAllApiQueryGet(limit, offset, options).then((request) => request(axios, basePath));
+        async getAllApiQueryGet(sort?: Sort, start?: Date, end?: Date, segment?: Array<string>, walls?: Array<string>, floorsMin?: number, floorsMax?: number, limit?: number, offset?: number, options?: AxiosRequestConfig): Promise<AxiosResponse<Array<QueryGet>>> {
+            return QueryApiFp(configuration).getAllApiQueryGet(sort, start, end, segment, walls, floorsMin, floorsMax, limit, offset, options).then((request) => request(axios, basePath));
         },
         /**
          * Получить запрос по его id
@@ -426,14 +480,21 @@ export class QueryApi extends BaseAPI {
     /**
      * Получить список всех запросов
      * @summary Получение всех запросов
+     * @param {Sort} [sort] Cортировка
+     * @param {Date} [start] Дата начала
+     * @param {Date} [end] Дата окончания
+     * @param {Array<string>} [segment] Сегмент
+     * @param {Array<string>} [walls] Стены
+     * @param {number} [floorsMin] Минимальное количество этажей
+     * @param {number} [floorsMax] Максимальное количество этажей
      * @param {number} [limit] 
      * @param {number} [offset] 
      * @param {*} [options] Override http request option.
      * @throws {RequiredError}
      * @memberof QueryApi
      */
-    public async getAllApiQueryGet(limit?: number, offset?: number, options?: AxiosRequestConfig) : Promise<AxiosResponse<Array<QueryGet>>> {
-        return QueryApiFp(this.configuration).getAllApiQueryGet(limit, offset, options).then((request) => request(this.axios, this.basePath));
+    public async getAllApiQueryGet(sort?: Sort, start?: Date, end?: Date, segment?: Array<string>, walls?: Array<string>, floorsMin?: number, floorsMax?: number, limit?: number, offset?: number, options?: AxiosRequestConfig) : Promise<AxiosResponse<Array<QueryGet>>> {
+        return QueryApiFp(this.configuration).getAllApiQueryGet(sort, start, end, segment, walls, floorsMin, floorsMax, limit, offset, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Получить запрос по его id
