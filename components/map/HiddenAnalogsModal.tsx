@@ -79,10 +79,15 @@ export default function HiddenAnalogsModal({
       )
       .then((_) => {
         // Отправляем аналоги на перерасчет
-        apiClient.subqueryApi.recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost(
-          store.queryGetData!.guid,
-          selectedSubQueryGuid
-        );
+        apiClient.subqueryApi
+          .recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost(
+            store.queryGetData!.guid,
+            selectedSubQuery.guid
+          )
+          .then((res) => {
+            // Обновляем локальное состояние с учётом перерасчёта
+            store.updGetQueryData(res.data);
+          });
       });
   };
 

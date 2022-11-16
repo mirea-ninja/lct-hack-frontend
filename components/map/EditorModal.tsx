@@ -206,10 +206,13 @@ export function EditorModal({
     }
 
     // Отправляем на повторный рассчет аналогов
-    await apiClient.subqueryApi.recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost(
+    const res = await apiClient.subqueryApi.recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost(
       store.queryGetData.guid,
       selectedSubQueryGuid
     );
+
+    // Обновляем локальное состояние с учётом перерасчёта
+    store.updGetQueryData(res.data);
   }
 
   const handleClick = () => {
