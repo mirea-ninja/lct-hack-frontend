@@ -65,7 +65,7 @@ export default function CalculateEtalonsPage({}: Props) {
 
   return (
     <Box>
-      <Header stepProgress={4} />
+      <Header stepProgress={3} />
       <Box sx={{ padding: "30px" }}>
         <Stack sx={{ mb: "30px", gap: "20px" }}>
           <Stack

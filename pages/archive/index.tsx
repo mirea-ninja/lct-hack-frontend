@@ -148,13 +148,13 @@ export default function ArchivePage({}: Props) {
             </Stack>
             <Stack direction="row" sx={{ gap: "20px" }}>
               <TagItem
-                label="Запросы с 01.01.2022 по 04.11.2022"
+                label="Запросы с 01.01.2022 по 16.11.2022"
                 onDelete={handleDelete}
               />
-              <TagItem
+              {/* <TagItem
                 label="Запросы с 01.01.2022 по 04.11.2022"
                 onDelete={handleDelete}
-              />
+              /> */}
             </Stack>
           </Stack>
           {/* Список архивов */}
