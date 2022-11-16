@@ -18,6 +18,7 @@ import { useStore } from "../../logic/DataStore";
 import { useApiClient } from "../../logic/ApiClientHook";
 import { ApartmentGet } from "../../apiConnection/gen/models/apartment-get";
 import { ApartmentCreate } from "../../apiConnection/gen";
+import { toJS } from "mobx";
 
 export enum EditorModalType {
   CREATE,
@@ -76,11 +77,18 @@ export function EditorModal({
 
     const analogs =
       store.queryGetData.subQueries[selectedSubQueryIndex].analogs!;
+    const selectedAnalogs =
+      store.queryGetData.subQueries[selectedSubQueryIndex].selectedAnalogs!;
 
     if (type === EditorModalType.EDIT) {
-      const analogIndex = analogs.findIndex((a) => a.guid === analog?.guid);
+      let isInSelected = false;
+      let analogIndex = analogs.findIndex((a) => a.guid === analog?.guid);
 
-      if (analogIndex === -1) return;
+      if (analogIndex === -1) {
+        analogIndex = selectedAnalogs.findIndex((a) => a.guid === analog?.guid);
+        isInSelected = true;
+      }
+
       // Изменяем локальное состояние аналога
       store.queryGetData.subQueries[selectedSubQueryIndex].analogs![
         analogIndex
@@ -99,6 +107,26 @@ export function EditorModal({
         m2price: Math.trunc(price / apartmentArea),
       };
 
+      // Если аналог был выбран, то меняем его в выбранных
+      if (isInSelected) {
+        store.queryGetData.subQueries[selectedSubQueryIndex].selectedAnalogs![
+          analogIndex
+        ] = {
+          ...selectedAnalogs[analogIndex],
+          address,
+          floor,
+          floors,
+          quality,
+          apartmentArea,
+          kitchenArea,
+          hasBalcony,
+          distanceToMetro,
+          price,
+          link,
+          m2price: Math.trunc(price / apartmentArea),
+        };
+      }
+
       // Изменяем аналог на сервере
       await apiClient.apartmentApi.patchApiQueryIdSubquerySubidApartmentAidPatch(
         { ...analogs[analogIndex] },
@@ -106,8 +134,7 @@ export function EditorModal({
         selectedSubQueryGuid,
         analogs[analogIndex].guid
       );
-    } 
-    else if (type === EditorModalType.CREATE) {
+    } else if (type === EditorModalType.CREATE) {
       const standartObject =
         store.queryGetData.subQueries[selectedSubQueryIndex].standartObject;
 
