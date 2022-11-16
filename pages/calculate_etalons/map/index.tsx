@@ -269,19 +269,20 @@ const Maps = observer(({}: Props) => {
 
   React.useEffect(() => {
     if (store.queryGetData === null) return;
-    if (store.isAnalogsLoaded) {
-      if (selectedSubQuery === null) {
-        setSelectedSubQuery(store.queryGetData?.subQueries[0].guid);
-      }
 
+    if (store.isAnalogsLoaded) {
+      const subQeuryToSelect = store.queryGetData.subQueries[0].guid;
+      
       // Возможно, что у подзапроса нет аналогов (поиск аналогв не был завершен/произведен
       // при предыдущем поиске). В таком случае их надо получить
       const subquery = getSubqueryByGuid(
-        selectedSubQuery!,
+        subQeuryToSelect!,
         store.queryGetData?.subQueries
       );
-
-      if (subquery !== undefined && subquery.analogs === undefined) {
+      
+      setSelectedSubQuery(subQeuryToSelect);
+      
+      if (subquery !== undefined && subquery.analogs !== undefined) {
         if (subquery.analogs.length > 0) return;
       }
     }
