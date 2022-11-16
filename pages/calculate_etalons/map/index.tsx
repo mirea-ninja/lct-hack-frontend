@@ -273,7 +273,17 @@ const Maps = observer(({}: Props) => {
       if (selectedSubQuery === null) {
         setSelectedSubQuery(store.queryGetData?.subQueries[0].guid);
       }
-      return;
+
+      // Возможно, что у подзапроса нет аналогов (поиск аналогв не был завершен/произведен
+      // при предыдущем поиске). В таком случае их надо получить
+      const subquery = getSubqueryByGuid(
+        selectedSubQuery!,
+        store.queryGetData?.subQueries
+      );
+
+      if (subquery !== undefined && subquery.analogs === undefined) {
+        if (subquery.analogs.length > 0) return;
+      }
     }
 
     const subqieries = store.queryGetData.subQueries;
