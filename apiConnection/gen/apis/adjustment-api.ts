@@ -16,15 +16,72 @@ import { Configuration } from '../configuration';
 // Some imports not used depending on template conditions
 // @ts-ignore
 import { BASE_PATH, COLLECTION_FORMATS, RequestArgs, BaseAPI, RequiredError } from '../base';
+import { AdjusmentGetValues } from '../models';
 import { AdjustmentGet } from '../models';
 import { AdjustmentPatch } from '../models';
 import { HTTPValidationError } from '../models';
+import { Type } from '../models';
+import { Value } from '../models';
 /**
  * AdjustmentApi - axios parameter creator
  * @export
  */
 export const AdjustmentApiAxiosParamCreator = function (configuration?: Configuration) {
     return {
+        /**
+         * Получить список значений корректировок по типу корректировки
+         * @summary Получение списка значений корректировок по типу корректировки
+         * @param {Type} type Тип корректировки
+         * @param {Value} value Значение
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        getApiAdjustmentGet: async (type: Type, value: Value, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'type' is not null or undefined
+            if (type === null || type === undefined) {
+                throw new RequiredError('type','Required parameter type was null or undefined when calling getApiAdjustmentGet.');
+            }
+            // verify required parameter 'value' is not null or undefined
+            if (value === null || value === undefined) {
+                throw new RequiredError('value','Required parameter value was null or undefined when calling getApiAdjustmentGet.');
+            }
+            const localVarPath = `/api/adjustment`;
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions :AxiosRequestConfig = { method: 'GET', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication HTTPBearer required
+
+            if (type !== undefined) {
+                localVarQueryParameter['type'] = type;
+            }
+
+            if (value !== undefined) {
+                localVarQueryParameter['value'] = value;
+            }
+
+            const query = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                query.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.params) {
+                query.set(key, options.params[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
         /**
          * Изменить квартиру по его id (частисно обновление модели)
          * @summary Изменение квартиры по id (только указанные поля будут изменены)
@@ -104,6 +161,21 @@ export const AdjustmentApiAxiosParamCreator = function (configuration?: Configur
 export const AdjustmentApiFp = function(configuration?: Configuration) {
     return {
         /**
+         * Получить список значений корректировок по типу корректировки
+         * @summary Получение списка значений корректировок по типу корректировки
+         * @param {Type} type Тип корректировки
+         * @param {Value} value Значение
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getApiAdjustmentGet(type: Type, value: Value, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<AdjusmentGetValues>>> {
+            const localVarAxiosArgs = await AdjustmentApiAxiosParamCreator(configuration).getApiAdjustmentGet(type, value, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
          * Изменить квартиру по его id (частисно обновление модели)
          * @summary Изменение квартиры по id (только указанные поля будут изменены)
          * @param {AdjustmentPatch} body 
@@ -131,6 +203,17 @@ export const AdjustmentApiFp = function(configuration?: Configuration) {
 export const AdjustmentApiFactory = function (configuration?: Configuration, basePath?: string, axios?: AxiosInstance) {
     return {
         /**
+         * Получить список значений корректировок по типу корректировки
+         * @summary Получение списка значений корректировок по типу корректировки
+         * @param {Type} type Тип корректировки
+         * @param {Value} value Значение
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async getApiAdjustmentGet(type: Type, value: Value, options?: AxiosRequestConfig): Promise<AxiosResponse<AdjusmentGetValues>> {
+            return AdjustmentApiFp(configuration).getApiAdjustmentGet(type, value, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Изменить квартиру по его id (частисно обновление модели)
          * @summary Изменение квартиры по id (только указанные поля будут изменены)
          * @param {AdjustmentPatch} body 
@@ -154,6 +237,18 @@ export const AdjustmentApiFactory = function (configuration?: Configuration, bas
  * @extends {BaseAPI}
  */
 export class AdjustmentApi extends BaseAPI {
+    /**
+     * Получить список значений корректировок по типу корректировки
+     * @summary Получение списка значений корректировок по типу корректировки
+     * @param {Type} type Тип корректировки
+     * @param {Value} value Значение
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof AdjustmentApi
+     */
+    public async getApiAdjustmentGet(type: Type, value: Value, options?: AxiosRequestConfig) : Promise<AxiosResponse<AdjusmentGetValues>> {
+        return AdjustmentApiFp(this.configuration).getApiAdjustmentGet(type, value, options).then((request) => request(this.axios, this.basePath));
+    }
     /**
      * Изменить квартиру по его id (частисно обновление модели)
      * @summary Изменение квартиры по id (только указанные поля будут изменены)

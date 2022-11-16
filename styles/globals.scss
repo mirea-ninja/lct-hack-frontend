@@ -49,6 +49,9 @@ a {
 
 .ymaps-2-1-79-balloon__content {
   background: #3e3e41 !important;
+  width: 335px;
+  margin-right: 10px;
+  padding: 10px;
 }
 
 .ymaps-2-1-79-balloon__tail {
@@ -126,7 +129,7 @@ a {
 
 .map__balloon {
   padding: 5px 10px;
-  min-width: 126px;
+  min-width: 100px;
   display: flex;
   flex-direction: column;
   justify-content: center;

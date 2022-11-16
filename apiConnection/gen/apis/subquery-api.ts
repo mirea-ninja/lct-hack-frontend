@@ -231,6 +231,54 @@ export const SubqueryApiAxiosParamCreator = function (configuration?: Configurat
             };
         },
         /**
+         * Рассчитать аналоги для подзапроса
+         * @summary Расчет аналогов для подзапроса
+         * @param {string} id Id запроса
+         * @param {string} subid Id подзапроса
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost: async (id: string, subid: string, options: AxiosRequestConfig = {}): Promise<RequestArgs> => {
+            // verify required parameter 'id' is not null or undefined
+            if (id === null || id === undefined) {
+                throw new RequiredError('id','Required parameter id was null or undefined when calling recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost.');
+            }
+            // verify required parameter 'subid' is not null or undefined
+            if (subid === null || subid === undefined) {
+                throw new RequiredError('subid','Required parameter subid was null or undefined when calling recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost.');
+            }
+            const localVarPath = `/api/query/{id}/subquery/{subid}/recalculate-analogs`
+                .replace(`{${"id"}}`, encodeURIComponent(String(id)))
+                .replace(`{${"subid"}}`, encodeURIComponent(String(subid)));
+            // use dummy base URL string because the URL constructor only accepts absolute URLs.
+            const localVarUrlObj = new URL(localVarPath, 'https://example.com');
+            let baseOptions;
+            if (configuration) {
+                baseOptions = configuration.baseOptions;
+            }
+            const localVarRequestOptions :AxiosRequestConfig = { method: 'POST', ...baseOptions, ...options};
+            const localVarHeaderParameter = {} as any;
+            const localVarQueryParameter = {} as any;
+
+            // authentication HTTPBearer required
+
+            const query = new URLSearchParams(localVarUrlObj.search);
+            for (const key in localVarQueryParameter) {
+                query.set(key, localVarQueryParameter[key]);
+            }
+            for (const key in options.params) {
+                query.set(key, options.params[key]);
+            }
+            localVarUrlObj.search = (new URLSearchParams(query)).toString();
+            let headersFromBaseOptions = baseOptions && baseOptions.headers ? baseOptions.headers : {};
+            localVarRequestOptions.headers = {...localVarHeaderParameter, ...headersFromBaseOptions, ...options.headers};
+
+            return {
+                url: localVarUrlObj.pathname + localVarUrlObj.search + localVarUrlObj.hash,
+                options: localVarRequestOptions,
+            };
+        },
+        /**
          * Установить подзапросу выбранные аналоги
          * @summary Установка аналогов для подзапроса
          * @param {string} id Id запроса
@@ -407,6 +455,21 @@ export const SubqueryApiFp = function(configuration?: Configuration) {
             };
         },
         /**
+         * Рассчитать аналоги для подзапроса
+         * @summary Расчет аналогов для подзапроса
+         * @param {string} id Id запроса
+         * @param {string} subid Id подзапроса
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost(id: string, subid: string, options?: AxiosRequestConfig): Promise<(axios?: AxiosInstance, basePath?: string) => Promise<AxiosResponse<QueryGet>>> {
+            const localVarAxiosArgs = await SubqueryApiAxiosParamCreator(configuration).recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost(id, subid, options);
+            return (axios: AxiosInstance = globalAxios, basePath: string = BASE_PATH) => {
+                const axiosRequestArgs :AxiosRequestConfig = {...localVarAxiosArgs.options, url: basePath + localVarAxiosArgs.url};
+                return axios.request(axiosRequestArgs);
+            };
+        },
+        /**
          * Установить подзапросу выбранные аналоги
          * @summary Установка аналогов для подзапроса
          * @param {string} id Id запроса
@@ -493,6 +556,17 @@ export const SubqueryApiFactory = function (configuration?: Configuration, baseP
             return SubqueryApiFp(configuration).getAnalogsApiQueryIdSubquerySubidAnalogsGet(id, subid, options).then((request) => request(axios, basePath));
         },
         /**
+         * Рассчитать аналоги для подзапроса
+         * @summary Расчет аналогов для подзапроса
+         * @param {string} id Id запроса
+         * @param {string} subid Id подзапроса
+         * @param {*} [options] Override http request option.
+         * @throws {RequiredError}
+         */
+        async recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost(id: string, subid: string, options?: AxiosRequestConfig): Promise<AxiosResponse<QueryGet>> {
+            return SubqueryApiFp(configuration).recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost(id, subid, options).then((request) => request(axios, basePath));
+        },
+        /**
          * Установить подзапросу выбранные аналоги
          * @summary Установка аналогов для подзапроса
          * @param {string} id Id запроса
@@ -574,6 +648,18 @@ export class SubqueryApi extends BaseAPI {
      */
     public async getAnalogsApiQueryIdSubquerySubidAnalogsGet(id: string, subid: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<Array<ApartmentGet>>> {
         return SubqueryApiFp(this.configuration).getAnalogsApiQueryIdSubquerySubidAnalogsGet(id, subid, options).then((request) => request(this.axios, this.basePath));
+    }
+    /**
+     * Рассчитать аналоги для подзапроса
+     * @summary Расчет аналогов для подзапроса
+     * @param {string} id Id запроса
+     * @param {string} subid Id подзапроса
+     * @param {*} [options] Override http request option.
+     * @throws {RequiredError}
+     * @memberof SubqueryApi
+     */
+    public async recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost(id: string, subid: string, options?: AxiosRequestConfig) : Promise<AxiosResponse<QueryGet>> {
+        return SubqueryApiFp(this.configuration).recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost(id, subid, options).then((request) => request(this.axios, this.basePath));
     }
     /**
      * Установить подзапросу выбранные аналоги

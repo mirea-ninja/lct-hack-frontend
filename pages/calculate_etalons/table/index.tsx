@@ -13,8 +13,8 @@ import Link from "next/link"
 import { useApiClient } from "../../../logic/ApiClientHook"
 import { useMutation, useQuery } from "@tanstack/react-query"
 import { toJS } from "mobx"
-import { SubQueryGet } from "../../../apiConnection/gen"
 import { Pool } from "../../../components/tables/PoolTable/types"
+import { SubQueryGet } from "../../../apiConnection/gen"
 
 type Props = {}
 
@@ -42,10 +42,13 @@ function SubQueryToPoolTableRender(subquery: SubQueryGet): Pool[] {
           value: object.hasBalcony!,
           change: object.adjustment?.hasBalcony,
         },
-        state: { value: object.quality!, change: object.adjustment?.quality },
+        state: {
+          value: object.quality!,
+          change: object.adjustment?.quality,
+        },
         metro: {
           value: object.distanceToMetro!,
-          change: object.adjustment?.quality,
+          change: object.adjustment?.distanceToMetro,
         },
       }
     }
@@ -62,7 +65,7 @@ export default function CalculateEtalonsPage({}: Props) {
 
   return (
     <Box>
-      <Header stepProgress={4} />
+      <Header stepProgress={3} />
       <Box sx={{ padding: "30px" }}>
         <Stack sx={{ mb: "30px", gap: "20px" }}>
           <Stack
@@ -134,53 +137,7 @@ export default function CalculateEtalonsPage({}: Props) {
         </Stack>
         <PoolTabs
           subQueryToPoolTableRender={SubQueryToPoolTableRender}
-          subqueries={
-            store.queryGetData?.subQueries ?? [
-              {
-                guid: "1",
-                analogs: [
-                  {
-                    guid: "12",
-                    address: "Ватутина, 11",
-                    price: 1000000,
-                    apartmentArea: 100,
-                    floor: 1,
-                    floors: 22,
-                    kitchenArea: 10,
-                    hasBalcony: true,
-                    id: 1,
-                  },
-                  {
-                    guid: "12",
-                    address: "Ватутина, 21",
-                    price: 10,
-                    apartmentArea: 100,
-                    floor: 16,
-                    floors: 22,
-                    kitchenArea: 10,
-                    hasBalcony: false,
-                    id: 1,
-                  },
-                ],
-              },
-              {
-                guid: "2",
-                analogs: [
-                  {
-                    guid: "123",
-                    address: "Ватутина, 11",
-                    price: 1000000,
-                    apartmentArea: 100,
-                    floor: 1,
-                    floors: 22,
-                    kitchenArea: 10,
-                    hasBalcony: true,
-                    id: 1,
-                  },
-                ],
-              },
-            ]
-          }
+          subqueries={store.queryGetData?.subQueries!}
           hasMetroAttribute
         />
       </Box>

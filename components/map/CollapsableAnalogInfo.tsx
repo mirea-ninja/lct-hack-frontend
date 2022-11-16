@@ -14,6 +14,10 @@ import { EditorModalType, EditorModal } from "./EditorModal";
 import { PenIcon } from "../icons/PenIcon";
 import { ClosedEyeIcon } from "../icons/ClosedEyeIcon";
 import TextField from "@mui/material/TextField";
+import AddedByUserIcon from "../icons/AddedByUserIcon";
+import { ApartmentGet } from "../../apiConnection/gen/models/apartment-get";
+import { useStore } from "../../logic/DataStore";
+import { useApiClient } from "../../logic/ApiClientHook";
 
 interface InfoCardProps {
   title: string;
@@ -21,7 +25,7 @@ interface InfoCardProps {
   isPositive: boolean | null;
 }
 
-function InfoCard ({ title, description, isPositive }: InfoCardProps) {
+function InfoCard({ title, description, isPositive }: InfoCardProps) {
   const theme = useTheme();
 
   return (
@@ -37,8 +41,8 @@ function InfoCard ({ title, description, isPositive }: InfoCardProps) {
         minWidth: "90px",
 
         backgroundColor:
-        // если title содержит "null" или isPositive === null то цвет фона #F6968140 иначе #EEF2F5
-        title.includes("null") ? "#F6968140" : "#EEF2F5",
+          // если title содержит "null" или isPositive === null то цвет фона #F6968140 иначе #EEF2F5
+          title.includes("null") ? "#F6968140" : "#EEF2F5",
         borderRadius: "10px",
       }}
     >
@@ -50,7 +54,6 @@ function InfoCard ({ title, description, isPositive }: InfoCardProps) {
         {title}
       </Typography>
       <TextField
-        fontSize={14}
         fontWeight={500}
         value={description}
         padding={0}
@@ -58,142 +61,188 @@ function InfoCard ({ title, description, isPositive }: InfoCardProps) {
           "& .MuiOutlinedInput-root": {
             "& fieldset": {
               border: "none",
-            }},
+            },
+          },
 
           alignSelf: "center",
           input: {
-            color: isPositive === null ? theme.palette.secondary.dark : isPositive ? "#76BF5C" : "#F69681",
+            color:
+              isPositive === null
+                ? theme.palette.secondary.dark
+                : isPositive
+                ? "#76BF5C"
+                : "#F69681",
             width: "100%",
             textAlign: "center",
             padding: "0px",
             margin: "0px",
-
           },
           width: "fit-content",
         }}
-      >
-      </TextField>
+      />
     </Box>
   );
-};
-
-interface AnalogInfoProps {
-  address: string;
-  link: string | null;
-
-  price_final: number | null;
-  m2price: number | null;
-  adj_m2price: number | null;
-
-  building_type: string | null;
-  floors: number | null;
-  walls: string | null;
-
-  floor: number | null;
-  apt_area: number | null;
-  kitchen_area: number | null;
-  has_balcony: boolean | null;
-  to_metro: number | null;
-  repair_type: string | null;
-
-  trade_adj: number | null;
-  floor_adj: number | null;
-  apt_area_adj: number | null;
-  kitchen_area_adj: number | null;
-  has_balcony_adj: number | null;
-  to_metro_adj: number | null;
-  repair_type_adj: number | null;
-
-  trade_adj_price: number | null;
-  floor_adj_price: number | null;
-  apt_area_adj_price: number | null;
-  kitchen_area_adj_price: number | null;
-  has_balcony_adj_price: number | null;
-  to_metro_adj_price: number | null;
 }
 
-export default function CollapsableAnalogInfo(
-  {
-    address = "ул. Ленина, 1",
-    link = "https://www.example.com",
+interface AnalogInfoProps {
+  key: string;
+  analog: ApartmentGet;
+  selectedSubQueryGuid: string;
+}
 
-    price_final = null,
-    m2price = null,
-    // округлить до 2 знаков после запятой
-    adj_m2price = m2price ? ((price_final - m2price) * 100 / m2price).toFixed(1) : null,
-
-    building_type = null,
-    floors = null,
-    walls = null,
-
-    floor = null,
-    apt_area = null,
-    kitchen_area = null,
-    has_balcony = null,
-    to_metro = null,
-    repair_type = null,
-
-    trade_adj = -0.045,
-    floor_adj = null,
-    apt_area_adj = null,
-    kitchen_area_adj = null,
-    has_balcony_adj = null,
-    to_metro_adj = null,
-    repair_type_adj = null,
-
-    trade_adj_price = null,
-    floor_adj_price = null,
-    apt_area_adj_price = null,
-    kitchen_area_adj_price = null,
-    has_balcony_adj_price = null,
-    to_metro_adj_price = null,
-  }: AnalogInfoProps,
-) {
+export default function CollapsableAnalogInfo({
+  key,
+  analog,
+  selectedSubQueryGuid,
+}: AnalogInfoProps) {
   const theme = useTheme();
+  const store = useStore();
+  const apiClient = useApiClient();
+
+  const onAnalogHide = (analog: ApartmentGet) => {
+    if (store.queryGetData === null) return;
+    if (store.queryGetData.subQueries === null) return;
+
+    const selectedSubQueryIndex = store.queryGetData.subQueries.findIndex(
+      (subQuery) => subQuery.guid === selectedSubQueryGuid
+    );
+
+    if (selectedSubQueryIndex !== -1) {
+      // Обновляем состояние в Store: удаляем аналог из списка выбранных аналогов (selectedAnalogs
+      store.queryGetData.subQueries[selectedSubQueryIndex].selectedAnalogs =
+        store.queryGetData.subQueries[
+          selectedSubQueryIndex
+        ].selectedAnalogs!.filter((tmp) => tmp.guid !== analog.guid);
+
+      // Отправляем запрос на сервер для обновления аналогов (перезаписываем список выбранных аналогов)
+      apiClient.subqueryApi
+        .setAnalogsApiQueryIdSubquerySubidUserAnalogsPost(
+          store.queryGetData!.guid,
+          selectedSubQueryGuid,
+          {
+            guids: store.queryGetData.subQueries[
+              selectedSubQueryIndex
+            ].selectedAnalogs!.map((analog) => analog.guid),
+          }
+        )
+        .then((_) => {
+          apiClient.subqueryApi
+            .calculateAnalogsApiQueryIdSubquerySubidCalculateAnalogsPost(
+              store.queryGetData!.guid,
+              selectedSubQueryGuid
+            )
+            .then((_) => {
+              // Отправляем аналоги на перерасчет
+              apiClient.subqueryApi
+                .recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost(
+                  store.queryGetData!.guid,
+                  selectedSubQueryGuid
+                )
+                .then((res) => {
+                  // Обновляем локальное состояние с учётом перерасчёта
+                  store.updGetQueryData(res.data);
+                });
+            });
+        });
+    }
+  };
 
   const [isCollapsed, setIsCollapsed] = React.useState(false);
   const [editorOpen, setEditorOpen] = React.useState(false);
 
-  repair_type = repair_type?.toLowerCase();
-  repair_type = repair_type === "муниципальный ремонт"
-                ? "муниципальная"
-                : (repair_type === "современная отделка"
-                  ? "современная"
-                  : "без отделки");
+  let address = analog.address ? analog.address : "Адрес не указан";
 
-  address = address.replace("Москва, ", "").replace("улица", "ул.").replace("проспект", "пр-кт").replace("переулок", "пер.").replace("площадь", "пл.").replace("ул.,", ",").replace(" ,", ",")
-  building_type = building_type?.charAt(0).toUpperCase() + building_type?.slice(1);
+  let link = analog.link ? analog.link : "https://www.example.com";
+
+  let price_final = analog.adjustment?.priceFinal;
+  let m2price = analog.m2price;
+  let building_type = analog.segment;
+  let floors = analog.floors;
+  let walls = analog.walls ? analog.walls : "тип стен не указан";
+
+  let floor = analog.floor;
+  let apt_area = analog.apartmentArea;
+  let kitchen_area = analog.kitchenArea;
+  let has_balcony = analog.hasBalcony;
+  let to_metro = analog.distanceToMetro;
+  let repair_type = analog.quality;
+
+  let trade_adj = analog.adjustment?.trade;
+  let floor_adj = analog.adjustment?.floor;
+  let apt_area_adj = analog.adjustment?.aptArea;
+  let kitchen_area_adj = analog.adjustment?.kitchenArea;
+  let has_balcony_adj = analog.adjustment?.hasBalcony;
+  let to_metro_adj = analog.adjustment?.distanceToMetro;
+  let repair_type_adj = analog.adjustment?.quality;
+
+  let trade_adj_price = analog.adjustment?.priceTrade;
+  let floor_adj_price = analog.adjustment?.priceFloor;
+  let apt_area_adj_price = analog.adjustment?.priceArea;
+  let kitchen_area_adj_price = analog.adjustment?.priceKitchen;
+  let has_balcony_adj_price = analog.adjustment?.priceBalcony;
+  let to_metro_adj_price = analog.adjustment?.priceMetro;
+
+  let adj_m2price = m2price
+    ? (((price_final - m2price) * 100) / m2price).toFixed(1)
+    : null;
+
+  repair_type = repair_type?.toLowerCase();
+  repair_type =
+    repair_type === "муниципальный ремонт"
+      ? "муниципальная"
+      : repair_type === "современная отделка"
+      ? "современная"
+      : "без отделки";
+
+  address = address
+    .replace("Москва, ", "")
+    .replace("улица", "ул.")
+    .replace("проспект", "пр-кт")
+    .replace("переулок", "пер.")
+    .replace("площадь", "пл.")
+    .replace("ул.,", ",")
+    .replace("корп.", "к.")
+    .replace(" ,", ",");
+  building_type =
+    building_type?.charAt(0).toUpperCase() + building_type?.slice(1);
 
   // умножить все _adj на 100 и округлить до 1 знака после запятой. Если после запятой 0, то округлить до целого
   trade_adj = trade_adj ? (trade_adj * 100).toFixed(1) : null;
-  trade_adj = trade_adj % 1 === 0 ? (trade_adj / 1) : trade_adj;
+  trade_adj = trade_adj % 1 === 0 ? trade_adj / 1 : trade_adj;
 
   floor_adj = floor_adj ? (floor_adj * 100).toFixed(1) : null;
-  floor_adj = floor_adj % 1 === 0 ? (floor_adj / 1) : floor_adj;
+  floor_adj = floor_adj % 1 === 0 ? floor_adj / 1 : floor_adj;
 
   apt_area_adj = apt_area_adj ? (apt_area_adj * 100).toFixed(1) : null;
-  apt_area_adj = apt_area_adj % 1 === 0 ? (apt_area_adj / 1) : apt_area_adj;
+  apt_area_adj = apt_area_adj % 1 === 0 ? apt_area_adj / 1 : apt_area_adj;
 
-  kitchen_area_adj = kitchen_area_adj ? (kitchen_area_adj * 100).toFixed(1) : null;
-  kitchen_area_adj = kitchen_area_adj % 1 === 0 ? (kitchen_area_adj / 1) : kitchen_area_adj;
+  kitchen_area_adj = kitchen_area_adj
+    ? (kitchen_area_adj * 100).toFixed(1)
+    : null;
+  kitchen_area_adj =
+    kitchen_area_adj % 1 === 0 ? kitchen_area_adj / 1 : kitchen_area_adj;
 
   has_balcony_adj = has_balcony_adj ? (has_balcony_adj * 100).toFixed(1) : null;
-  has_balcony_adj = has_balcony_adj % 1 === 0 ? (has_balcony_adj / 1) : has_balcony_adj;
+  has_balcony_adj =
+    has_balcony_adj % 1 === 0 ? has_balcony_adj / 1 : has_balcony_adj;
 
   to_metro_adj = to_metro_adj ? (to_metro_adj * 100).toFixed(1) : null;
-  to_metro_adj = to_metro_adj % 1 === 0 ? (to_metro_adj / 1) : to_metro_adj;
+  to_metro_adj = to_metro_adj % 1 === 0 ? to_metro_adj / 1 : to_metro_adj;
 
   // repair_type_adj = repair_type_adj ? (repair_type_adj * 100).toFixed(1) : null;
   // repair_type_adj = repair_type_adj % 1 === 0 ? (repair_type_adj / 1) : repair_type_adj;
 
-
   return (
     <>
-      <EditorModal
-        type={EditorModalType.EDIT}
-        open={editorOpen}
-        setOpen={setEditorOpen}
-      />
+      {analog !== undefined ? (
+        <EditorModal
+          type={EditorModalType.EDIT}
+          open={editorOpen}
+          setOpen={setEditorOpen}
+          selectedSubQueryGuid={selectedSubQueryGuid}
+          analog={analog}
+        />
+      ) : null}
 
       <Box>
         <Box
@@ -213,7 +262,11 @@ export default function CollapsableAnalogInfo(
             }}
           >
             {/* адрес */}
-            <Link href={link} target="_blank" sx={{textDecoration: "none"}}>
+            <Link
+              href={link !== "https://www.example.com" ? link : "#"}
+              target={link !== "https://www.example.com" ? "_blank" : "_self"}
+              sx={{ textDecoration: "none" }}
+            >
               <Typography
                 fontSize={20}
                 color={theme.palette.text.primary}
@@ -223,21 +276,23 @@ export default function CollapsableAnalogInfo(
                 sx={{
                   width: "100%",
                   "&:hover": {
-                    color: theme.palette.primary.main,
+                    color:
+                      link !== "https://www.example.com"
+                        ? theme.palette.primary.main
+                        : theme.palette.text.primary,
                   },
-
                 }}
               >
+                {link === "https://www.example.com" && <AddedByUserIcon />}
                 {address}
               </Typography>
             </Link>
-
 
             {/* кнопки */}
             <IconButton onClick={() => setEditorOpen(true)}>
               <PenIcon />
             </IconButton>
-            <IconButton>
+            <IconButton onClick={() => onAnalogHide(analog)}>
               <ClosedEyeIcon />
             </IconButton>
           </Box>
@@ -275,7 +330,13 @@ export default function CollapsableAnalogInfo(
           <Typography
             fontSize={16}
             lineHeight={"18px"}
-            color={adj_m2price < 0 ? "#F79681" : adj_m2price > 0 ? "#76BF5C" : theme.palette.secondary.dark}
+            color={
+              adj_m2price < 0
+                ? "#F79681"
+                : adj_m2price > 0
+                ? "#76BF5C"
+                : theme.palette.secondary.dark
+            }
             fontWeight={500}
             sx={{ marginRight: "5px" }}
           >
@@ -300,10 +361,15 @@ export default function CollapsableAnalogInfo(
             sx={{ marginTop: "15px", marginBottom: "20px" }}
           >
             {building_type}, <br />
-            {floors} этаж{
-              floors % 10 === 1 && floors % 100 !== 11 ? "" : floors % 10 >= 2 && floors % 10 <= 4 && (floors % 100 < 10 || floors % 100 >= 20) ? "а" : "ей"
-            }, {' '}
-            {walls.toLowerCase()}
+            {floors} этаж
+            {floors % 10 === 1 && floors % 100 !== 11
+              ? ""
+              : floors % 10 >= 2 &&
+                floors % 10 <= 4 &&
+                (floors % 100 < 10 || floors % 100 >= 20)
+              ? "а"
+              : "ей"}
+            , {`${walls}`.toLowerCase()}
           </Typography>
 
           {/* корректировки */}
@@ -311,50 +377,106 @@ export default function CollapsableAnalogInfo(
             <Grid item xs={4}>
               <InfoCard
                 title={`торг`}
-                description={`${trade_adj <= 0 ? "" : '+'}${trade_adj}%`}
+                description={`${trade_adj <= 0 ? "" : "+"}${trade_adj}%`}
                 isPositive={false}
               />
             </Grid>
             <Grid item xs={4}>
               <InfoCard
                 title={`${floor} этаж`}
-                description={`${floor_adj <= 0 ? "" : '+'}${floor_adj}%`}
-                isPositive={floor === null ? null : floor_adj > 0 ? true : floor_adj < 0 ? false : null}
+                description={`${floor_adj <= 0 ? "" : "+"}${floor_adj}%`}
+                isPositive={
+                  floor === null
+                    ? null
+                    : floor_adj > 0
+                    ? true
+                    : floor_adj < 0
+                    ? false
+                    : null
+                }
               />
             </Grid>
             <Grid item xs={4}>
               <InfoCard
                 title={`S ${apt_area} м²`}
-                description={`${apt_area_adj <= 0 ? "" : '+'}${apt_area_adj}%`}
-                isPositive={apt_area === null ? null : apt_area_adj > 0 ? true : apt_area_adj < 0 ? false : null}
+                description={`${apt_area_adj <= 0 ? "" : "+"}${apt_area_adj}%`}
+                isPositive={
+                  apt_area === null
+                    ? null
+                    : apt_area_adj > 0
+                    ? true
+                    : apt_area_adj < 0
+                    ? false
+                    : null
+                }
               />
             </Grid>
             <Grid item xs={6}>
               <InfoCard
                 title={`S кухни ${kitchen_area} м²`}
-                description={`${kitchen_area_adj <= 0 ? "" : '+'}${kitchen_area_adj}%`}
-                isPositive={kitchen_area === null ? null : kitchen_area_adj > 0 ? true : kitchen_area_adj < 0 ? false : null}
+                description={`${
+                  kitchen_area_adj <= 0 ? "" : "+"
+                }${kitchen_area_adj}%`}
+                isPositive={
+                  kitchen_area === null
+                    ? null
+                    : kitchen_area_adj > 0
+                    ? true
+                    : kitchen_area_adj < 0
+                    ? false
+                    : null
+                }
               />
             </Grid>
             <Grid item xs={6}>
               <InfoCard
-                title={`${has_balcony ? "есть" : "нет"} балкон${has_balcony ? "" : "а"}`}
-                description={`${has_balcony_adj <= 0 ? "" : '+'}${has_balcony_adj}%`}
-                isPositive={has_balcony === null ? null : has_balcony_adj > 0 ? true : has_balcony_adj < 0 ? false : null}
+                title={`${has_balcony ? "есть" : "нет"} балкон${
+                  has_balcony ? "" : "а"
+                }`}
+                description={`${
+                  has_balcony_adj <= 0 ? "" : "+"
+                }${has_balcony_adj}%`}
+                isPositive={
+                  has_balcony === null
+                    ? null
+                    : has_balcony_adj > 0
+                    ? true
+                    : has_balcony_adj < 0
+                    ? false
+                    : null
+                }
               />
             </Grid>
             <Grid item xs={6}>
               <InfoCard
                 title={`до метро ${to_metro} мин.`}
-                description={`${to_metro_adj <= 0 ? "" : '+'}${to_metro_adj}%`}
-                isPositive={to_metro === null ? null : to_metro_adj > 0 ? true : to_metro_adj < 0 ? false : null}
+                description={`${to_metro_adj <= 0 ? "" : "+"}${to_metro_adj}%`}
+                isPositive={
+                  to_metro === null
+                    ? null
+                    : to_metro_adj > 0
+                    ? true
+                    : to_metro_adj < 0
+                    ? false
+                    : null
+                }
               />
             </Grid>
             <Grid item xs={6}>
               <InfoCard
                 title={repair_type}
-                description={`${repair_type_adj <= 0 ? "" : '+'}${repair_type_adj}₽`}
-                isPositive={repair_type === null ? null : repair_type_adj > 0 ? true : repair_type_adj < 0 ? false : null}
+                description={`${
+                  repair_type_adj <= 0 ? "" : "+"
+                }${repair_type_adj}₽`}
+                isPositive={
+                  repair_type === null
+                    ? null
+                    : repair_type_adj > 0
+                    ? true
+                    : repair_type_adj < 0
+                    ? false
+                    : null
+                }
               />
             </Grid>
           </Grid>

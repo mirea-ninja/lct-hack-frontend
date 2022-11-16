@@ -60,7 +60,9 @@ export default function CalculatePoolPage({}: Props) {
   const store = useStore()
   const api = useApiClient()
 
-  const [corrections, setCorrections] = useState<boolean>(false)
+  const [corrections, setCorrections] = useState<boolean>(true)
+  const [splitByList, setSplitByList] = useState<boolean>(true)
+  
   const [link, setLink] = useState<string>()
 
   const standart = store.queryGetData?.subQueries[0].standartObject
@@ -80,11 +82,12 @@ export default function CalculatePoolPage({}: Props) {
   })
 
   const exportApi = useMutation({
-    mutationFn: (params: { queryId: string; useCorrections: boolean }) => {
+    mutationFn: (params: { queryId: string; useCorrections: boolean, splitByList: boolean }) => {
       return api.poolApi.exportApiExportGet(
         params.queryId,
         params.useCorrections,
-        false
+        params.splitByList,
+
       )
     },
     onSuccess(data) {
@@ -203,7 +206,7 @@ export default function CalculatePoolPage({}: Props) {
                 control={
                   <AppCheckbox
                     onChange={() => {
-                      setCorrections(!corrections)
+                      setSplitByList(!splitByList)
                     }}
                     defaultChecked
                   />
@@ -235,6 +238,7 @@ export default function CalculatePoolPage({}: Props) {
                   exportApi.mutate({
                     queryId: store.queryGetData!.guid,
                     useCorrections: corrections,
+                    splitByList: splitByList,                    
                   })
                 }}
               >
@@ -246,53 +250,7 @@ export default function CalculatePoolPage({}: Props) {
         </Stack>
         <PoolTabs
           subQueryToPoolTableRender={SubQueryToPoolTableRender}
-          subqueries={
-            store.queryGetData?.subQueries ?? [
-              {
-                guid: "1",
-                analogs: [
-                  {
-                    guid: "12",
-                    address: "Ватутина, 11",
-                    price: 1000000,
-                    apartmentArea: 100,
-                    floor: 1,
-                    floors: 22,
-                    kitchenArea: 10,
-                    hasBalcony: true,
-                    id: 1,
-                  },
-                  {
-                    guid: "12",
-                    address: "Ватутина, 21",
-                    price: 10,
-                    apartmentArea: 100,
-                    floor: 16,
-                    floors: 22,
-                    kitchenArea: 10,
-                    hasBalcony: false,
-                    id: 1,
-                  },
-                ],
-              },
-              {
-                guid: "2",
-                analogs: [
-                  {
-                    guid: "123",
-                    address: "Ватутина, 11",
-                    price: 1000000,
-                    apartmentArea: 100,
-                    floor: 1,
-                    floors: 22,
-                    kitchenArea: 10,
-                    hasBalcony: true,
-                    id: 1,
-                  },
-                ],
-              },
-            ]
-          }
+          subqueries={store.queryGetData?.subQueries}
         />
       </Box>
     </Box>

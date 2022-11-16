@@ -3,9 +3,9 @@ import Paper from "@mui/material/Paper"
 import Button from "@mui/material/Button"
 import { Stack } from "@mui/system"
 import PoolTable from "../../tables/PoolTable"
-import { SubQueryGet } from "../../../apiConnection/gen/models/sub-query-get"
 import { Pool } from "../../tables/PoolTable/types"
 import { toJS } from "mobx"
+import { SubQueryGet } from "../../../apiConnection/gen"
 
 type Props = {
   hasMetroAttribute?: boolean
@@ -112,7 +112,7 @@ export default function PoolTabs({
             <PoolTab
               key={index}
               isActive={activeTab == index}
-              text={idToRooms(index)}
+              text={idToRooms(subqueries.standartObject?.rooms ?? 0)}
               onClick={() => {
                 setActiveTab(index)
               }}

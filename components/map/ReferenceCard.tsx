@@ -154,7 +154,7 @@ export default function ReferenceCard({
       <Collapse in={isCollapsed}>
         <Box>
           <Typography variant="body2" pb={"10px"}>
-            {address}
+            {address.replace("г. ", "").replace("Москва, ", "").replace("улица", "ул.").replace("ул. ", "").replace("проспект", "пр-кт").replace("переулок", "пер.").replace("площадь", "пл.").replace("ул.,", ",").replace("корп.", "к.").replace("д.", "").replace(", к. ", "К").replace(" ,", ",")}
           </Typography>
           <Typography variant="body2" pb={"10px"}>
             {price} ₽ / м²
@@ -172,7 +172,7 @@ export default function ReferenceCard({
                 (floors % 100 < 10 || floors % 100 >= 20)
               ? "а"
               : "ей"}
-            , {walls}
+            , {walls.toLowerCase()}
           </Typography>
           <Stack paddingBottom="10px">
             <Stack direction="row" gap="5px">
