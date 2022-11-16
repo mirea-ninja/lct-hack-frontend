@@ -355,7 +355,8 @@ const Maps = observer(({}: Props) => {
             <CircularProgress />
           </Box>
           <Typography variant="h6" id="modal-modal-title" component="div">
-            Ищем аналоги по вашему запросу. Это может занять какое-то время.
+            Ищем аналоги по вашему запросу.
+            Это может занять какое-то время.
             Пожалуйста, подождите.
           </Typography>
         </Box>
