@@ -63,7 +63,7 @@ export function EditorModal({
   const [distanceToMetro, setDistanceToMetro] = React.useState(
     analog ? analog.distanceToMetro : 0
   );
-  const [price, setPrice] = React.useState(analog ? analog.price : 0);
+  const [price, setPrice] = React.useState(analog ? analog.price ?? 0 : 0);
 
   const onEditComplete = () => {
     if (store.queryGetData === null) return;
@@ -96,6 +96,7 @@ export function EditorModal({
         distanceToMetro,
         price,
         link,
+        m2price: Math.trunc(price / apartmentArea),
       };
 
       apiClient.apartmentApi.patchApiQueryIdSubquerySubidApartmentAidPatch(
@@ -127,8 +128,12 @@ export function EditorModal({
         walls: walls!.toLowerCase(),
         rooms,
         price,
+        m2price: Math.trunc(price / apartmentArea),
+        lat: 0,
+        lon: 0,
       };
 
+      // Отправляем запрос на создание новых квартир
       apiClient.apartmentApi
         .createApiQueryIdSubquerySubidApartmentPost(
           { ...newAnalog },
@@ -142,16 +147,15 @@ export function EditorModal({
           });
 
           // Устанавливаем новый аналог в качестве выбранного аналога в локальном состоянии
-          store.queryGetData!.subQueries[
-            selectedSubQueryIndex
-          ].selectedAnalogs = [
-            ...store.queryGetData!.subQueries[selectedSubQueryIndex]
-              .selectedAnalogs,
-            {
-              ...newAnalog,
-              guid: response.data.guid,
-            },
-          ];
+          store.queryGetData!.subQueries[selectedSubQueryIndex].selectedAnalogs =
+            [
+              ...store.queryGetData!.subQueries[selectedSubQueryIndex]
+                .selectedAnalogs,
+              {
+                ...newAnalog,
+                guid: response.data.guid,
+              },
+            ];
 
           // Заново устанавливаем аналоги, чтобы обновить список
           apiClient.subqueryApi
@@ -170,6 +174,12 @@ export function EditorModal({
             });
         });
     }
+
+    // Отправляем на повторный рассчет аналогов
+    apiClient.subqueryApi.recalculateAnalogsApiQueryIdSubquerySubidRecalculateAnalogsPost(
+      store.queryGetData.guid,
+      selectedSubQueryGuid
+    );
   };
 
   const handleClick = () => {
