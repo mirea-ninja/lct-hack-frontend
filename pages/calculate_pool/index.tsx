@@ -246,53 +246,7 @@ export default function CalculatePoolPage({}: Props) {
         </Stack>
         <PoolTabs
           subQueryToPoolTableRender={SubQueryToPoolTableRender}
-          subqueries={
-            store.queryGetData?.subQueries ?? [
-              {
-                guid: "1",
-                analogs: [
-                  {
-                    guid: "12",
-                    address: "Ватутина, 11",
-                    price: 1000000,
-                    apartmentArea: 100,
-                    floor: 1,
-                    floors: 22,
-                    kitchenArea: 10,
-                    hasBalcony: true,
-                    id: 1,
-                  },
-                  {
-                    guid: "12",
-                    address: "Ватутина, 21",
-                    price: 10,
-                    apartmentArea: 100,
-                    floor: 16,
-                    floors: 22,
-                    kitchenArea: 10,
-                    hasBalcony: false,
-                    id: 1,
-                  },
-                ],
-              },
-              {
-                guid: "2",
-                analogs: [
-                  {
-                    guid: "123",
-                    address: "Ватутина, 11",
-                    price: 1000000,
-                    apartmentArea: 100,
-                    floor: 1,
-                    floors: 22,
-                    kitchenArea: 10,
-                    hasBalcony: true,
-                    id: 1,
-                  },
-                ],
-              },
-            ]
-          }
+          subqueries={store.queryGetData?.subQueries}
         />
       </Box>
     </Box>
