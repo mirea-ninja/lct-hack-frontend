@@ -60,7 +60,9 @@ export default function CalculatePoolPage({}: Props) {
   const store = useStore()
   const api = useApiClient()
 
-  const [corrections, setCorrections] = useState<boolean>(false)
+  const [corrections, setCorrections] = useState<boolean>(true)
+  const [splitByList, setSplitByList] = useState<boolean>(true)
+  
   const [link, setLink] = useState<string>()
 
   const standart = store.queryGetData?.subQueries[0].standartObject
@@ -80,11 +82,12 @@ export default function CalculatePoolPage({}: Props) {
   })
 
   const exportApi = useMutation({
-    mutationFn: (params: { queryId: string; useCorrections: boolean }) => {
+    mutationFn: (params: { queryId: string; useCorrections: boolean, splitByList: boolean }) => {
       return api.poolApi.exportApiExportGet(
         params.queryId,
         params.useCorrections,
-        false
+        params.splitByList,
+
       )
     },
     onSuccess(data) {
@@ -203,7 +206,7 @@ export default function CalculatePoolPage({}: Props) {
                 control={
                   <AppCheckbox
                     onChange={() => {
-                      setCorrections(!corrections)
+                      setSplitByList(!splitByList)
                     }}
                     defaultChecked
                   />
@@ -235,6 +238,7 @@ export default function CalculatePoolPage({}: Props) {
                   exportApi.mutate({
                     queryId: store.queryGetData!.guid,
                     useCorrections: corrections,
+                    splitByList: splitByList,                    
                   })
                 }}
               >
