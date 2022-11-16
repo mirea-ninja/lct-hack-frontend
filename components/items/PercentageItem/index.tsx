@@ -4,36 +4,37 @@ import { styled } from "@mui/material/styles"
 import Typography from "@mui/material/Typography"
 import TextField from "@mui/material/TextField"
 import { Stack } from "@mui/system"
+import { Box, ClickAwayListener } from "@mui/material"
+import SliderTooltip from "../../tooltips/SliderTooltip/index"
 
 type Props = {
-  value?: number
+  value: number
   sx?: SxProps<Theme>
+  onPercentChange?: (newVal: number) => void
   [props: string]: any
 }
 
-export default function PercentageItem({ value, sx, ...props }: Props) {
+export default function PercentageItem({
+  value,
+  sx,
+  onPercentChange,
+  ...props
+}: Props) {
   const [isChangeMode, setIsChangeMode] = useState(false)
-  const [percentageValue, setPercentageValue] = useState(String(value))
-  const percentageInputRef = useRef<HTMLDivElement>(null)
+  const [percentageValue, setPercentageValue] = useState<number>(value)
 
-  useEffect(() => {
-    function handleClickOutside(event: MouseEvent) {
-      if (
-        percentageInputRef.current &&
-        !percentageInputRef.current.contains(event.target as Node)
-      ) {
-        console.log("You clicked outside of me!")
-      }
+  const handleClickAway = (): void => {
+    setIsChangeMode(false)
+    if (onPercentChange != undefined) {
+      onPercentChange(percentageValue)
     }
+  }
 
-    document.addEventListener("click", handleClickOutside)
-    return () => {
-      document.removeEventListener("click", handleClickOutside)
-    }
-  }, [percentageInputRef])
+  value = percentageValue / 100
 
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPercentageValue(event.target.value)
+  const handleChange = (val: number | number[]) => {
+    console.log(val)
+    setPercentageValue(val as number)
   }
 
   const PercentageJSX = (
@@ -45,6 +46,7 @@ export default function PercentageItem({ value, sx, ...props }: Props) {
           fontWeight: 500,
           fontSize: 18,
           lineHeight: "20px",
+          width: "50px",
           color:
             value! > 0
               ? "var(--positive-clr)"
@@ -62,36 +64,56 @@ export default function PercentageItem({ value, sx, ...props }: Props) {
     >
       {value! > 0
         ? value! < 1
-          ? `+${(value * 100).toFixed(1) % 1 == 0 ? ((value * 100).toFixed(1) / 1) : (value * 100).toFixed(1)}%`
+          ? `+${
+              (value * 100).toFixed(1) % 1 == 0
+                ? (value * 100).toFixed(1) / 1
+                : (value * 100).toFixed(1)
+            }%`
           : `+${value}₽`
         : value! == 0
         ? `0%`
         : value! > -1
-        ? `${(value * 100).toFixed(1) % 1 == 0 ? ((value * 100).toFixed(1) / 1) : (value * 100).toFixed(1)}%`
+        ? `${
+            (value * 100).toFixed(1) % 1 == 0
+              ? (value * 100).toFixed(1) / 1
+              : (value * 100).toFixed(1)
+          }%`
         : `${value}₽`}
     </Typography>
   )
 
-  const InputJSX = (
-    <Stack direction="row" alignItems="center">
-      <TextField
-        value={percentageValue}
-        onChange={handleChange}
-        sx={{
-          maxWidth: 50,
-
-          "& input": {
-            p: "5px",
-          },
-        }}
-      />
-      %
-    </Stack>
-  )
-
   return (
-    <div ref={percentageInputRef}>
-      {isChangeMode ? InputJSX : PercentageJSX}
-    </div>
+    <ClickAwayListener onClickAway={handleClickAway}>
+      <Box
+        sx={{
+          position: "relative",
+          width: "fit-content",
+          height: "fit-content",
+        }}
+      >
+        {isChangeMode ? (
+          <Box
+            sx={{
+              position: "absolute",
+              top: "25px",
+              right: "0px",
+              backgroundColor: "red",
+            }}
+          >
+            <SliderTooltip onChange={handleChange}>
+              <Box
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                }}
+              ></Box>
+            </SliderTooltip>
+          </Box>
+        ) : (
+          <div></div>
+        )}
+        {PercentageJSX}
+      </Box>
+    </ClickAwayListener>
   )
 }
