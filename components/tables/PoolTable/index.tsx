@@ -11,6 +11,8 @@ import { Pool } from "./types"
 import PercentageItem from "../../items/PercentageItem"
 import { Stack } from "@mui/system"
 import { toJS } from "mobx"
+import { SubQueryGet } from "../../../apiConnection/gen/models/sub-query-get"
+import { ApartmentGet } from "../../../apiConnection/gen/models/apartment-get"
 
 const StyledStack = styled(Stack)({
   display: "flex",
@@ -51,7 +53,13 @@ const StyledTableRow = styled(TableRow)({
 
 type Props = {
   hasMetroAttribute?: boolean
-  rows: Pool[]
+  rows: RowsData[]
+}
+
+export type RowsData = {
+  sub: SubQueryGet
+  apt: ApartmentGet
+  row?: Pool
 }
 
 export default function PoolTable({ rows, hasMetroAttribute = false }: Props) {
@@ -78,7 +86,9 @@ export default function PoolTable({ rows, hasMetroAttribute = false }: Props) {
         <TableBody>
           {rows.map((row, index) => (
             <ResultTableRow
-              row={row}
+              apartment={row.apt}
+              subquery={row.sub}
+              row={row.row}
               key={index}
               hasMetroAttribute={hasMetroAttribute}
             />
@@ -91,10 +101,17 @@ export default function PoolTable({ rows, hasMetroAttribute = false }: Props) {
 
 type TableRowProps = {
   row: Pool
+  apartment: ApartmentGet
+  subquery: SubQueryGet
   hasMetroAttribute?: boolean
 }
 
-const ResultTableRow = ({ row, hasMetroAttribute }: TableRowProps) => {
+const ResultTableRow = ({
+  row,
+  hasMetroAttribute,
+  subquery,
+  apartment,
+}: TableRowProps) => {
   console.log(toJS(row))
 
   return (
@@ -102,10 +119,16 @@ const ResultTableRow = ({ row, hasMetroAttribute }: TableRowProps) => {
       <StyledTableCell scope="row">
         <StyledStack>
           {row.pricePerSquareMeter.value} ₽
-          {hasMetroAttribute && row.pricePerSquareMeter.value > 0 &&
-               (<PercentageItem value={row.pricePerSquareMeter.change - row.pricePerSquareMeter.value} />)}
-
-
+          {hasMetroAttribute && row.pricePerSquareMeter.value > 0 && (
+            <PercentageItem
+              adjType="floor"
+              sub={subquery}
+              apart={apartment}
+              value={
+                row.pricePerSquareMeter.change - row.pricePerSquareMeter.value
+              }
+            />
+          )}
         </StyledStack>
       </StyledTableCell>
       <StyledTableCell align="right">
@@ -114,14 +137,26 @@ const ResultTableRow = ({ row, hasMetroAttribute }: TableRowProps) => {
       <StyledTableCell align="right">
         <StyledStack>
           {row.floor.value}
-          {row.floor.change != null && (<PercentageItem value={row.floor.change} />)}
+          {row.floor.change != null && (
+            <PercentageItem
+              adjType="floor"
+              sub={subquery}
+              apart={apartment}
+              value={row.floor.change}
+            />
+          )}
         </StyledStack>
       </StyledTableCell>
       <StyledTableCell align="right">
         <StyledStack>
           {row.flatSquare.value}
           {row.flatSquare.change != null && (
-            <PercentageItem value={row.flatSquare.change} />
+            <PercentageItem
+              adjType="floor"
+              sub={subquery}
+              apart={apartment}
+              value={row.flatSquare.change}
+            />
           )}
         </StyledStack>
       </StyledTableCell>
@@ -129,7 +164,12 @@ const ResultTableRow = ({ row, hasMetroAttribute }: TableRowProps) => {
         <StyledStack>
           {row.kitchenSquare.value}
           {row.kitchenSquare.change != null && (
-            <PercentageItem value={row.kitchenSquare.change} />
+            <PercentageItem
+              adjType="floor"
+              sub={subquery}
+              apart={apartment}
+              value={row.kitchenSquare.change}
+            />
           )}
         </StyledStack>
       </StyledTableCell>
@@ -137,7 +177,12 @@ const ResultTableRow = ({ row, hasMetroAttribute }: TableRowProps) => {
         <StyledStack>
           {row.hasBalcony.value ? "Да" : "Нет"}
           {row.hasBalcony.change != null && (
-            <PercentageItem value={row.hasBalcony.change} />
+            <PercentageItem
+              adjType="floor"
+              sub={subquery}
+              apart={apartment}
+              value={row.hasBalcony.change}
+            />
           )}
         </StyledStack>
       </StyledTableCell>
@@ -145,14 +190,28 @@ const ResultTableRow = ({ row, hasMetroAttribute }: TableRowProps) => {
         <StyledTableCell align="right">
           <StyledStack>
             {row.metro.value}
-            {row.metro.change != null && <PercentageItem value={row.metro.change} />}
+            {row.metro.change != null && (
+              <PercentageItem
+                adjType="floor"
+                sub={subquery}
+                apart={apartment}
+                value={row.metro.change}
+              />
+            )}
           </StyledStack>
         </StyledTableCell>
       )}
       <StyledTableCell align="left">
         <StyledStack>
           {row.state.value}
-          {row.state.change != null && <PercentageItem value={row.state.change} />}
+          {row.state.change != null && (
+            <PercentageItem
+              adjType="floor"
+              sub={subquery}
+              apart={apartment}
+              value={row.state.change}
+            />
+          )}
         </StyledStack>
       </StyledTableCell>
     </StyledTableRow>

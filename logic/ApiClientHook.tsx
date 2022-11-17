@@ -15,6 +15,7 @@ import {
 import globalAxios, { AxiosResponse, AxiosInstance } from "axios"
 import applyCaseMiddleware from "axios-case-converter"
 import { ParserApi } from "../apiConnection/parser/apis/parser-api"
+import { AdjustmentApi } from "../apiConnection/gen/apis/adjustment-api"
 
 class ApiClient {
   apartmentApi: ApartmentApi
@@ -23,6 +24,7 @@ class ApiClient {
   queryApi: QueryApi
   subqueryApi: SubqueryApi
   usersApi: UsersApi
+  ajdApi: AdjustmentApi
 
   parser: ParserApi
 
@@ -59,6 +61,8 @@ class ApiClient {
     this.queryApi = new QueryApi(config, config.basePath, http)
     this.subqueryApi = new SubqueryApi(config, config.basePath, http)
     this.usersApi = new UsersApi(config, config.basePath, http)
+    this.ajdApi = new AdjustmentApi(config, config.basePath, http)
+
     this.parser = new ParserApi(parserConfig, parserConfig.basePath, http)
   }
 }

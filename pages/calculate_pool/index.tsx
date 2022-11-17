@@ -12,46 +12,68 @@ import { useStore } from "../../logic/DataStore"
 import { useApiClient } from "../../logic/ApiClientHook"
 import { useMutation } from "@tanstack/react-query"
 import { SubQueryGet } from "../../apiConnection/gen"
-import { Pool } from "../../components/tables/PoolTable/types"
 import { toJS } from "mobx"
+import { RowsData } from "../../components/tables/PoolTable"
 
-function SubQueryToPoolTableRender(subquery: SubQueryGet): Pool[] {
+function SubQueryToPoolTableRender(subquery: SubQueryGet): RowsData[] {
   console.log(toJS(subquery))
 
-  return [
-    subquery.standartObject!,
-    ...subquery.inputApartments!.filter(
-      (obj) => obj.guid != subquery.standartObject!.guid
-    ),
+  var arr: RowsData[] = [
+    {
+      sub: subquery,
+      apt: subquery.standartObject!,
+    },
+    ...subquery
+      .inputApartments!.filter(
+        (obj) => obj.guid != subquery.standartObject!.guid
+      )
+      .map<RowsData>((obj) => {
+        return {
+          sub: subquery,
+          apt: obj,
+        }
+      }),
   ].map((object, i) => {
     return {
-      id: i,
-      isBasic: true,
-      pricePerSquareMeter: {
-        value: object.m2price ?? 0,
-        change: object.adjustment?.priceArea,
-      },
-      objectPrice: object.price!,
-      floor: { value: object.floor!, change: object.adjustment?.floor },
-      flatSquare: {
-        value: object.apartmentArea!,
-        change: object.adjustment?.aptArea,
-      },
-      kitchenSquare: {
-        value: object.kitchenArea!,
-        change: object.adjustment?.kitchenArea,
-      },
-      hasBalcony: {
-        value: object.hasBalcony!,
-        change: object.adjustment?.hasBalcony,
-      },
-      state: { value: object.quality!, change: object.adjustment?.quality },
-      metro: {
-        value: object.distanceToMetro!,
-        change: object.adjustment?.quality,
+      sub: subquery,
+      apt: object.apt,
+      row: {
+        id: i,
+        isBasic: true,
+        pricePerSquareMeter: {
+          value: object.apt.m2price ?? 0,
+          change: object.apt.adjustment?.priceArea,
+        },
+        objectPrice: object.apt.price!,
+        floor: {
+          value: object.apt.floor!,
+          change: object.apt.adjustment?.floor,
+        },
+        flatSquare: {
+          value: object.apt.apartmentArea!,
+          change: object.apt.adjustment?.aptArea,
+        },
+        kitchenSquare: {
+          value: object.apt.kitchenArea!,
+          change: object.apt.adjustment?.kitchenArea,
+        },
+        hasBalcony: {
+          value: object.apt.hasBalcony!,
+          change: object.apt.adjustment?.hasBalcony,
+        },
+        state: {
+          value: object.apt.quality!,
+          change: object.apt.adjustment?.quality,
+        },
+        metro: {
+          value: object.apt.distanceToMetro!,
+          change: object.apt.adjustment?.quality,
+        },
       },
     }
   })
+
+  return arr
 }
 
 type Props = {}
@@ -62,7 +84,7 @@ export default function CalculatePoolPage({}: Props) {
 
   const [corrections, setCorrections] = useState<boolean>(true)
   const [splitByList, setSplitByList] = useState<boolean>(true)
-  
+
   const [link, setLink] = useState<string>()
 
   const standart = store.queryGetData?.subQueries[0].standartObject
@@ -82,12 +104,15 @@ export default function CalculatePoolPage({}: Props) {
   })
 
   const exportApi = useMutation({
-    mutationFn: (params: { queryId: string; useCorrections: boolean, splitByList: boolean }) => {
+    mutationFn: (params: {
+      queryId: string
+      useCorrections: boolean
+      splitByList: boolean
+    }) => {
       return api.poolApi.exportApiExportGet(
         params.queryId,
         params.useCorrections,
-        params.splitByList,
-
+        params.splitByList
       )
     },
     onSuccess(data) {
@@ -238,7 +263,7 @@ export default function CalculatePoolPage({}: Props) {
                   exportApi.mutate({
                     queryId: store.queryGetData!.guid,
                     useCorrections: corrections,
-                    splitByList: splitByList,                    
+                    splitByList: splitByList,
                   })
                 }}
               >
@@ -250,7 +275,7 @@ export default function CalculatePoolPage({}: Props) {
         </Stack>
         <PoolTabs
           subQueryToPoolTableRender={SubQueryToPoolTableRender}
-          subqueries={store.queryGetData?.subQueries}
+          subqueries={store.queryGetData!.subQueries}
         />
       </Box>
     </Box>

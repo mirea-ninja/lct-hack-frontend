@@ -48,8 +48,8 @@ type Props = {
 
 export default function SliderTooltip({
   children,
-  min,
-  max,
+  min = -20,
+  max = 20,
   initialValue = 0,
   price,
   marks,
@@ -120,9 +120,7 @@ export default function SliderTooltip({
                     fontSize: 14,
                     lineHeight: "16px",
                   }}
-                >
-                  {difference >= 0 ? `+${difference}` : `${difference}`} ₽
-                </Typography>
+                ></Typography>
                 <Typography
                   sx={{
                     color: "var(--secondary-clr-light)",
@@ -130,9 +128,7 @@ export default function SliderTooltip({
                     fontSize: 14,
                     lineHeight: "16px",
                   }}
-                >
-                  {total} ₽
-                </Typography>
+                ></Typography>
               </Stack>
               <Percentage value={Number(sliderValue)} />
             </Stack>
