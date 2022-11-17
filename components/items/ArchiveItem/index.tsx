@@ -9,6 +9,7 @@ import { ArrowRight } from "../../icons/ArrowRightIcon";
 import { useStore } from "../../../logic/DataStore";
 import { QueryGet } from "../../../apiConnection/gen/models/query-get";
 import { useRouter } from "next/router";
+import { IconButton } from "@mui/material";
 
 const PrimaryTypography = styled(Typography)({
   color: "var(--text-clr-main)",
@@ -55,21 +56,11 @@ export default function ArchiveItem({ item }: Props) {
       sx={{
         padding: "20px",
         borderRadius: "var(--border-radius-1)",
-        cursor: "pointer",
+        // cursor: "pointer",
 
         "&:hover": {
           boxShadow: "var(--shadow-1)",
         },
-      }}
-      onClick={() => {
-        // Обновляем локальное состояние Store от выбранного запроса
-        store.updGetQueryData(item);
-
-        // Устанавливаем isAnalogsLoaded в true, чтобы при переходе на страницу карты аналоги не искались заново
-        store.isAnalogsLoaded = true;
-
-        // Переходим на страницу выбора эталона (import/etalons)
-        router.replace("/import/etalons");
       }}
     >
       <Stack direction="row" alignItems="center" justifyContent="space-between">
@@ -114,7 +105,21 @@ export default function ArchiveItem({ item }: Props) {
               Итоговый файл
             </Button>
           </Stack>
-          <ArrowRight />
+          <IconButton
+            sx={{ width: "40px", height: "40px" }}
+            onClick={() => {
+              // Обновляем локальное состояние Store от выбранного запроса
+              store.updGetQueryData(item);
+
+              // Устанавливаем isAnalogsLoaded в true, чтобы при переходе на страницу карты аналоги не искались заново
+              store.isAnalogsLoaded = true;
+
+              // Переходим на страницу выбора эталона (import/etalons)
+              router.replace("/import/etalons");
+            }}
+          >
+            <ArrowRight />
+          </IconButton>
         </Stack>
       </Stack>
     </Paper>
