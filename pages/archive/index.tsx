@@ -1,40 +1,41 @@
-import React, { useState } from "react";
-import Header from "../../components/main/Header";
-import { Box, Typography } from "@mui/material";
-import { Stack } from "@mui/system";
-import AppButton from "../../components/buttons/AppButton";
-import FilterIcon from "../../components/icons/FilterIcon";
-import MenuItem from "@mui/material/MenuItem";
-import Select, { SelectChangeEvent } from "@mui/material/Select";
-import InputAdornment from "@mui/material/InputAdornment";
-import TextField from "@mui/material/TextField";
-import SearchIcon from "../../components/icons/SearchIcon";
-import ArchiveList from "../../components/lists/ArchiveList";
-import ArchiveFilterMenu from "../../components/menus/ArchiveFilterMenu";
-import TagItem from "../../components/items/TagItem";
-import NoResultItem from "../../components/items/NoResultItem";
-import CircularProgress from "@mui/material/CircularProgress";
-import Autocomplete from "@mui/material/Autocomplete";
-import { useStore } from "../../logic/DataStore";
-import { toJS } from "mobx";
-import { useMutation, useQuery } from "@tanstack/react-query";
-import { observer } from "mobx-react";
-import { useApiClient } from "../../logic/ApiClientHook";
-import { QueryGet } from "../../apiConnection/gen/models/query-get";
+import React, { useState } from "react"
+import Header from "../../components/main/Header"
+import { Box, Typography } from "@mui/material"
+import { Stack } from "@mui/system"
+import AppButton from "../../components/buttons/AppButton"
+import FilterIcon from "../../components/icons/FilterIcon"
+import MenuItem from "@mui/material/MenuItem"
+import Select, { SelectChangeEvent } from "@mui/material/Select"
+import InputAdornment from "@mui/material/InputAdornment"
+import TextField from "@mui/material/TextField"
+import SearchIcon from "../../components/icons/SearchIcon"
+import ArchiveList from "../../components/lists/ArchiveList"
+import ArchiveFilterMenu from "../../components/menus/ArchiveFilterMenu"
+import TagItem from "../../components/items/TagItem"
+import NoResultItem from "../../components/items/NoResultItem"
+import CircularProgress from "@mui/material/CircularProgress"
+import Autocomplete from "@mui/material/Autocomplete"
+import { useStore } from "../../logic/DataStore"
+import { toJS } from "mobx"
+import { useMutation, useQuery } from "@tanstack/react-query"
+import { observer } from "mobx-react"
+import { useApiClient } from "../../logic/ApiClientHook"
+import { QueryGet } from "../../apiConnection/gen/models/query-get"
 
-type Props = {};
+type Props = {}
 
 export default function ArchivePage({}: Props) {
-  const apiClient = useApiClient();
-  const [type, setType] = useState("");
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [filtredData, setFiltredData] = useState<QueryGet[]>([]);
-  const open = Boolean(anchorEl);
+  const apiClient = useApiClient()
+  const [type, setType] = useState("new")
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
+  const [data, setData] = useState<QueryGet[]>([])
+  const [filtredData, setFiltredData] = useState<QueryGet[]>([])
+  const open = Boolean(anchorEl)
 
-  const { data, isLoading, error } = useQuery({
-    queryFn: () =>
+  const { mutate, isLoading, error, isSuccess } = useMutation({
+    mutationFn: () =>
       apiClient.queryApi.getAllApiQueryGet(
-        "desc",
+        type == "new" ? "desc" : type == "old" ? "asc" : "desc",
         undefined,
         undefined,
         undefined,
@@ -44,25 +45,31 @@ export default function ArchivePage({}: Props) {
         35
       ),
     onSuccess: (data) => {
-      setFiltredData(data.data);
+      setFiltredData(data.data)
+      setData(data.data)
     },
-  });
+  })
+
+  React.useEffect(() => {
+    mutate()
+  }, [])
 
   const handleClose = () => {
-    setAnchorEl(null);
-  };
+    setAnchorEl(null)
+  }
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+    setAnchorEl(event.currentTarget)
+  }
 
   const handleChange = (event: SelectChangeEvent) => {
-    setType(event.target.value as string);
-  };
+    setType(event.target.value as string)
+    mutate()
+  }
 
   const handleDelete = () => {
-    console.info("You clicked the delete icon.");
-  };
+    console.info("You clicked the delete icon.")
+  }
 
   return (
     <Box>
@@ -83,7 +90,7 @@ export default function ArchivePage({}: Props) {
       )}
 
       {/* Список архивов */}
-      {data && (
+      {isSuccess && (
         <Box sx={{ padding: "30px" }}>
           <Typography
             variant="h4"
@@ -124,16 +131,16 @@ export default function ArchivePage({}: Props) {
               </Stack>
               <TextField
                 onChange={(e) => {
-                  const value = e.target.value;
-                  const filtred = data.data.filter((item) => {
+                  const value = e.target.value
+                  const filtred = data.filter((item) => {
                     if (item.name !== undefined) {
                       return item.name
                         .toLowerCase()
-                        .includes(value.toLowerCase());
+                        .includes(value.toLowerCase())
                     }
-                    return false;
-                  });
-                  setFiltredData(filtred);
+                    return false
+                  })
+                  setFiltredData(filtred)
                 }}
                 placeholder="Поиск"
                 sx={{ width: "330px" }}
@@ -171,5 +178,5 @@ export default function ArchivePage({}: Props) {
         </Box>
       )}
     </Box>
-  );
+  )
 }
