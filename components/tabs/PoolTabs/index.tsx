@@ -2,7 +2,7 @@ import React from "react"
 import Paper from "@mui/material/Paper"
 import Button from "@mui/material/Button"
 import { Stack } from "@mui/system"
-import PoolTable from "../../tables/PoolTable"
+import PoolTable, { RowsData } from "../../tables/PoolTable"
 import { Pool } from "../../tables/PoolTable/types"
 import { toJS } from "mobx"
 import { SubQueryGet } from "../../../apiConnection/gen"
@@ -10,7 +10,7 @@ import { SubQueryGet } from "../../../apiConnection/gen"
 type Props = {
   hasMetroAttribute?: boolean
   subqueries: SubQueryGet[]
-  subQueryToPoolTableRender(subquery: SubQueryGet): Pool[]
+  subQueryToPoolTableRender(subquery: SubQueryGet): RowsData[]
 }
 
 type PoolTabProps = {
@@ -50,41 +50,6 @@ function idToRooms(id: number): string {
   }
 }
 
-// function SubQueryToPoolTableRender(subquery: SubQueryGet): Pool[] {
-//   return [subquery.standartObject!, ...subquery.analogs!].map((object, i) => {
-//     return {
-//       id: i,
-//       isBasic: true,
-//       pricePerSquareMeter: {
-//         value: object.m2price!,
-//         change: object.adjustment?.priceArea,
-//       },
-//       objectPrice: object.price!,
-//       floor: { value: object.floor!, change: object.adjustment?.floor },
-//       flatSquare: {
-//         value: object.apartmentArea!,
-//         change: object.adjustment?.aptArea,
-//       },
-//       kitchenSquare: {
-//         value: object.kitchenArea!,
-//         change: object.adjustment?.kitchenArea,
-//       },
-//       hasBalcony: {
-//         value: object.hasBalcony!,
-//         change: object.adjustment?.hasBalcony,
-//       },
-//       metro: {
-//         value: object.distanceToMetro!,
-//         change: object.adjustment?.quality,
-//       },
-//       state: {
-//         value: object.quality!,
-//         change: object.adjustment?.quality
-//       },
-//     }
-//   })
-// }
-
 export default function PoolTabs({
   subqueries,
   hasMetroAttribute = false,
@@ -119,7 +84,6 @@ export default function PoolTabs({
             />
           ))}
         </Stack>
-
         <PoolTable rows={data} hasMetroAttribute={hasMetroAttribute} />
       </Stack>
     </Paper>

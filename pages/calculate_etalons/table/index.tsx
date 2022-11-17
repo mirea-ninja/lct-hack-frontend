@@ -15,44 +15,65 @@ import { useMutation, useQuery } from "@tanstack/react-query"
 import { toJS } from "mobx"
 import { Pool } from "../../../components/tables/PoolTable/types"
 import { SubQueryGet } from "../../../apiConnection/gen"
+import { RowsData } from "../../../components/tables/PoolTable"
 
 type Props = {}
 
-function SubQueryToPoolTableRender(subquery: SubQueryGet): Pool[] {
-  return [subquery.standartObject!, ...subquery.selectedAnalogs!].map(
-    (object, i) => {
+function SubQueryToPoolTableRender(subquery: SubQueryGet): RowsData[] {
+  console.log(toJS(subquery))
+
+  var arr: RowsData[] = [
+    {
+      sub: subquery,
+      apt: subquery.standartObject!,
+    },
+    ...subquery.selectedAnalogs!.map<RowsData>((obj) => {
       return {
+        sub: subquery,
+        apt: obj,
+      }
+    }),
+  ].map((object, i) => {
+    return {
+      sub: subquery,
+      apt: object.apt,
+      row: {
         id: i,
         isBasic: true,
         pricePerSquareMeter: {
-          value: object.m2price ?? 0,
-          change: object.adjustment?.priceArea,
+          value: object.apt.m2price ?? 0,
+          change: object.apt.adjustment?.priceArea,
         },
-        objectPrice: object.price!,
-        floor: { value: object.floor!, change: object.adjustment?.floor },
+        objectPrice: object.apt.price!,
+        floor: {
+          value: object.apt.floor!,
+          change: object.apt.adjustment?.floor,
+        },
         flatSquare: {
-          value: object.apartmentArea!,
-          change: object.adjustment?.aptArea,
+          value: object.apt.apartmentArea!,
+          change: object.apt.adjustment?.aptArea,
         },
         kitchenSquare: {
-          value: object.kitchenArea!,
-          change: object.adjustment?.kitchenArea,
+          value: object.apt.kitchenArea!,
+          change: object.apt.adjustment?.kitchenArea,
         },
         hasBalcony: {
-          value: object.hasBalcony!,
-          change: object.adjustment?.hasBalcony,
+          value: object.apt.hasBalcony!,
+          change: object.apt.adjustment?.hasBalcony,
         },
         state: {
-          value: object.quality!,
-          change: object.adjustment?.quality,
+          value: object.apt.quality!,
+          change: object.apt.adjustment?.quality,
         },
         metro: {
-          value: object.distanceToMetro!,
-          change: object.adjustment?.distanceToMetro,
+          value: object.apt.distanceToMetro!,
+          change: object.apt.adjustment?.quality,
         },
-      }
+      },
     }
-  )
+  })
+
+  return arr
 }
 
 export default function CalculateEtalonsPage({}: Props) {

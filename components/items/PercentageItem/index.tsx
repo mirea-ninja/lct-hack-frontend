@@ -6,10 +6,22 @@ import TextField from "@mui/material/TextField"
 import { Stack } from "@mui/system"
 import { Box, ClickAwayListener } from "@mui/material"
 import SliderTooltip from "../../tooltips/SliderTooltip/index"
+import { useMutation } from "@tanstack/react-query"
+import { useApiClient } from "../../../logic/ApiClientHook"
+import { AdjustmentPatch } from "../../../apiConnection/gen/models/adjustment-patch"
+import { SubQueryGet } from "../../../apiConnection/gen/models/sub-query-get"
+import { useStore } from "../../../logic/DataStore"
+import { ApartmentGet } from "../../../apiConnection/gen/models/apartment-get"
+import classNames from "classnames"
+
+type AdjTypeKeys = keyof AdjustmentPatch
 
 type Props = {
   value: number
+  adjType: AdjTypeKeys
   sx?: SxProps<Theme>
+  sub: SubQueryGet
+  apart: ApartmentGet
   onPercentChange?: (newVal: number) => void
   [props: string]: any
 }
@@ -18,24 +30,51 @@ export default function PercentageItem({
   value,
   sx,
   onPercentChange,
+  adjType,
+  apart,
+  sub,
   ...props
 }: Props) {
   const [isChangeMode, setIsChangeMode] = useState(false)
   const [percentageValue, setPercentageValue] = useState<number>(value)
+  const api = useApiClient()
+  const store = useStore()
 
   const handleClickAway = (): void => {
     setIsChangeMode(false)
     if (onPercentChange != undefined) {
       onPercentChange(percentageValue)
     }
+    adjResult[adjType as AdjTypeKeys] = percentageValue as number
+    console.log("CHANGED OMG")
+    console.log(adjResult)
+    mut.mutate()
   }
 
-  value = percentageValue / 100
+  let adjResult: AdjustmentPatch = {}
+
+  value = percentageValue
 
   const handleChange = (val: number | number[]) => {
     console.log(val)
     setPercentageValue(val as number)
   }
+
+  const mut = useMutation({
+    mutationFn: () => {
+      return api.ajdApi.patchApiQueryIdSubquerySubidApartmentAidAdjustmentAdjidPatch(
+        adjResult,
+        store.queryGetData!.guid!,
+        sub.guid,
+        apart.guid,
+        apart.adjustment!.guid!
+      )
+    },
+    onSuccess: (data) => {
+      console.log("SHIT IS CHANGED")
+      console.log(data)
+    },
+  })
 
   const PercentageJSX = (
     <Typography
@@ -69,7 +108,7 @@ export default function PercentageItem({
                 ? (value * 100).toFixed(1) / 1
                 : (value * 100).toFixed(1)
             }%`
-          : `+${value}₽`
+          : `+${value}%`
         : value! == 0
         ? `0%`
         : value! > -1
@@ -78,7 +117,7 @@ export default function PercentageItem({
               ? (value * 100).toFixed(1) / 1
               : (value * 100).toFixed(1)
           }%`
-        : `${value}₽`}
+        : `${value}%`}
     </Typography>
   )
 

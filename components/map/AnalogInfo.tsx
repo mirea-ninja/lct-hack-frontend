@@ -1,5 +1,5 @@
-import React from "react";
-import { Collapse, Link, TextField, useTheme } from "@mui/material";
+import React from "react"
+import { Collapse, Link, TextField, useTheme } from "@mui/material"
 import {
   Box,
   Typography,
@@ -7,25 +7,25 @@ import {
   ToggleButtonGroup,
   ToggleButton,
   Grid,
-} from "@mui/material";
+} from "@mui/material"
 
-import ArrowLeft from "@mui/icons-material/ChevronLeft";
-import { EditorModal, EditorModalType } from "./EditorModal";
-import { PenIcon } from "../icons/PenIcon";
-import { ClosedEyeIcon } from "../icons/ClosedEyeIcon";
-import { OpenedEyeIcon } from "../icons/OpenedEyeIcon";
-import AddedByUserIcon from "../icons/AddedByUserIcon";
-import { ApartmentGet } from "../../apiConnection/gen/models/apartment-get";
-import Modal from "@mui/material/Modal";
+import ArrowLeft from "@mui/icons-material/ChevronLeft"
+import { EditorModal, EditorModalType } from "./EditorModal"
+import { PenIcon } from "../icons/PenIcon"
+import { ClosedEyeIcon } from "../icons/ClosedEyeIcon"
+import { OpenedEyeIcon } from "../icons/OpenedEyeIcon"
+import AddedByUserIcon from "../icons/AddedByUserIcon"
+import { ApartmentGet } from "../../apiConnection/gen/models/apartment-get"
+import Modal from "@mui/material/Modal"
 
 interface InfoCardProps {
-  title: string;
-  description: string;
-  isPositive: boolean | null;
+  title: string
+  description: string
+  isPositive: boolean | null
 }
 
 const InfoCard = ({ title, description, isPositive }: InfoCardProps) => {
-  const theme = useTheme();
+  const theme = useTheme()
   return (
     <>
       <Box
@@ -86,14 +86,14 @@ const InfoCard = ({ title, description, isPositive }: InfoCardProps) => {
         />
       </Box>
     </>
-  );
-};
+  )
+}
 
 interface AnalogInfoProps {
-  key: string;
-  analog: ApartmentGet;
-  setSelected: (apartment: ApartmentGet) => void;
-  selectedSubQueryGuid: string;
+  key: string
+  analog: ApartmentGet
+  setSelected: (apartment: ApartmentGet) => void
+  selectedSubQueryGuid: string
 }
 
 export default function CollapsableAnalogInfo({
@@ -102,71 +102,69 @@ export default function CollapsableAnalogInfo({
   setSelected,
   selectedSubQueryGuid,
 }: AnalogInfoProps) {
-  const theme = useTheme();
+  const theme = useTheme()
 
-  const [editorOpen, setEditorOpen] = React.useState(false);
-  const [errorShown, setErrorShown] = React.useState(false);
+  const [editorOpen, setEditorOpen] = React.useState(false)
+  const [errorShown, setErrorShown] = React.useState(false)
 
-  let address = analog.address ? analog.address : "Адрес не указан";
-  let link = analog.link ? analog.link : "https://www.example.com";
+  let address = analog.address ? analog.address : "Адрес не указан"
+  let link = analog.link ? analog.link : "https://www.example.com"
 
-  let m2price = analog.m2price ? analog.m2price : "Цена за кв.м. не указана";
+  let m2price = analog.m2price ? analog.m2price : "Цена за кв.м. не указана"
   let price_final = analog.adjustment?.priceFinal
     ? analog.adjustment?.priceFinal
-    : m2price;
+    : m2price
 
-  let building_type = analog.segment ? analog.segment : "Тип жилья не указан";
-  let floors = analog.floors ? analog.floors : null;
-  let walls = analog.walls ? analog.walls : "Тип стен не указан";
-  let floor = analog.floor ? analog.floor : null;
-  let apt_area = analog.apartmentArea ? analog.apartmentArea : null;
-  let kitchen_area = analog.kitchenArea ? analog.kitchenArea : null;
-  let has_balcony = analog.hasBalcony ? analog.hasBalcony : null;
-  let to_metro = analog.distanceToMetro ? analog.distanceToMetro : null;
-  let repair_type = analog.quality ? analog.quality : null;
+  let building_type = analog.segment ? analog.segment : "Тип жилья не указан"
+  let floors = analog.floors ? analog.floors : null
+  let walls = analog.walls ? analog.walls : "Тип стен не указан"
+  let floor = analog.floor ? analog.floor : null
+  let apt_area = analog.apartmentArea ? analog.apartmentArea : null
+  let kitchen_area = analog.kitchenArea ? analog.kitchenArea : null
+  let has_balcony = analog.hasBalcony ? analog.hasBalcony : null
+  let to_metro = analog.distanceToMetro ? analog.distanceToMetro : null
+  let repair_type = analog.quality ? analog.quality : null
 
-  let trade_adj = analog.adjustment?.trade ? analog.adjustment?.trade : -0.045;
-  let floor_adj = analog.adjustment?.floor ? analog.adjustment?.floor : 0;
-  let apt_area_adj = analog.adjustment?.aptArea
-    ? analog.adjustment?.aptArea
-    : 0;
+  let trade_adj = analog.adjustment?.trade ? analog.adjustment?.trade : -0.045
+  let floor_adj = analog.adjustment?.floor ? analog.adjustment?.floor : 0
+  let apt_area_adj = analog.adjustment?.aptArea ? analog.adjustment?.aptArea : 0
   let kitchen_area_adj = analog.adjustment?.kitchenArea
     ? analog.adjustment?.kitchenArea
-    : 0;
+    : 0
   let has_balcony_adj = analog.adjustment?.hasBalcony
     ? analog.adjustment?.hasBalcony
-    : 0;
+    : 0
   let to_metro_adj = analog.adjustment?.distanceToMetro
     ? analog.adjustment?.distanceToMetro
-    : 0;
+    : 0
   let repair_type_adj = analog.adjustment?.quality
     ? analog.adjustment?.quality
-    : 0;
+    : 0
 
   let trade_adj_price = analog.adjustment?.priceTrade
     ? analog.adjustment?.priceTrade
-    : null;
+    : null
   let floor_adj_price = analog.adjustment?.priceFloor
     ? analog.adjustment?.priceFloor
-    : null;
+    : null
   let apt_area_adj_price = analog.adjustment?.priceArea
     ? analog.adjustment?.priceArea
-    : null;
+    : null
   let kitchen_area_adj_price = analog.adjustment?.priceKitchen
     ? analog.adjustment?.priceKitchen
-    : null;
+    : null
   let has_balcony_adj_price = analog.adjustment?.priceBalcony
     ? analog.adjustment?.priceBalcony
-    : null;
+    : null
   let to_metro_adj_price = analog.adjustment?.priceMetro
     ? analog.adjustment?.priceMetro
-    : null;
+    : null
 
   let adj_m2price = m2price
     ? (((price_final - m2price) * 100) / m2price).toFixed(1)
-    : null;
+    : null
 
-  repair_type = repair_type ? repair_type?.toLowerCase() : null;
+  repair_type = repair_type ? repair_type?.toLowerCase() : null
   repair_type =
     repair_type === "муниципальный ремонт"
       ? "муниципальная"
@@ -174,7 +172,7 @@ export default function CollapsableAnalogInfo({
       ? "современная"
       : repair_type === null
       ? "не указано"
-      : "без отделки";
+      : "без отделки"
 
   address = address
     .replace("Москва, ", "")
@@ -183,32 +181,32 @@ export default function CollapsableAnalogInfo({
     .replace("переулок", "пер.")
     .replace("площадь", "пл.")
     .replace("ул.,", ",")
-    .replace(" ,", ",");
+    .replace(" ,", ",")
   building_type =
-    building_type?.charAt(0).toUpperCase() + building_type?.slice(1);
+    building_type?.charAt(0).toUpperCase() + building_type?.slice(1)
 
   // умножить все _adj на 100 и округлить до 1 знака после запятой. Если после запятой 0, то округлить до целого
-  trade_adj = trade_adj ? (trade_adj * 100).toFixed(1) : null;
-  trade_adj = trade_adj % 1 === 0 ? trade_adj / 1 : trade_adj;
+  trade_adj = trade_adj ? (trade_adj * 100).toFixed(1) : null
+  trade_adj = trade_adj % 1 === 0 ? trade_adj / 1 : trade_adj
 
-  floor_adj = floor_adj ? (floor_adj * 100).toFixed(1) : null;
-  floor_adj = floor_adj % 1 === 0 ? floor_adj / 1 : floor_adj;
+  floor_adj = floor_adj ? (floor_adj * 100).toFixed(1) : null
+  floor_adj = floor_adj % 1 === 0 ? floor_adj / 1 : floor_adj
 
-  apt_area_adj = apt_area_adj ? (apt_area_adj * 100).toFixed(1) : null;
-  apt_area_adj = apt_area_adj % 1 === 0 ? apt_area_adj / 1 : apt_area_adj;
+  apt_area_adj = apt_area_adj ? (apt_area_adj * 100).toFixed(1) : null
+  apt_area_adj = apt_area_adj % 1 === 0 ? apt_area_adj / 1 : apt_area_adj
 
   kitchen_area_adj = kitchen_area_adj
     ? (kitchen_area_adj * 100).toFixed(1)
-    : null;
+    : null
   kitchen_area_adj =
-    kitchen_area_adj % 1 === 0 ? kitchen_area_adj / 1 : kitchen_area_adj;
+    kitchen_area_adj % 1 === 0 ? kitchen_area_adj / 1 : kitchen_area_adj
 
-  has_balcony_adj = has_balcony_adj ? (has_balcony_adj * 100).toFixed(1) : null;
+  has_balcony_adj = has_balcony_adj ? (has_balcony_adj * 100).toFixed(1) : null
   has_balcony_adj =
-    has_balcony_adj % 1 === 0 ? has_balcony_adj / 1 : has_balcony_adj;
+    has_balcony_adj % 1 === 0 ? has_balcony_adj / 1 : has_balcony_adj
 
-  to_metro_adj = to_metro_adj ? (to_metro_adj * 100).toFixed(1) : null;
-  to_metro_adj = to_metro_adj % 1 === 0 ? to_metro_adj / 1 : to_metro_adj;
+  to_metro_adj = to_metro_adj ? (to_metro_adj * 100).toFixed(1) : null
+  to_metro_adj = to_metro_adj % 1 === 0 ? to_metro_adj / 1 : to_metro_adj
 
   // repair_type_adj = repair_type_adj ? (repair_type_adj * 100).toFixed(1) : null;
   // repair_type_adj = repair_type_adj % 1 === 0 ? (repair_type_adj / 1) : repair_type_adj;
@@ -307,11 +305,11 @@ export default function CollapsableAnalogInfo({
                 !analog.quality ||
                 !analog.distanceToMetro
               ) {
-                setErrorShown(true);
-                return;
+                setErrorShown(true)
+                return
               }
 
-              setSelected(analog);
+              setSelected(analog)
             }}
             title="Выбрать для расчёта"
           >
@@ -327,9 +325,7 @@ export default function CollapsableAnalogInfo({
             color={theme.palette.text.primary}
             fontWeight={500}
             sx={{ marginRight: "5px" }}
-          >
-            {price_final} ₽ / м²
-          </Typography>
+          ></Typography>
         </Box>
         <Box display={"flex"} alignItems={"center"}>
           <Typography
@@ -338,9 +334,7 @@ export default function CollapsableAnalogInfo({
             color={theme.palette.secondary.dark}
             fontWeight={500}
             sx={{ marginRight: "10px" }}
-          >
-            {m2price} ₽ / м²
-          </Typography>
+          ></Typography>
           <Typography
             fontSize={16}
             lineHeight={"18px"}
@@ -499,5 +493,5 @@ export default function CollapsableAnalogInfo({
         </Box>
       </Box>
     </>
-  );
+  )
 }
